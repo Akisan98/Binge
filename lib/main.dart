@@ -1,7 +1,9 @@
+import 'package:binge/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  // await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
   runApp(const Binge());
 }
 
@@ -104,21 +106,6 @@ class Binge extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text("Hello World"),
-        ),
-      ),
-    );
-  }
-}
-
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -156,6 +143,11 @@ class LoginPage extends StatelessWidget {
                       const SnackBar(
                         content: Text("Privacy is a good thing!"),
                       ),
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                   }),
                   child: Text(

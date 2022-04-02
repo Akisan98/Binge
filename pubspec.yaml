@@ -38,6 +38,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Cached Network Image
+  cached_network_image: ^3.2.0
+
+  # Web Requests
+  http: ^0.13.4
+
+  # .env file
+  flutter_dotenv: ^5.0.2
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -54,6 +63,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - .env
 
   # To add assets to your application, add an assets section, like this:
   # assets:
