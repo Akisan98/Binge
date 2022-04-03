@@ -14,7 +14,7 @@ class HorizontalList extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8, top: 24, bottom: 8),
+          padding: const EdgeInsets.only(left: 8, top: 24, bottom: 16),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -38,13 +38,16 @@ class HorizontalList extends StatelessWidget {
                   return Text('Error: ${response.error}');
                 } else {
                   return SizedBox(
-                    height: 200,
+                    height: 153,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: response.data?.results?.length ?? 1,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return PosterCard(text: response.data!.results![index]);
+                        return PosterCard(
+                          text: response.data!.results![index],
+                          scaleFactor: 0.7,
+                        );
                       },
                     ),
                   );

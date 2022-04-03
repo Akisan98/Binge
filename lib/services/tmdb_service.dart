@@ -16,7 +16,6 @@ class TMDBService {
   String createImageURL(String path) => _imageUrl + path;
 
   // API Key
-
   static String apiKey = dotenv.get('TMDB_KEY');
 
   // One client instance for all the requests
@@ -28,10 +27,19 @@ class TMDBService {
   //   client.get(createUri(_searchEndpoint));
   // }
 
-  Future<TMDBResponse> getTrendingTVShows() async {
-    const _endpoint = '/trending/tv/week';
+  /// Gets a list of TV Shows that is airing today.
+  Future<TMDBResponse> getTodaysTVShows(int pageKey) async {
+    const _endpoint = '/tv/airing_today';
 
-    var request = await client.get(createUri(_endpoint, {'api_key': apiKey}));
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var uri =
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+    log(uri.toString());
+    var request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body));
@@ -40,10 +48,36 @@ class TMDBService {
     }
   }
 
-  Future<TMDBResponse> getPopularTVShows() async {
+  Future<TMDBResponse> getTrendingTVShows(int pageKey) async {
+    const _endpoint = '/trending/tv/week';
+
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var uri =
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+    log(uri.toString());
+    var request = await client.get(uri);
+
+    if (request.statusCode == 200) {
+      return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Trending is not 200");
+    }
+  }
+
+  Future<TMDBResponse> getPopularTVShows(int pageKey) async {
     const _endpoint = '/tv/popular';
 
-    var request = await client.get(createUri(_endpoint, {'api_key': apiKey}));
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var request = await client.get(
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body));
