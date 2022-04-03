@@ -86,6 +86,60 @@ class TMDBService {
     }
   }
 
+  Future<TMDBResponse> getCurrentMovies(int pageKey) async {
+    const _endpoint = '/movie/now_playing';
+
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var request = await client.get(
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+
+    if (request.statusCode == 200) {
+      return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Popular is not 200");
+    }
+  }
+
+  Future<TMDBResponse> getTopRatedMovies(int pageKey) async {
+    const _endpoint = '/movie/top_rated';
+
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var request = await client.get(
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+
+    if (request.statusCode == 200) {
+      return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Popular is not 200");
+    }
+  }
+
+  Future<TMDBResponse> getPopularMovies(int pageKey) async {
+    const _endpoint = '/movie/popular';
+
+    // Max range in docs
+    if (pageKey <= 0 || pageKey > 1000) {
+      throw Exception("Page Key out of range!");
+    }
+
+    var request = await client.get(
+        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+
+    if (request.statusCode == 200) {
+      return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Popular is not 200");
+    }
+  }
+
   decodeBody(Response response) {
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);

@@ -60,7 +60,7 @@ class PosterCard extends StatelessWidget {
                   height: scaleFactor != null ? scaleFactor! * 38 : 38,
                   width: scaleFactor != null ? scaleFactor! * 92 : 92,
                   child: AutoSizeText(
-                    text.name!,
+                    text.name ?? "",
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

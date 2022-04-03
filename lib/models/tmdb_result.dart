@@ -34,11 +34,13 @@ class TMDBResults {
     genreIds = json['genre_ids'].cast<int>();
     originalLanguage = json['original_language'];
     id = json['id'];
-    originalName = json['original_name'];
-    originCountry = json['origin_country'].cast<String>();
+    originalName = json['original_name'] ?? json['original_title'];
+    originCountry = json['origin_country'] != null
+        ? json['origin_country'].cast<String>()
+        : null;
     firstAirDate = json['first_air_date'];
     voteCount = json['vote_count'];
-    name = json['name'];
+    name = json['name'] ?? json['title'];
     voteAverage = double.parse(json['vote_average'].toString());
     posterPath = json['poster_path'];
     backdropPath = json['backdrop_path'];
