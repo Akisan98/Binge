@@ -1,4 +1,5 @@
 import 'package:binge/pages/home_page.dart';
+import 'package:binge/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -101,86 +102,7 @@ class Binge extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: true,
-      home: const LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(32, 135, 32, 60),
-            child: Column(
-              children: [
-                Text(
-                  "Welcome 👋",
-                  style: theme.textTheme.headline1,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(
-                    top: 32,
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Text(
-                    "Binge is the app to keep track of all of your TV Shows and movies and how far you have progressed.",
-                    textScaleFactor: 1.1,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: (() {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Privacy is a good thing!"),
-                      ),
-                    );
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  }),
-                  child: Text(
-                    "Let's Start!",
-                    style: theme.textTheme.button,
-                  ),
-                ),
-                // const SizedBox(
-                //   height: 18,
-                // ),
-                // ElevatedButton(
-                //   onPressed: (() {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(
-                //         content: Text("No Support for web"),
-                //       ),
-                //     );
-                //   }),
-                //   child: Text(
-                //     "Sign in with Trakt",
-                //     style: theme.textTheme.overline,
-                //   ),
-                //   style: ElevatedButton.styleFrom(
-                //     primary: theme.brightness == Brightness.light
-                //         ? theme.colorScheme.secondary
-                //         : theme.colorScheme.tertiary,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
