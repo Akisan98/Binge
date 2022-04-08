@@ -1,5 +1,6 @@
 import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/views/infinite_list.dart';
+import 'package:binge/views/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -24,12 +25,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 // Search
-                const Padding(
-                  padding: EdgeInsets.only(left: 8, top: 24, bottom: 8),
-                  child: Placeholder(
-                    fallbackHeight: 50,
-                  ),
-                ),
+                const SearchBar(),
                 InfiniteList(
                   apiCall: tmdb.getTodaysTVShows,
                   header: "Airing Today",
