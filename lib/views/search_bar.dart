@@ -31,7 +31,7 @@ class SearchBar extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 16),
                   child: Text(
-                    "TV Series, Movie, or Actor",
+                    "TV Series, Movies, or Actors",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
