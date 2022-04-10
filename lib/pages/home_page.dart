@@ -1,6 +1,6 @@
 import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/views/infinite_list.dart';
-import 'package:binge/views/search_bar.dart';
+import 'package:binge/views/search_bar/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {

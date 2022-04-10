@@ -40,7 +40,6 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
   @override
   void dispose() {
     searchText.dispose();
-    hasTyped.drain();
     _controller.close();
     super.dispose();
   }

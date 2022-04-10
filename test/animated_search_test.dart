@@ -6,7 +6,8 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  testWidgets('Search bar starts in Focused mode', (WidgetTester tester) async {
+  testWidgets('Animated Search bar starts in Focused mode',
+      (WidgetTester tester) async {
     TextEditingController _searchcontroller = TextEditingController();
 
     // Create the widget by telling the tester to build it.
@@ -44,7 +45,7 @@ void main() {
     );
   });
 
-  testWidgets('Search bar shows text when dismissed',
+  testWidgets('Animated Search bar shows text when dismissed',
       (WidgetTester tester) async {
     TextEditingController _searchcontroller = TextEditingController();
 

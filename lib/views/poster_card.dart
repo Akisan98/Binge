@@ -38,7 +38,9 @@ class PosterCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 );
               },
@@ -48,24 +50,26 @@ class PosterCard extends StatelessWidget {
                   height: scaleFactor != null ? scaleFactor! * 138 : 138,
                   child: Center(
                     child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
+                      value: downloadProgress.progress,
+                    ),
                   ),
                 );
               },
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: SizedBox(
-                  height: scaleFactor != null ? scaleFactor! * 38 : 38,
-                  width: scaleFactor != null ? scaleFactor! * 92 : 92,
-                  child: AutoSizeText(
-                    text.name ?? "",
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
+              padding: const EdgeInsets.only(top: 8),
+              child: SizedBox(
+                height: scaleFactor != null ? scaleFactor! * 38 : 38,
+                width: scaleFactor != null ? scaleFactor! * 92 : 92,
+                child: AutoSizeText(
+                  text.name ?? "",
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
           ],
         ),
       ),

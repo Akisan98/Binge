@@ -38,21 +38,20 @@ class _InfiniteListState extends State<InfiniteList> {
   }
 
   Future<void> _fetchPage(int pageKey) async {
-    // try {
-    log(pageKey.toString());
-    final response = await widget.apiCall(pageKey);
-    log(response.toString());
-    final isLastPage = response.page == response.totalPages;
+    try {
+      log(pageKey.toString());
+      final response = await widget.apiCall(pageKey);
+      log(response.toString());
+      final isLastPage = response.page == response.totalPages;
 
-    if (isLastPage) {
-      _controller.appendLastPage(response.results!);
-    } else {
-      _controller.appendPage(response.results!, pageKey + 1);
+      if (isLastPage) {
+        _controller.appendLastPage(response.results!);
+      } else {
+        _controller.appendPage(response.results!, pageKey + 1);
+      }
+    } catch (error) {
+      _controller.error = error;
     }
-    // }
-    // catch (error) {
-    //   _controller.error = error;
-    // }
   }
 
   @override
@@ -84,7 +83,7 @@ class _InfiniteListState extends State<InfiniteList> {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
