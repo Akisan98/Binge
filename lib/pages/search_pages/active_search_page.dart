@@ -1,10 +1,11 @@
-// When pressing SearchBar
-
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/views/search_bar/animated_search.dart';
+import 'package:binge/views/search_history.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/transformers.dart';
 
 class ActiveSearchPage extends StatefulWidget {
   const ActiveSearchPage({Key? key}) : super(key: key);
@@ -15,8 +16,10 @@ class ActiveSearchPage extends StatefulWidget {
 
 class _ActiveSearchPageState extends State<ActiveSearchPage> {
   TextEditingController searchText = TextEditingController();
-  final StreamController<bool> _controller = StreamController<bool>();
-  late Stream<bool> hasTyped = _controller.stream;
+  final StreamController<String> _controller =
+      StreamController<String>.broadcast();
+  late Stream<String> userTyped = _controller.stream;
+  String liveQuery = '';
 
   dismissSearch() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -27,8 +30,8 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
 
   void _printLatestValue() {
     log('Second text field: ${searchText.text}');
-    _controller.add(searchText.text != "");
-    log(hasTyped.toString());
+    _controller.add(searchText.text);
+    //liveQuery = searchText.text;
   }
 
   @override
@@ -63,12 +66,24 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
                 // Need the key, else IconBtn in Prefix won't work if TextField is out of focus
                 searchTextController: searchText,
               ),
-              StreamBuilder<bool>(
-                initialData: false,
-                stream: hasTyped,
+              StreamBuilder<String>(
+                initialData: '',
+                stream:
+                    userTyped.debounceTime(const Duration(milliseconds: 300)),
                 builder: (builder, snapshot) {
-                  log(snapshot.data!.toString());
-                  return SearchBody(hasTyped: snapshot.data!);
+                  log("StreamBuilder" + snapshot.data!.toString());
+                  return Expanded(
+                    child: Center(
+                      child: snapshot.data! != ''
+                          ? ListView.builder(
+                              itemCount: 6,
+                              itemBuilder: (context, index) {
+                                return Text(snapshot.data!.toString());
+                              },
+                            )
+                          : const SearchHistory(),
+                    ),
+                  );
                 },
               ),
             ],
@@ -76,15 +91,5 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
         ),
       ),
     );
-  }
-}
-
-class SearchBody extends StatelessWidget {
-  const SearchBody({Key? key, required this.hasTyped}) : super(key: key);
-  final bool hasTyped;
-
-  @override
-  Widget build(BuildContext context) {
-    return hasTyped ? const Text("SEARCHING!") : const Text("WRITE!!!");
   }
 }

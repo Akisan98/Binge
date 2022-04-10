@@ -1,7 +1,5 @@
 import 'package:binge/models/tmdb_result.dart';
-import 'package:binge/pages/search_pages/active_search_page.dart';
 import 'package:binge/views/poster_card.dart';
-import 'package:binge/views/search_bar/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
