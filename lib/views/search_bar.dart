@@ -1,5 +1,4 @@
 import 'package:binge/pages/search_pages/active_search_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {

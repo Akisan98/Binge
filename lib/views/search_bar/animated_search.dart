@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class AnimatedSearch extends StatefulWidget {
@@ -66,6 +68,8 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
   @override
   void initState() {
+    log("Animated Search Bar: InitState");
+
     searchTextController = widget.searchTextController;
     chevronIcon = Padding(
       padding: const EdgeInsets.only(left: 8, right: 12),
@@ -76,8 +80,8 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
           size: 35,
         ),
         onPressed: () {
-          setState(() {});
           dismissSearch();
+          setState(() {});
         },
       ),
     );
@@ -87,6 +91,8 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
   @override
   Widget build(BuildContext context) {
+    log("Animated Search Bar: Build");
+
     return AnimatedContainer(
       height: inFocus ? 62 : 50,
       padding: inFocus ? const EdgeInsets.all(0) : const EdgeInsets.all(4),
@@ -102,6 +108,7 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
       curve: Curves.easeInOut,
       child: TextField(
         onTap: () => {
+          log("Animated Search Bar: TextField Tapped"),
           inFocus = true,
           hint = '',
           prefix = chevronIcon,
