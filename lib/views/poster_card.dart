@@ -1,9 +1,9 @@
 import 'package:binge/models/tmdb_result.dart';
 import 'package:binge/services/tmdb_service.dart';
+import 'package:binge/views/poster_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class PosterCard extends StatelessWidget {
   const PosterCard({Key? key, required this.text, this.scaleFactor})
@@ -25,38 +25,7 @@ class PosterCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CachedNetworkImage(
-              imageUrl: text.posterPath != null
-                  ? tmdb.createImageURL(text.posterPath!)
-                  : "https://v4.akisan.ml/assets/favicon.png",
-              width: scaleFactor != null ? scaleFactor! * 92 : 92,
-              height: scaleFactor != null ? scaleFactor! * 138 : 138,
-              imageBuilder: (context, imageProvider) {
-                return Container(
-                  width: scaleFactor != null ? scaleFactor! * 92 : 92,
-                  height: scaleFactor != null ? scaleFactor! * 138 : 138,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-              progressIndicatorBuilder: (context, url, downloadProgress) {
-                return SizedBox(
-                  width: scaleFactor != null ? scaleFactor! * 92 : 92,
-                  height: scaleFactor != null ? scaleFactor! * 138 : 138,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                    ),
-                  ),
-                );
-              },
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
+            PosterImage(scaleFactor: scaleFactor, imagePath: text.posterPath),
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: SizedBox(

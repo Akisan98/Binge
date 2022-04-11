@@ -22,11 +22,20 @@ class TMDBService {
   // One client instance for all the requests
   Client client = Client();
 
-  // search(String query) {
-  //   var _searchEndpoint = '/search/multi?api_key=$apiKey&query=$query';
+  /// Searches the TMDB DB for content matching query.
+  Future<TMDBResponse> search(String query) async {
+    const _endpoint = '/search/multi';
 
-  //   client.get(createUri(_searchEndpoint));
-  // }
+    var uri = createUri(_endpoint, {'api_key': apiKey, 'query': query});
+    log(uri.toString());
+    var request = await client.get(uri);
+
+    if (request.statusCode == 200) {
+      return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Trending is not 200");
+    }
+  }
 
   /// Gets a list of TV Shows that is airing today.
   Future<TMDBResponse> getTodaysTVShows(int pageKey) async {

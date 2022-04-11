@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:binge/models/tmdb_response.dart';
 import 'package:binge/services/tmdb_service.dart';
+import 'package:binge/views/list_card.dart';
 import 'package:binge/views/search_bar/animated_search.dart';
 import 'package:binge/views/search_history.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
       StreamController<String>.broadcast();
   late Stream<String> userTyped = _controller.stream;
   String liveQuery = '';
+  TMDBService tmdb = TMDBService();
 
   dismissSearch() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -56,6 +59,10 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
         log("Active Search Page: GestureDetector Tapped");
         dismissSearch();
       },
+      onPanDown: (_) {
+        log("Active Search Page: GestureDetector Swiped");
+        dismissSearch();
+      },
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -69,16 +76,32 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
               StreamBuilder<String>(
                 initialData: '',
                 stream:
-                    userTyped.debounceTime(const Duration(milliseconds: 300)),
+                    userTyped.debounceTime(const Duration(milliseconds: 500)),
                 builder: (builder, snapshot) {
                   log("StreamBuilder" + snapshot.data!.toString());
                   return Expanded(
                     child: Center(
                       child: snapshot.data! != ''
-                          ? ListView.builder(
-                              itemCount: 6,
-                              itemBuilder: (context, index) {
-                                return Text(snapshot.data!.toString());
+                          ? FutureBuilder<TMDBResponse>(
+                              future: tmdb.search(snapshot.data!),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                    itemCount:
+                                        snapshot.data?.results?.length ?? 0,
+                                    itemBuilder: (context, index) {
+                                      return SizedBox(
+                                        height: 170,
+                                        child: ListCard(
+                                          item: snapshot.data!.results![index],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               },
                             )
                           : const SearchHistory(),
