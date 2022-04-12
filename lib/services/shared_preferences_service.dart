@@ -31,16 +31,25 @@ class SharedPreferencesService {
   }
 
   addHistory(String newItem) async {
-    var isEmpty = false;
+    var newList = <String>[];
 
     if (prefs.getStringList('search_history') == null) {
-      isEmpty = true;
+      log("Search History - Empty");
+      newList.add(newItem);
     } else {
-      prefs.getStringList('search_history')!.add(newItem);
+      newList = prefs.getStringList('search_history')!;
+      newList.insert(0, newItem);
     }
 
-    await prefs.setStringList('search_history',
-        isEmpty ? [newItem] : prefs.getStringList('search_history')!);
+    if (newList.length > 10) {
+      newList.removeLast();
+    }
+
+    log("Search History - Added $newItem");
+
+    await prefs.setStringList('search_history', newList);
+
+    log("Search History - ${prefs.getStringList('search_history').toString()}");
 
     controller.sink.add(prefs.getStringList('search_history'));
   }

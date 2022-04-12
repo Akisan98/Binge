@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/services/shared_preferences_service.dart';
 import 'package:binge/utils/utils.dart';
 import 'package:binge/views/poster_image.dart';
 import 'package:flutter/material.dart';
@@ -15,59 +19,64 @@ class ListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          PosterImage(scaleFactor: 1, imagePath: item.posterPath),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: SizedBox(
-                    width: screenWidth - 92 - 16 - 16 - 16 - 16,
-                    child: AutoSizeText(
-                      item.name ?? "",
-                      textAlign: TextAlign.start,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textScaleFactor: 1.25,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => {
+        spService.addHistory(jsonEncode(item)),
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            PosterImage(scaleFactor: 1, imagePath: item.posterPath),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SizedBox(
+                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      child: AutoSizeText(
+                        item.name ?? "",
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textScaleFactor: 1.25,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: screenWidth - 92 - 16 - 16 - 16 - 16,
-                  child: AutoSizeText(
-                    resolveMediaType(item.mediaType, item.gender) +
-                        resolveYear(item.firstAirDate),
-                    textAlign: TextAlign.start,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: SizedBox(
+                  SizedBox(
                     width: screenWidth - 92 - 16 - 16 - 16 - 16,
                     child: AutoSizeText(
-                      resolveGenre(item.genreIds),
+                      resolveMediaType(item.mediaType, item.gender) +
+                          resolveYear(item.firstAirDate),
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: SizedBox(
+                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      child: AutoSizeText(
+                        resolveGenre(item.genreIds),
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Spacer(),
-          // Icon(Icons.add),
-        ],
+            // Spacer(),
+            // Icon(Icons.add),
+          ],
+        ),
       ),
     );
   }

@@ -69,24 +69,22 @@ class TMDBResults {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['genre_ids'] = genreIds;
-    data['original_language'] = originalLanguage;
-    data['id'] = id;
-    data['original_name'] = originalName;
-    data['origin_country'] = originCountry;
-    data['first_air_date'] = firstAirDate;
-    data['vote_count'] = voteCount;
-    data['name'] = name;
-    data['vote_average'] = voteAverage;
-    data['poster_path'] = posterPath;
-    data['backdrop_path'] = backdropPath;
-    data['overview'] = overview;
-    data['popularity'] = popularity;
-    data['media_type'] = mediaType;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'genre_ids': genreIds,
+        'original_language': originalLanguage,
+        'id': id,
+        'original_name': originalName,
+        'origin_country': originCountry,
+        'first_air_date': firstAirDate,
+        'vote_count': voteCount,
+        'name': name,
+        'vote_average': voteAverage,
+        'poster_path': posterPath,
+        'backdrop_path': backdropPath,
+        'overview': overview,
+        'popularity': popularity,
+        'media_type': mediaType,
+      };
 
   @override
   String toString() {
