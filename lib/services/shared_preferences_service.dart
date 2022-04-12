@@ -9,9 +9,7 @@ class SharedPreferencesService {
   late SharedPreferences prefs;
   final controller = StreamController.broadcast();
 
-  SharedPreferencesService._private() {
-    log('Yooo');
-  }
+  SharedPreferencesService._private();
 
   setup() async {
     log('Setting Up - SharedPreferencesService');
@@ -19,9 +17,8 @@ class SharedPreferencesService {
 
     var searchHistory = prefs.getStringList('search_history');
     log("History" + searchHistory.toString() + " - SharedPreferencesService");
-    controller.sink.add(searchHistory ?? "");
 
-    return searchHistory;
+    controller.sink.add(searchHistory ?? "");
   }
 
   Stream getHistoryStream() {
@@ -48,9 +45,6 @@ class SharedPreferencesService {
     log("Search History - Added $newItem");
 
     await prefs.setStringList('search_history', newList);
-
-    log("Search History - ${prefs.getStringList('search_history').toString()}");
-
     controller.sink.add(prefs.getStringList('search_history'));
   }
 

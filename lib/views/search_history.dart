@@ -38,28 +38,35 @@ class HistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.only(top: 16, left: 16),
-              child: Text(
-                'Recent Searches',
-                textScaleFactor: 1.25,
-                style: TextStyle(fontWeight: FontWeight.bold),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 62,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(top: 16, left: 16),
+                child: Text(
+                  'Recent Searches',
+                  textScaleFactor: 1.25,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          ),
-          for (var item in history)
-            ListCard(item: TMDBResults.fromJson(jsonDecode(item))),
-          TextButton(
-            onPressed: () => spService.clearHistory(),
-            child: const Text('Clear History'),
-          )
-        ],
+            for (var item in history)
+              SizedBox(
+                height: 170,
+                child: ListCard(
+                  item: TMDBResults.fromJson(jsonDecode(item)),
+                ),
+              ),
+            TextButton(
+              onPressed: () => spService.clearHistory(),
+              child: const Text('Clear History'),
+            ),
+          ],
+        ),
       ),
     );
   }

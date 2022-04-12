@@ -84,6 +84,8 @@ class TMDBResults {
         'overview': overview,
         'popularity': popularity,
         'media_type': mediaType,
+        'adult': adult,
+        'gender': gender,
       };
 
   @override
