@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/pages/detail_page.dart';
 import 'package:binge/services/shared_preferences_service.dart';
 import 'package:binge/utils/utils.dart';
 import 'package:binge/views/poster_image.dart';
@@ -9,11 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ListCard extends StatelessWidget {
-  const ListCard({Key? key, required this.item}) : super(key: key);
+  const ListCard({Key? key, required this.item, required this.index})
+      : super(key: key);
 
   final TMDBResults item;
   final num scaleFactor = 1;
   static Utils utils = Utils();
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,24 @@ class ListCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => {
         spService.addHistory(jsonEncode(item)),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(
+              item: item,
+              heroKey: 'poster$index',
+            ),
+          ),
+        ),
       },
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            PosterImage(scaleFactor: 1, imagePath: item.posterPath),
+            Hero(
+              tag: 'poster$index',
+              child: PosterImage(scaleFactor: 1, imagePath: item.posterPath),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               child: Column(
@@ -81,12 +95,12 @@ class ListCard extends StatelessWidget {
     );
   }
 
-  resolveMediaType(String? type, int? genre) {
+  resolveMediaType(String? type, int? gender) {
     switch (type) {
       case 'tv':
         return 'TV Series';
       case 'person':
-        return genre == 1 ? 'Actress' : 'Actor';
+        return gender == 1 ? 'Actress' : 'Actor';
       case 'movie':
         return 'Movie';
       default:

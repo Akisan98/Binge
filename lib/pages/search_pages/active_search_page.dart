@@ -94,6 +94,7 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
                                         height: 170,
                                         child: ListCard(
                                           item: snapshot.data!.results![index],
+                                          index: index,
                                         ),
                                       );
                                     },

@@ -77,11 +77,13 @@ class _InfiniteListState extends State<InfiniteList> {
             scrollDirection: Axis.horizontal,
             pagingController: _controller,
             builderDelegate: PagedChildBuilderDelegate<TMDBResults>(
-              itemBuilder: (context, item, index) => PosterCard(
-                text: item,
-                scaleFactor: _scaleFactor,
-              ),
-            ),
+                itemBuilder: (context, item, index) => PosterCard(
+                      index: index,
+                      listName: widget.header,
+                      item: item,
+                      scaleFactor: _scaleFactor,
+                    ),
+                animateTransitions: true),
           ),
         ),
       ],

@@ -17,7 +17,9 @@ void main() {
             child: SizedBox(
               height: 206,
               child: PosterCard(
-                text: TMDBResults.fromJson(
+                index: 0,
+                listName: 'postCardTest',
+                item: TMDBResults.fromJson(
                   {
                     "adult": false,
                     "backdrop_path": "/egoyMDLqCxzjnSrWOz50uLlJWmD.jpg",

@@ -13,8 +13,14 @@ class TMDBService {
       Uri.https(_baseUrl, '/3$unencoded', queryParameters);
 
   // Image URL
-  static const _imageUrl = 'https://image.tmdb.org/t/p/w92';
-  String createImageURL(String path) => _imageUrl + path;
+  static const _thumbnailUrl = 'https://image.tmdb.org/t/p/w92';
+  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
+  String createImageURL(String path, bool hero) =>
+      hero ? _imageUrl + path : _thumbnailUrl + path;
+
+  // Thumbnail, 92W, 138H
+  // Image, 500W, 750H
+  // H is 1.5X W
 
   // API Key
   static String apiKey = dotenv.get('TMDB_KEY');

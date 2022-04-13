@@ -1,4 +1,4 @@
-package ml.akisan.binge
+package ml.akisan.binge2
 
 import io.flutter.embedding.android.FlutterActivity
 

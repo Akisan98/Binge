@@ -7,26 +7,29 @@ class PosterImage extends StatelessWidget {
     Key? key,
     required this.scaleFactor,
     required this.imagePath,
+    this.hero = false,
   }) : super(key: key);
 
   static final TMDBService tmdb = TMDBService();
   final num? scaleFactor;
   final String? imagePath;
+  final bool hero;
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imagePath != null
-          ? tmdb.createImageURL(imagePath!)
+          ? tmdb.createImageURL(imagePath!, hero)
           : "https://v4.akisan.ml/assets/favicon.png",
-      width: scaleFactor != null ? scaleFactor! * 92 : 92,
-      height: scaleFactor != null ? scaleFactor! * 138 : 138,
+      width: getWidth(context),
+      height: getHeight(context),
       imageBuilder: (context, imageProvider) {
         return Container(
-          width: scaleFactor != null ? scaleFactor! * 92 : 92,
-          height: scaleFactor != null ? scaleFactor! * 138 : 138,
+          width: getWidth(context),
+          height: getHeight(context),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderRadius:
+                !hero ? const BorderRadius.all(Radius.circular(8)) : null,
             image: DecorationImage(
               image: imageProvider,
               fit: BoxFit.cover,
@@ -35,9 +38,14 @@ class PosterImage extends StatelessWidget {
         );
       },
       progressIndicatorBuilder: (context, url, downloadProgress) {
+        if (hero) {
+          // Use small img for Hero transition if big is not in cache
+          return PosterImage(
+              scaleFactor: getWidth(context) / 92, imagePath: imagePath);
+        }
         return SizedBox(
-          width: scaleFactor != null ? scaleFactor! * 92 : 92,
-          height: scaleFactor != null ? scaleFactor! * 138 : 138,
+          width: getWidth(context),
+          height: getHeight(context),
           child: Center(
             child: CircularProgressIndicator(
               value: downloadProgress.progress,
@@ -47,5 +55,27 @@ class PosterImage extends StatelessWidget {
       },
       errorWidget: (context, url, error) => const Icon(Icons.error),
     );
+  }
+
+  double getWidth(BuildContext context) {
+    if (hero) {
+      return MediaQuery.of(context).size.width;
+    } else {
+      if (scaleFactor != null) {
+        return scaleFactor! * 92;
+      }
+      return 92;
+    }
+  }
+
+  double getHeight(BuildContext context) {
+    if (hero) {
+      return MediaQuery.of(context).size.width * 1.5;
+    } else {
+      if (scaleFactor != null) {
+        return scaleFactor! * 138;
+      }
+      return 138;
+    }
   }
 }

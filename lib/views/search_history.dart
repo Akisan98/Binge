@@ -54,11 +54,12 @@ class HistoryList extends StatelessWidget {
                 ),
               ),
             ),
-            for (var item in history)
+            for (int i = 0; i < history.length - 1; i++)
               SizedBox(
                 height: 170,
                 child: ListCard(
-                  item: TMDBResults.fromJson(jsonDecode(item)),
+                  item: TMDBResults.fromJson(jsonDecode(history[i])),
+                  index: i,
                 ),
               ),
             TextButton(
