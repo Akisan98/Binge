@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:binge/enums/media_type.dart';
+import 'package:binge/models/tmdb_detail.dart';
 import 'package:binge/models/tmdb_response.dart';
 import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,6 +29,34 @@ class TMDBService {
 
   // One client instance for all the requests
   Client client = Client();
+
+  Future<TMDBDetail> getDetails(String? type, int? id) async {
+    var _endpoint;
+    final _id = id ?? 1;
+
+    switch (type) {
+      case 'person':
+        _endpoint = '/person/$_id';
+        break;
+      case 'tv':
+        _endpoint = '/tv/$_id';
+        break;
+      case 'movie':
+      default:
+        _endpoint = '/movie/$_id';
+        break;
+    }
+
+    var uri = createUri(_endpoint, {'api_key': apiKey});
+    log(uri.toString());
+    var request = await client.get(uri);
+
+    if (request.statusCode == 200) {
+      return TMDBDetail.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Detail is not 200");
+    }
+  }
 
   /// Searches the TMDB DB for content matching query.
   Future<TMDBResponse> search(String query) async {
@@ -58,7 +88,8 @@ class TMDBService {
     var request = await client.get(uri);
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(
+          jsonDecode(request.body), MediaType.tvSeries);
     } else {
       throw Exception("Status Code on Get Trending is not 200");
     }
@@ -78,7 +109,8 @@ class TMDBService {
     var request = await client.get(uri);
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(
+          jsonDecode(request.body), MediaType.tvSeries);
     } else {
       throw Exception("Status Code on Get Trending is not 200");
     }
@@ -96,7 +128,8 @@ class TMDBService {
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(
+          jsonDecode(request.body), MediaType.tvSeries);
     } else {
       throw Exception("Status Code on Get Popular is not 200");
     }
@@ -114,7 +147,7 @@ class TMDBService {
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
       throw Exception("Status Code on Get Popular is not 200");
     }
@@ -132,7 +165,7 @@ class TMDBService {
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
       throw Exception("Status Code on Get Popular is not 200");
     }
@@ -150,19 +183,9 @@ class TMDBService {
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
 
     if (request.statusCode == 200) {
-      return TMDBResponse.fromJson(jsonDecode(request.body));
+      return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
       throw Exception("Status Code on Get Popular is not 200");
-    }
-  }
-
-  decodeBody(Response response) {
-    if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      List<dynamic> items = json['results'];
-      return items;
-    } else {
-      return response;
     }
   }
 }

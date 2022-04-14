@@ -12,7 +12,7 @@ class TMDBResults {
   String? backdropPath;
   String? overview;
   double? popularity;
-  String? mediaType;
+  String? mediaType; // Not Present in the List tho
 
   // Actors
   bool? adult;

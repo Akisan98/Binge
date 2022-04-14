@@ -1,3 +1,4 @@
+import 'package:binge/enums/media_type.dart';
 import 'package:binge/models/tmdb_result.dart';
 
 class TMDBResponse {
@@ -8,12 +9,16 @@ class TMDBResponse {
 
   TMDBResponse({this.page, this.results, this.totalPages, this.totalResults});
 
-  TMDBResponse.fromJson(Map<String, dynamic> json) {
+  TMDBResponse.fromJson(Map<String, dynamic> json, [MediaType? type]) {
     page = json['page'];
     if (json['results'] != null) {
       results = <TMDBResults>[];
       json['results'].forEach((v) {
-        results!.add(TMDBResults.fromJson(v));
+        var item = TMDBResults.fromJson(v);
+        if (type != null) {
+          item.mediaType = type.string;
+        }
+        results!.add(item);
       });
     }
     totalPages = json['total_pages'];
