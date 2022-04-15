@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:binge/models/tmdb_response.dart';
+import 'package:binge/models/tmdb/tmdb_response.dart';
 import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/views/list_card.dart';
 import 'package:binge/views/search_bar/animated_search.dart';

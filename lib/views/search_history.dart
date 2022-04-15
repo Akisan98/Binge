@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/views/list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:binge/services/shared_preferences_service.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/pages/detail_page.dart';
 import 'package:binge/services/shared_preferences_service.dart';
 import 'package:binge/utils/utils.dart';

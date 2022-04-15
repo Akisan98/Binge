@@ -1,4 +1,4 @@
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/views/poster_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

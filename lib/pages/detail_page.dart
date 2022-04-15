@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:binge/models/tmdb_detail.dart';
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_detail.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/utils/utils.dart';
 import 'package:binge/views/poster_image.dart';
@@ -24,61 +24,126 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Hero(
-              tag: heroKey,
-              child: PosterImage(
-                scaleFactor: MediaQuery.of(context).size.width / 92,
-                imagePath: item.posterPath,
-                hero: true,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Hero(
+                tag: heroKey,
+                child: PosterImage(
+                  scaleFactor: MediaQuery.of(context).size.width / 92,
+                  imagePath: item.posterPath,
+                  hero: true,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        child: AutoSizeText(
-                          item.name ?? '',
-                          maxLines: 2,
-                          textScaleFactor: 2,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start,
-                        ),
-                        width: MediaQuery.of(context).size.width - 100,
+              // Padding(
+              //   padding: const EdgeInsets.all(16),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Row(
+              //         children: [
+              //           SizedBox(
+              //             child: AutoSizeText(
+              //               item.name ?? '',
+              //               maxLines: 2,
+              //               textScaleFactor: 2,
+              //               style: const TextStyle(fontWeight: FontWeight.bold),
+              //               textAlign: TextAlign.start,
+              //             ),
+              //             width: MediaQuery.of(context).size.width - 100,
+              //           ),
+              //         ],
+              //       ),
+              //       Padding(
+              //         padding: const EdgeInsets.only(top: 16),
+              //         child: Text(resolveYear(item.firstAirDate)),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              FutureBuilder<TMDBDetail>(
+                future: tmdb.getDetails(item.mediaType, item.id),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    log(snapshot.data!.toString());
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                child: AutoSizeText(
+                                  item.name ?? '',
+                                  maxLines: 2,
+                                  textScaleFactor: 2,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.start,
+                                ),
+                                width: MediaQuery.of(context).size.width - 100,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(right: 8),
+                                child: Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 28,
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: formatRating(snapshot.data?.voteAverage)
+                                      .toString(),
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: const [
+                                    TextSpan(
+                                      text: ' / 10.0',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Text(formatString(snapshot.data)),
+                          ),
+                          Text(snapshot.data!.genres!.first.name!),
+                          Text(snapshot.data!.toJson().toString()),
+                        ],
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(resolveYear(item.firstAirDate)),
-                  ),
-                ],
-              ),
-            ),
-            FutureBuilder<TMDBDetail>(
-              future: tmdb.getDetails(item.mediaType, item.id),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  log(snapshot.data!.toString());
-                  return Expanded(
-                    child: SingleChildScrollView(
-                      child: Text(formatString(snapshot.data)),
-                    ),
-                  );
-                }
+                    );
+                  }
 
-                return CircularProgressIndicator();
-              },
-            ),
-          ],
+                  return const CircularProgressIndicator();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  formatRating(double? rating) {
+    if (rating != null) {
+      return rating;
+    }
+
+    return 0.0;
   }
 
   formatString(TMDBDetail? data) {
@@ -86,17 +151,24 @@ class DetailPage extends StatelessWidget {
       return '';
     }
 
+    var date;
+
+    if (data.releaseDate != null) {
+      date = DateTime.parse(data.releaseDate!).year.toString();
+    } else {
+      date = '';
+    }
+
     var vote = data.voteAverage != null ? data.voteAverage.toString() : '';
-    var date = data.releaseDate ?? '';
+
     var runtime = data.runtime?.toString() ?? '';
     var company = '';
 
-    if (data.productionCompanies != null ||
-        data.productionCompanies!.isNotEmpty) {
-      company = data.productionCompanies![0].name ?? '';
+    if (data.companies != null && data.companies!.isNotEmpty) {
+      company = data.companies![0].name ?? '';
     }
 
-    return vote + date + runtime + company;
+    return '$date  •  $runtime min  •  $company';
   }
 
   resolveMediaType(String? type, int? gender) {

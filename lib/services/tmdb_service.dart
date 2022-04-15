@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:binge/enums/media_type.dart';
-import 'package:binge/models/tmdb_detail.dart';
-import 'package:binge/models/tmdb_response.dart';
+import 'package:binge/models/tmdb/tmdb_detail.dart';
+import 'package:binge/models/tmdb/tmdb_response.dart';
 import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

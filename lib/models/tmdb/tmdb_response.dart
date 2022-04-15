@@ -1,5 +1,5 @@
 import 'package:binge/enums/media_type.dart';
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 
 class TMDBResponse {
   int? page;

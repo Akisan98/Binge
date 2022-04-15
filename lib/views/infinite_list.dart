@@ -1,9 +1,9 @@
 import 'dart:developer';
-import 'package:binge/models/tmdb_response.dart';
+import 'package:binge/models/tmdb/tmdb_response.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'package:binge/models/tmdb_result.dart';
 import 'package:binge/views/poster_card.dart';
 
 class InfiniteList extends StatefulWidget {

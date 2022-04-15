@@ -1,4 +1,4 @@
-import 'package:binge/models/tmdb_result.dart';
+import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/pages/detail_page.dart';
 import 'package:binge/services/tmdb_service.dart';
 import 'package:binge/views/poster_image.dart';
