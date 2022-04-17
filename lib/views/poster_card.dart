@@ -12,12 +12,14 @@ class PosterCard extends StatelessWidget {
     this.scaleFactor,
     required this.index,
     required this.listName,
+    this.extraLine = false,
   }) : super(key: key);
 
   final TMDBResults item;
   final num? scaleFactor;
   final String listName;
   final int index;
+  final bool extraLine;
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +51,18 @@ class PosterCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: SizedBox(
-                  height: scaleFactor != null ? scaleFactor! * 38 : 38,
+                  height: extraLine
+                      ? scaleFactor != null
+                          ? scaleFactor! * 42
+                          : 42
+                      : scaleFactor != null
+                          ? scaleFactor! * 38
+                          : 38,
                   width: scaleFactor != null ? scaleFactor! * 92 : 92,
                   child: AutoSizeText(
                     item.name ?? "",
                     textAlign: TextAlign.center,
-                    maxLines: 2,
+                    maxLines: extraLine ? 3 : 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

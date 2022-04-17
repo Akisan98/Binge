@@ -28,15 +28,15 @@ class HomePage extends StatelessWidget {
                 const SearchBar(),
                 InfiniteList(
                   apiCall: tmdb.getTodaysTVShows,
-                  header: "Airing Today",
+                  header: 'Airing Today',
                 ),
                 InfiniteList(
                   apiCall: tmdb.getTrendingTVShows,
-                  header: "Trending TV Shows",
+                  header: 'Trending TV Shows',
                 ),
                 InfiniteList(
                   apiCall: tmdb.getPopularTVShows,
-                  header: "Popular TV Shows",
+                  header: 'Popular TV Shows',
                 ),
                 // Future Ad Placement
                 // const Padding(
@@ -47,15 +47,15 @@ class HomePage extends StatelessWidget {
                 // ),
                 InfiniteList(
                   apiCall: tmdb.getCurrentMovies,
-                  header: "Movies in Theaters",
+                  header: 'Movies in Theaters',
                 ),
                 InfiniteList(
                   apiCall: tmdb.getPopularMovies,
-                  header: "Popular Movies",
+                  header: 'Popular Movies',
                 ),
                 InfiniteList(
                   apiCall: tmdb.getTopRatedMovies,
-                  header: "Top Rated Movies",
+                  header: 'Top Rated Movies',
                 ),
               ],
             ),

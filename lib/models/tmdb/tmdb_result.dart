@@ -44,9 +44,25 @@ class TMDBResults {
     adult = credit?.adult;
     gender = credit?.gender;
     id = credit?.id;
-    name = credit?.name;
+    name = createName(credit);
     posterPath = credit?.profilePath;
     mediaType = credit?.mediaType ?? MediaType.person.string;
+  }
+
+  createName(Cast? credit) {
+    String output = '';
+
+    if (credit == null || (credit.name == null && credit.character == null)) {
+      return '';
+    }
+
+    output += credit.name ?? '';
+
+    output += credit.character != null && credit.character != ''
+        ? ' as ' + credit.character!
+        : '';
+
+    return output;
   }
 
   TMDBResults.fromJson(Map<String, dynamic> json) {

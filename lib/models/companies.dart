@@ -14,7 +14,7 @@ class Companies {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['logo_path'] = logoPath;
     data['name'] = name;

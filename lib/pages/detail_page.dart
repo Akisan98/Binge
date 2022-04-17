@@ -1,16 +1,17 @@
 import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:binge/enums/media_type.dart';
-import 'package:binge/models/tmdb/tmdb_credit.dart';
-import 'package:binge/models/tmdb/tmdb_detail.dart';
-import 'package:binge/models/tmdb/tmdb_result.dart';
-import 'package:binge/services/tmdb_service.dart';
-import 'package:binge/utils/utils.dart';
-import 'package:binge/views/genre_card.dart';
-import 'package:binge/views/poster_card.dart';
-import 'package:binge/views/poster_image.dart';
 import 'package:flutter/material.dart';
+
+import '../enums/media_type.dart';
+import '../models/tmdb/tmdb_credit.dart';
+import '../models/tmdb/tmdb_detail.dart';
+import '../models/tmdb/tmdb_result.dart';
+import '../services/tmdb_service.dart';
+import '../utils/utils.dart';
+import '../views/genre_card.dart';
+import '../views/poster_card.dart';
+import '../views/poster_image.dart';
+import '../views/season_list.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({
@@ -53,7 +54,7 @@ class DetailPage extends StatelessWidget {
                             children: [
                               SizedBox(
                                 child: AutoSizeText(
-                                  item.name ?? '',
+                                  snapshot.data?.title ?? '',
                                   maxLines: 2,
                                   textScaleFactor: 2,
                                   style: const TextStyle(
@@ -99,14 +100,14 @@ class DetailPage extends StatelessWidget {
                                 )
                               : Container(),
                           Padding(
-                            padding: EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.only(top: 8),
                             child: item.mediaType != MediaType.person.string
                                 ? Text(formatString(snapshot.data))
                                 : Text(safeString(snapshot.data?.birthday)),
                           ),
                           item.mediaType != MediaType.person.string
                               ? Padding(
-                                  padding: EdgeInsets.only(top: 8),
+                                  padding: const EdgeInsets.only(top: 8),
                                   child: SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     height: 16,
@@ -128,13 +129,18 @@ class DetailPage extends StatelessWidget {
                                 )
                               : Container(),
                           Padding(
-                            padding: EdgeInsets.only(top: 24),
+                            padding: const EdgeInsets.only(top: 24),
                             child: Text(snapshot.data?.tagline ?? ''),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.only(top: 8),
                             child: Text(snapshot.data?.overview ?? ''),
                           ),
+                          item.mediaType == MediaType.tvSeries.string
+                              ? SeasonList(
+                                  seasons: snapshot.data?.seasons,
+                                )
+                              : Container(),
                           // Text(snapshot.data!.toJson().toString()),
                         ],
                       ),
@@ -148,25 +154,49 @@ class DetailPage extends StatelessWidget {
                 future: tmdb.getCredits(item.id, item.mediaType),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data?.cast?.length ?? 0,
-                          itemBuilder: (BuildContext context, int index) {
-                            var name = snapshot.data?.cast?[index].name != null
-                                ? 'credits_${snapshot.data?.cast?[index].name}'
-                                : 'credits_${snapshot.data?.cast?[index].id}';
-                            return PosterCard(
-                              item: TMDBResults.fromCredits(
-                                  snapshot.data?.cast?[index]),
-                              index: index,
-                              listName: name,
-                            );
-                          }),
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, bottom: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding:
+                                EdgeInsets.only(left: 8, top: 24, bottom: 8),
+                            child: Text(
+                              'Credits',
+                              textScaleFactor: 1.5,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 204,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data?.cast?.length ?? 0,
+                              itemBuilder: (BuildContext context, int index) {
+                                var name = snapshot.data?.cast?[index].name !=
+                                        null
+                                    ? 'credits_${snapshot.data?.cast?[index].name}'
+                                    : 'credits_${snapshot.data?.cast?[index].id}';
+                                return PosterCard(
+                                  item: TMDBResults.fromCredits(
+                                      snapshot.data?.cast?[index]),
+                                  index: index,
+                                  listName: name,
+                                  extraLine: true,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 },
               )
             ],

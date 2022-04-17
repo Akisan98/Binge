@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:binge/models/tmdb/tmdb_result.dart';
-import 'package:binge/pages/detail_page.dart';
-import 'package:binge/services/shared_preferences_service.dart';
-import 'package:binge/utils/utils.dart';
-import 'package:binge/views/poster_image.dart';
-import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+
+import '../models/tmdb/tmdb_result.dart';
+import '../pages/detail_page.dart';
+import '../services/shared_preferences_service.dart';
+import '../utils/utils.dart';
+import 'poster_image.dart';
 
 class ListCard extends StatelessWidget {
   const ListCard({Key? key, required this.item, required this.index})

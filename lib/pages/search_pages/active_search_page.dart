@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:binge/models/tmdb/tmdb_response.dart';
-import 'package:binge/services/tmdb_service.dart';
-import 'package:binge/views/list_card.dart';
-import 'package:binge/views/search_bar/animated_search.dart';
-import 'package:binge/views/search_history.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/transformers.dart';
+
+import '../../models/tmdb/tmdb_response.dart';
+import '../../services/tmdb_service.dart';
+import '../../views/list_card.dart';
+import '../../views/search_bar/animated_search.dart';
+import '../../views/search_history.dart';
 
 class ActiveSearchPage extends StatefulWidget {
   const ActiveSearchPage({Key? key}) : super(key: key);
@@ -52,15 +53,15 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Active Search Page: Build");
+    log('Active Search Page: Build');
 
     return GestureDetector(
       onTap: () {
-        log("Active Search Page: GestureDetector Tapped");
+        log('Active Search Page: GestureDetector Tapped');
         dismissSearch();
       },
       onPanDown: (_) {
-        log("Active Search Page: GestureDetector Swiped");
+        log('Active Search Page: GestureDetector Swiped');
         dismissSearch();
       },
       child: Scaffold(
@@ -69,7 +70,7 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
             children: [
               AnimatedSearch(
                 // TODO: Isolate State from parent
-                key: const Key("1"),
+                key: const Key('1'),
                 // Need the key, else IconBtn in Prefix won't work if TextField is out of focus
                 searchTextController: searchText,
               ),
@@ -78,7 +79,7 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
                 stream:
                     userTyped.debounceTime(const Duration(milliseconds: 500)),
                 builder: (builder, snapshot) {
-                  log("StreamBuilder" + snapshot.data!.toString());
+                  log('StreamBuilder' + snapshot.data!.toString());
                   return Expanded(
                     child: Center(
                       child: snapshot.data! != ''

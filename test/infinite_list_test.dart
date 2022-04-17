@@ -7,8 +7,8 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  testWidgets('Infinite list is displayed', (WidgetTester tester) async {
-    TMDBService tmdb = TMDBService();
+  testWidgets('Infinite list is displayed', (tester) async {
+    final tmdb = TMDBService();
 
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -36,7 +36,7 @@ void main() {
     // Verify that list renders.
     expect(headerTextFinder, findsOneWidget);
 
-    final Size baseSize = tester.getSize(listFinder);
+    final baseSize = tester.getSize(listFinder);
     expect(baseSize.height, equals((206 * 0.8) + 24 + 8 + 21));
   });
 }

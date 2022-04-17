@@ -1,7 +1,7 @@
-import 'package:binge/models/companies.dart';
-import 'package:binge/models/genres.dart';
-import 'package:binge/models/tv/episode_to_air.dart';
-import 'package:binge/models/tv/season.dart';
+import '../companies.dart';
+import '../genres.dart';
+import '../tv/episode_to_air.dart';
+import '../tv/season.dart';
 
 class TMDBDetail {
   bool? adult;
@@ -52,33 +52,34 @@ class TMDBDetail {
   String? birthday;
   String? deathday;
 
-  TMDBDetail(
-      {this.adult,
-      this.backdropPath,
-      this.budget,
-      this.genres,
-      this.homepage,
-      this.id,
-      this.imdbId,
-      this.inProduction,
-      this.lastAirDate,
-      this.lastEpisodeToAir,
-      this.nextEpisodeToAir,
-      this.numberOfEpisodes,
-      this.numberOfSeasons,
-      this.overview,
-      this.popularity,
-      this.posterPath,
-      this.companies,
-      this.releaseDate,
-      this.revenue,
-      this.runtime,
-      this.status,
-      this.tagline,
-      this.title,
-      this.video,
-      this.voteAverage,
-      this.voteCount});
+  TMDBDetail({
+    this.adult,
+    this.backdropPath,
+    this.budget,
+    this.genres,
+    this.homepage,
+    this.id,
+    this.imdbId,
+    this.inProduction,
+    this.lastAirDate,
+    this.lastEpisodeToAir,
+    this.nextEpisodeToAir,
+    this.numberOfEpisodes,
+    this.numberOfSeasons,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.companies,
+    this.releaseDate,
+    this.revenue,
+    this.runtime,
+    this.status,
+    this.tagline,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
+  });
 
   TMDBDetail.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -153,7 +154,7 @@ class TMDBDetail {
 
   Map<String, dynamic> toJson() {
     // TODO: Fix or Remove.
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['adult'] = adult;
     data['backdrop_path'] = backdropPath;
     data['budget'] = budget;

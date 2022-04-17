@@ -10,17 +10,18 @@ class EpisodeToAir {
   double? voteAverage;
   int? voteCount;
 
-  EpisodeToAir(
-      {this.airDate,
-      this.episodeNumber,
-      this.id,
-      this.name,
-      this.overview,
-      this.productionCode,
-      this.seasonNumber,
-      this.stillPath,
-      this.voteAverage,
-      this.voteCount});
+  EpisodeToAir({
+    this.airDate,
+    this.episodeNumber,
+    this.id,
+    this.name,
+    this.overview,
+    this.productionCode,
+    this.seasonNumber,
+    this.stillPath,
+    this.voteAverage,
+    this.voteCount,
+  });
 
   EpisodeToAir.fromJson(Map<String, dynamic> json) {
     airDate = json['air_date'];
@@ -36,17 +37,17 @@ class EpisodeToAir {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['air_date'] = this.airDate;
-    data['episode_number'] = this.episodeNumber;
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['overview'] = this.overview;
-    data['production_code'] = this.productionCode;
-    data['season_number'] = this.seasonNumber;
-    data['still_path'] = this.stillPath;
-    data['vote_average'] = this.voteAverage;
-    data['vote_count'] = this.voteCount;
+    final data = <String, dynamic>{};
+    data['air_date'] = airDate;
+    data['episode_number'] = episodeNumber;
+    data['id'] = id;
+    data['name'] = name;
+    data['overview'] = overview;
+    data['production_code'] = productionCode;
+    data['season_number'] = seasonNumber;
+    data['still_path'] = stillPath;
+    data['vote_average'] = voteAverage;
+    data['vote_count'] = voteCount;
     return data;
   }
 }

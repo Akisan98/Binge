@@ -14,15 +14,15 @@ class TMDBCredit {
         cast!.add(Cast.fromJson(v));
       });
     }
-    // if (json['crew'] != null) {
-    //   json['crew'].forEach((v) {
-    //     cast!.add(Cast.fromJson(v));
-    //   });
-    // }
+    if (json['crew'] != null) {
+      json['crew'].forEach((v) {
+        cast!.add(Cast.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     if (cast != null) {
       data['cast'] = cast!.map((v) => v.toJson()).toList();
@@ -46,20 +46,21 @@ class Cast {
   int? order;
   String? mediaType;
 
-  Cast(
-      {this.adult,
-      this.gender,
-      this.id,
-      this.knownForDepartment,
-      this.name,
-      this.originalName,
-      this.popularity,
-      this.profilePath,
-      this.castId,
-      this.character,
-      this.creditId,
-      this.order,
-      this.mediaType});
+  Cast({
+    this.adult,
+    this.gender,
+    this.id,
+    this.knownForDepartment,
+    this.name,
+    this.originalName,
+    this.popularity,
+    this.profilePath,
+    this.castId,
+    this.character,
+    this.creditId,
+    this.order,
+    this.mediaType,
+  });
 
   Cast.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -78,7 +79,7 @@ class Cast {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['adult'] = adult;
     data['gender'] = gender;
     data['id'] = id;

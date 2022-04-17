@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:binge/enums/media_type.dart';
-import 'package:binge/models/tmdb/tmdb_credit.dart';
-import 'package:binge/models/tmdb/tmdb_detail.dart';
-import 'package:binge/models/tmdb/tmdb_response.dart';
-import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+
+import '../enums/media_type.dart';
+import '../models/tmdb/tmdb_credit.dart';
+import '../models/tmdb/tmdb_detail.dart';
+import '../models/tmdb/tmdb_response.dart';
 
 class TMDBService {
   // Base Url for the API
@@ -48,14 +49,14 @@ class TMDBService {
         break;
     }
 
-    var uri = createUri(_endpoint, {'api_key': apiKey});
+    final uri = createUri(_endpoint, {'api_key': apiKey});
     log(uri.toString());
-    var request = await client.get(uri);
+    final request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBDetail.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception("Status Code on Get Detail is not 200");
+      throw Exception('Status Code on Get Detail is not 200');
     }
   }
 
@@ -63,14 +64,14 @@ class TMDBService {
   Future<TMDBResponse> search(String query) async {
     const _endpoint = '/search/multi';
 
-    var uri = createUri(_endpoint, {'api_key': apiKey, 'query': query});
+    final uri = createUri(_endpoint, {'api_key': apiKey, 'query': query});
     log(uri.toString());
-    var request = await client.get(uri);
+    final request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception("Status Code on Get Trending is not 200");
+      throw Exception('Status Code on Get Trending is not 200');
     }
   }
 
@@ -87,14 +88,14 @@ class TMDBService {
       _endpoint = '/person/$_id/combined_credits';
     }
 
-    var uri = createUri(_endpoint, {'api_key': apiKey});
+    final uri = createUri(_endpoint, {'api_key': apiKey});
     log(uri.toString());
-    var request = await client.get(uri);
+    final request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBCredit.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception("Status Code on Get Trending is not 200");
+      throw Exception('Status Code on Get Trending is not 200');
     }
   }
 
@@ -104,19 +105,21 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var uri =
+    final uri =
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
     log(uri.toString());
-    var request = await client.get(uri);
+    final request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(
-          jsonDecode(request.body), MediaType.tvSeries);
+        jsonDecode(request.body),
+        MediaType.tvSeries,
+      );
     } else {
-      throw Exception("Status Code on Get Trending is not 200");
+      throw Exception('Status Code on Get Trending is not 200');
     }
   }
 
@@ -125,19 +128,21 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var uri =
+    final uri =
         createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
     log(uri.toString());
-    var request = await client.get(uri);
+    final request = await client.get(uri);
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(
-          jsonDecode(request.body), MediaType.tvSeries);
+        jsonDecode(request.body),
+        MediaType.tvSeries,
+      );
     } else {
-      throw Exception("Status Code on Get Trending is not 200");
+      throw Exception('Status Code on Get Trending is not 200');
     }
   }
 
@@ -146,17 +151,20 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var request = await client.get(
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+    final request = await client.get(
+      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+    );
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(
-          jsonDecode(request.body), MediaType.tvSeries);
+        jsonDecode(request.body),
+        MediaType.tvSeries,
+      );
     } else {
-      throw Exception("Status Code on Get Popular is not 200");
+      throw Exception('Status Code on Get Popular is not 200');
     }
   }
 
@@ -165,16 +173,17 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var request = await client.get(
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+    final request = await client.get(
+      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+    );
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
-      throw Exception("Status Code on Get Popular is not 200");
+      throw Exception('Status Code on Get Popular is not 200');
     }
   }
 
@@ -183,16 +192,17 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var request = await client.get(
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+    final request = await client.get(
+      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+    );
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
-      throw Exception("Status Code on Get Popular is not 200");
+      throw Exception('Status Code on Get Popular is not 200');
     }
   }
 
@@ -201,16 +211,17 @@ class TMDBService {
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
-      throw Exception("Page Key out of range!");
+      throw Exception('Page Key out of range!');
     }
 
-    var request = await client.get(
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}));
+    final request = await client.get(
+      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+    );
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body), MediaType.movie);
     } else {
-      throw Exception("Status Code on Get Popular is not 200");
+      throw Exception('Status Code on Get Popular is not 200');
     }
   }
 }

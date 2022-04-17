@@ -6,9 +6,8 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  testWidgets('Animated Search bar starts in Focused mode',
-      (WidgetTester tester) async {
-    TextEditingController _searchcontroller = TextEditingController();
+  testWidgets('Animated Search bar starts in Focused mode', (tester) async {
+    final _searchcontroller = TextEditingController();
 
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -36,18 +35,17 @@ void main() {
 
     expect(
       find.byWidgetPredicate(
-        (Widget widget) =>
+        (widget) =>
             widget is AnimatedContainer &&
             widget.constraints!.heightConstraints().maxHeight == 62,
-        description: "Search bar in focus should have height of 62",
+        description: 'Search bar in focus should have height of 62',
       ),
       findsOneWidget,
     );
   });
 
-  testWidgets('Animated Search bar shows text when dismissed',
-      (WidgetTester tester) async {
-    TextEditingController _searchcontroller = TextEditingController();
+  testWidgets('Animated Search bar shows text when dismissed', (tester) async {
+    final _searchcontroller = TextEditingController();
 
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -75,10 +73,10 @@ void main() {
 
     expect(
       find.byWidgetPredicate(
-        (Widget widget) =>
+        (widget) =>
             widget is AnimatedContainer &&
             widget.constraints!.heightConstraints().maxHeight == 62,
-        description: "Search bar in focus should have height of 62",
+        description: 'Search bar in focus should have height of 62',
       ),
       findsOneWidget,
     );
@@ -95,10 +93,10 @@ void main() {
 
     expect(
       find.byWidgetPredicate(
-        (Widget widget) =>
+        (widget) =>
             widget is AnimatedContainer &&
             widget.constraints!.heightConstraints().maxHeight == 50,
-        description: "Search bar not in focus should have height of 50",
+        description: 'Search bar not in focus should have height of 50',
       ),
       findsOneWidget,
     );

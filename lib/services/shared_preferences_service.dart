@@ -16,9 +16,9 @@ class SharedPreferencesService {
     prefs = await SharedPreferences.getInstance();
 
     var searchHistory = prefs.getStringList('search_history');
-    log("History" + searchHistory.toString() + " - SharedPreferencesService");
+    log('History' + searchHistory.toString() + ' - SharedPreferencesService');
 
-    controller.sink.add(searchHistory ?? "");
+    controller.sink.add(searchHistory ?? '');
   }
 
   Stream getHistoryStream() {
@@ -31,7 +31,7 @@ class SharedPreferencesService {
     var newList = <String>[];
 
     if (prefs.getStringList('search_history') == null) {
-      log("Search History - Empty");
+      log('Search History - Empty');
       newList.add(newItem);
     } else {
       newList = prefs.getStringList('search_history')!;
@@ -42,7 +42,7 @@ class SharedPreferencesService {
       newList.removeLast();
     }
 
-    log("Search History - Added $newItem");
+    log('Search History - Added $newItem');
 
     await prefs.setStringList('search_history', newList);
     controller.sink.add(prefs.getStringList('search_history'));
@@ -50,6 +50,6 @@ class SharedPreferencesService {
 
   clearHistory() async {
     await prefs.remove('search_history');
-    controller.sink.add("");
+    controller.sink.add('');
   }
 }

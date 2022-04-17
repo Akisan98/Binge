@@ -7,7 +7,7 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  testWidgets('Search bar is displayed', (WidgetTester tester) async {
+  testWidgets('Search bar is displayed', (tester) async {
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
       const MaterialApp(
@@ -29,7 +29,7 @@ void main() {
     expect(searchIconFinder, findsOneWidget);
     expect(searchBarFinder, isNotNull);
 
-    final Size baseSize = tester.getSize(searchBarFinder);
+    final baseSize = tester.getSize(searchBarFinder);
     expect(baseSize.height, equals(50 + 24 + 8));
 
     // Tap the search bar.

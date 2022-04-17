@@ -7,14 +7,15 @@ class Seasons {
   String? posterPath;
   int? seasonNumber;
 
-  Seasons(
-      {this.airDate,
-      this.episodeCount,
-      this.id,
-      this.name,
-      this.overview,
-      this.posterPath,
-      this.seasonNumber});
+  Seasons({
+    this.airDate,
+    this.episodeCount,
+    this.id,
+    this.name,
+    this.overview,
+    this.posterPath,
+    this.seasonNumber,
+  });
 
   Seasons.fromJson(Map<String, dynamic> json) {
     airDate = json['air_date'];
@@ -27,7 +28,7 @@ class Seasons {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['air_date'] = airDate;
     data['episode_count'] = episodeCount;
     data['id'] = id;
@@ -37,4 +38,7 @@ class Seasons {
     data['season_number'] = seasonNumber;
     return data;
   }
+
+  @override
+  String toString() => toJson().toString();
 }
