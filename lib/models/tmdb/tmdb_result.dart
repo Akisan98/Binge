@@ -1,3 +1,6 @@
+import 'package:binge/enums/media_type.dart';
+import 'package:binge/models/tmdb/tmdb_credit.dart';
+
 class TMDBResults {
   List<int>? genreIds;
   String? originalLanguage;
@@ -20,21 +23,31 @@ class TMDBResults {
   List<TMDBResults>? knownFor;
   // String? knownForDepartment;
 
-  TMDBResults(
-      {this.genreIds,
-      this.originalLanguage,
-      this.id,
-      this.originalName,
-      this.originCountry,
-      this.firstAirDate,
-      this.voteCount,
-      this.name,
-      this.voteAverage,
-      this.posterPath,
-      this.backdropPath,
-      this.overview,
-      this.popularity,
-      this.mediaType});
+  TMDBResults({
+    this.genreIds,
+    this.originalLanguage,
+    this.id,
+    this.originalName,
+    this.originCountry,
+    this.firstAirDate,
+    this.voteCount,
+    this.name,
+    this.voteAverage,
+    this.posterPath,
+    this.backdropPath,
+    this.overview,
+    this.popularity,
+    this.mediaType,
+  });
+
+  TMDBResults.fromCredits(Cast? credit) {
+    adult = credit?.adult;
+    gender = credit?.gender;
+    id = credit?.id;
+    name = credit?.name;
+    posterPath = credit?.profilePath;
+    mediaType = credit?.mediaType ?? MediaType.person.string;
+  }
 
   TMDBResults.fromJson(Map<String, dynamic> json) {
     genreIds = json['genre_ids'] != null ? json['genre_ids'].cast<int>() : null;

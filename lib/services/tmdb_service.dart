@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:binge/enums/media_type.dart';
+import 'package:binge/models/tmdb/tmdb_credit.dart';
 import 'package:binge/models/tmdb/tmdb_detail.dart';
 import 'package:binge/models/tmdb/tmdb_response.dart';
 import 'package:http/http.dart';
@@ -58,7 +59,7 @@ class TMDBService {
     }
   }
 
-  /// Searches the TMDB DB for content matching query.
+  /// Fetches Credits for selected Media from the TMDB DB.
   Future<TMDBResponse> search(String query) async {
     const _endpoint = '/search/multi';
 
@@ -68,6 +69,30 @@ class TMDBService {
 
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception("Status Code on Get Trending is not 200");
+    }
+  }
+
+  /// Searches the TMDB DB for content matching query.
+  Future<TMDBCredit> getCredits(int? id, String? mediaType) async {
+    final _id = id ?? 1;
+    var _endpoint = '/movie/$_id/credits';
+
+    if (mediaType == MediaType.tvSeries.string) {
+      _endpoint = '/tv/$_id/credits';
+    }
+
+    if (mediaType == MediaType.person.string) {
+      _endpoint = '/person/$_id/combined_credits';
+    }
+
+    var uri = createUri(_endpoint, {'api_key': apiKey});
+    log(uri.toString());
+    var request = await client.get(uri);
+
+    if (request.statusCode == 200) {
+      return TMDBCredit.fromJson(jsonDecode(request.body));
     } else {
       throw Exception("Status Code on Get Trending is not 200");
     }

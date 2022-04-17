@@ -48,6 +48,10 @@ class TMDBDetail {
   double? voteAverage;
   int? voteCount;
 
+  // Person
+  String? birthday;
+  String? deathday;
+
   TMDBDetail(
       {this.adult,
       this.backdropPath,
@@ -89,7 +93,7 @@ class TMDBDetail {
     homepage = json['homepage'];
     id = json['id'];
     imdbId = json['imdb_id'];
-    overview = json['overview'];
+    overview = json['overview'] ?? json['biography'];
     popularity = json['popularity'];
     posterPath = json['poster_path'];
     if (json['networks'] != null) {
@@ -124,11 +128,13 @@ class TMDBDetail {
     revenue = json['revenue'];
     runtime = getRuntime(json);
     status = json['status'];
-    tagline = json['tagline'];
+    tagline = json['tagline'] ?? json['place_of_birth'];
     title = json['title'] ?? json['name'];
     video = json['video'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
+    birthday = json['birthday'];
+    deathday = json['deathday'];
   }
 
   getRuntime(json) {

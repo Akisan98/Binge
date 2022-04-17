@@ -19,7 +19,8 @@ class InfiniteList extends StatefulWidget {
 
 class _InfiniteListState extends State<InfiniteList> {
   final PagingController<int, TMDBResults> _controller =
-      PagingController<int, TMDBResults>(firstPageKey: 1);
+      PagingController<int, TMDBResults>(
+          firstPageKey: 1, invisibleItemsThreshold: 3);
 
   static const num? _scaleFactor = 0.8;
 
