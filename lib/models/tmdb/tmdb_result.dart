@@ -1,5 +1,5 @@
-import 'package:binge/enums/media_type.dart';
-import 'package:binge/models/tmdb/tmdb_credit.dart';
+import '../../enums/media_type.dart';
+import 'tmdb_credit.dart';
 
 class TMDBResults {
   List<int>? genreIds;

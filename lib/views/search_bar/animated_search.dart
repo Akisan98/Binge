@@ -68,7 +68,7 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
   @override
   void initState() {
-    log("Animated Search Bar: InitState");
+    log('Animated Search Bar: InitState');
 
     searchTextController = widget.searchTextController;
     chevronIcon = Padding(
@@ -91,7 +91,7 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
   @override
   Widget build(BuildContext context) {
-    log("Animated Search Bar: Build");
+    log('Animated Search Bar: Build');
 
     return AnimatedContainer(
       height: inFocus ? 62 : 50,
@@ -106,9 +106,14 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
             ),
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        color: searchColor,
+        borderRadius:
+            inFocus ? null : const BorderRadius.all(Radius.circular(8)),
+      ),
       child: TextField(
         onTap: () => {
-          log("Animated Search Bar: TextField Tapped"),
+          log('Animated Search Bar: TextField Tapped'),
           inFocus = true,
           hint = '',
           prefix = chevronIcon,
@@ -127,11 +132,6 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
           filled: true,
           hintStyle: textStyle,
         ),
-      ),
-      decoration: BoxDecoration(
-        color: searchColor,
-        borderRadius:
-            inFocus ? null : const BorderRadius.all(Radius.circular(8)),
       ),
     );
   }

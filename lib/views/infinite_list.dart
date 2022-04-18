@@ -1,10 +1,11 @@
 import 'dart:developer';
-import 'package:binge/models/tmdb/tmdb_response.dart';
-import 'package:binge/models/tmdb/tmdb_result.dart';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'package:binge/views/poster_card.dart';
+import '../models/tmdb/tmdb_response.dart';
+import '../models/tmdb/tmdb_result.dart';
+import 'poster_card.dart';
 
 class InfiniteList extends StatefulWidget {
   const InfiniteList({Key? key, required this.apiCall, required this.header})
@@ -42,7 +43,7 @@ class _InfiniteListState extends State<InfiniteList> {
     try {
       log(pageKey.toString());
       final response = await widget.apiCall(pageKey);
-      log(response.toString());
+      // log(response.toString());
       final isLastPage = response.page == response.totalPages;
 
       if (isLastPage) {

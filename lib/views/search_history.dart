@@ -1,34 +1,32 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:binge/models/tmdb/tmdb_result.dart';
-import 'package:binge/views/list_card.dart';
 import 'package:flutter/material.dart';
-import 'package:binge/services/shared_preferences_service.dart';
+
+import '../models/tmdb/tmdb_result.dart';
+import '../services/shared_preferences_service.dart';
+import 'list_card.dart';
 
 class SearchHistory extends StatelessWidget {
   const SearchHistory({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: spService.getHistoryStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          log("Data:" + snapshot.data.toString() + " - SearchHistory");
-          return snapshot.data != ""
-              ? HistoryList(
-                  history: snapshot.data!,
-                )
-              : const NoHistory();
-        }
+  Widget build(BuildContext context) => StreamBuilder(
+        stream: spService.getHistoryStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            //log('Data:${snapshot.data} - SearchHistory');
+            return snapshot.data != ''
+                ? HistoryList(
+                    history: snapshot.data,
+                  )
+                : const NoHistory();
+          }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
 }
 
 class HistoryList extends StatelessWidget {
@@ -37,40 +35,38 @@ class HistoryList extends StatelessWidget {
   final dynamic history;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 62,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.only(top: 16, left: 16),
-                child: Text(
-                  'Recent Searches',
-                  textScaleFactor: 1.25,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+  Widget build(BuildContext context) => SizedBox(
+        height: MediaQuery.of(context).size.height - 62,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 16, left: 16),
+                  child: Text(
+                    'Recent Searches',
+                    textScaleFactor: 1.25,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
-            for (int i = 0; i < history.length - 1; i++)
-              SizedBox(
-                height: 170,
-                child: ListCard(
-                  item: TMDBResults.fromJson(jsonDecode(history[i])),
-                  index: i,
+              for (int i = 0; i < history.length - 1; i++)
+                SizedBox(
+                  height: 170,
+                  child: ListCard(
+                    item: TMDBResults.fromJson(jsonDecode(history[i])),
+                    index: i,
+                  ),
                 ),
+              TextButton(
+                onPressed: spService.clearHistory,
+                child: const Text('Clear History'),
               ),
-            TextButton(
-              onPressed: () => spService.clearHistory(),
-              child: const Text('Clear History'),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class NoHistory extends StatelessWidget {

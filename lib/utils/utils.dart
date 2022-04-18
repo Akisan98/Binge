@@ -12,6 +12,14 @@ class Utils {
     return list == null || list.isEmpty;
   }
 
+  bool isNullOrEmpty(double? number) {
+    if (number == null || number == 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   // Avoid another call for string value.
   static const genres = [
     {'id': 28, 'name': 'Action'},

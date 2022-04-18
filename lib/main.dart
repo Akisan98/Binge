@@ -1,6 +1,7 @@
-import 'package:binge/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'pages/home_page.dart';
 
 Future<void> main() async {
   await dotenv.load();
@@ -24,84 +25,82 @@ class Binge extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        // Light Theme
-        brightness: Brightness.light,
-        backgroundColor: light,
-        primaryColor: purple,
-        splashColor: Colors.black,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: purple,
-          secondary: dark,
-          tertiary: white,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: purple,
-            minimumSize: const Size.fromHeight(56),
-            textStyle: button,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData(
+          // Light Theme
+          brightness: Brightness.light,
+          backgroundColor: light,
+          primaryColor: purple,
+          splashColor: Colors.black,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: purple,
+            secondary: dark,
+            tertiary: white,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              primary: purple,
+              minimumSize: const Size.fromHeight(56),
+              textStyle: button,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          textTheme: TextTheme(
+            button: button,
+            overline: TextStyle(
+              color: white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ), // button 2
+            headline1: TextStyle(
+              color: black,
+              fontSize: 48,
+              fontWeight: FontWeight.w900,
             ),
           ),
         ),
-        textTheme: TextTheme(
-          button: button,
-          overline: TextStyle(
-            color: white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ), // button 2
-          headline1: TextStyle(
-            color: black,
-            fontSize: 48,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
-      darkTheme: ThemeData(
-        // Dark Theme
-        backgroundColor: dark,
-        brightness: Brightness.dark,
-
-        primaryColor: purple,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: purple,
-          secondary: dark,
-          tertiary: white,
+        darkTheme: ThemeData(
+          // Dark Theme
+          backgroundColor: dark,
           brightness: Brightness.dark,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            primary: purple,
-            minimumSize: const Size.fromHeight(56),
-            textStyle: button,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+
+          primaryColor: purple,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: purple,
+            secondary: dark,
+            tertiary: white,
+            brightness: Brightness.dark,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              primary: purple,
+              minimumSize: const Size.fromHeight(56),
+              textStyle: button,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          textTheme: TextTheme(
+            button: button,
+            overline: TextStyle(
+              color: purple,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ), // button 2
+            headline1: TextStyle(
+              color: white,
+              fontSize: 48,
+              fontWeight: FontWeight.w900,
             ),
           ),
         ),
-        textTheme: TextTheme(
-          button: button,
-          overline: TextStyle(
-            color: purple,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ), // button 2
-          headline1: TextStyle(
-            color: white,
-            fontSize: 48,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: true,
-      home: HomePage(),
-    );
-  }
+        themeMode: ThemeMode.dark,
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+      );
 }

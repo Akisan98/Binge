@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../enums/media_type.dart';
+import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_credit.dart';
 import '../models/tmdb/tmdb_detail.dart';
 import '../models/tmdb/tmdb_result.dart';
@@ -25,8 +26,12 @@ class DetailPage extends StatelessWidget {
   static Utils utils = Utils();
   static TMDBService tmdb = TMDBService();
 
+  static late MediaContent content;
+
   @override
+  // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
+    log('Build - DetailPage');
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,7 +49,9 @@ class DetailPage extends StatelessWidget {
                 future: tmdb.getDetails(item.mediaType, item.id),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    log(snapshot.data!.toString());
+                    content = MediaContent.fromDetails(snapshot.data);
+
+                    // log(snapshot.data!.toString());
                     return Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -53,81 +60,84 @@ class DetailPage extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(
+                                width: MediaQuery.of(context).size.width - 100,
                                 child: AutoSizeText(
                                   snapshot.data?.title ?? '',
                                   maxLines: 2,
                                   textScaleFactor: 2,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                   textAlign: TextAlign.start,
                                 ),
-                                width: MediaQuery.of(context).size.width - 100,
                               ),
                             ],
                           ),
-                          item.mediaType != MediaType.person.string
-                              ? Row(
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 8),
-                                      child: Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                        size: 28,
-                                      ),
+                          if (item.mediaType != MediaType.person.string &&
+                              !utils.isNullOrEmpty(snapshot.data?.voteAverage))
+                            Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 28,
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: formatRating(
+                                      snapshot.data?.voteAverage,
+                                    ).toString(),
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: formatRating(
-                                                snapshot.data?.voteAverage)
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
+                                    children: const [
+                                      TextSpan(
+                                        text: ' / 10.0',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
                                         ),
-                                        children: const [
-                                          TextSpan(
-                                            text: ' / 10.0',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 32),
+                                  child: Text('Rate'),
+                                ),
+                              ],
+                            )
+                          else
+                            Container(),
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: item.mediaType != MediaType.person.string
                                 ? Text(formatString(snapshot.data))
                                 : Text(safeString(snapshot.data?.birthday)),
                           ),
-                          item.mediaType != MediaType.person.string
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 16,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          snapshot.data?.genres?.length ?? 0,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return GenreCard(
-                                            genre:
-                                                snapshot.data?.genres?[index]);
-                                      },
-                                      separatorBuilder:
-                                          (BuildContext context, int index) =>
-                                              const Text(', '),
-                                    ),
+                          if (item.mediaType != MediaType.person.string)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 16,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data?.genres?.length ?? 0,
+                                  itemBuilder: (context, index) => GenreCard(
+                                    genre: snapshot.data?.genres?[index],
                                   ),
-                                )
-                              : Container(),
+                                  separatorBuilder: (context, index) =>
+                                      const Text(', '),
+                                ),
+                              ),
+                            )
+                          else
+                            Container(),
                           Padding(
                             padding: const EdgeInsets.only(top: 24),
                             child: Text(snapshot.data?.tagline ?? ''),
@@ -136,11 +146,19 @@ class DetailPage extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 8),
                             child: Text(snapshot.data?.overview ?? ''),
                           ),
-                          item.mediaType == MediaType.tvSeries.string
-                              ? SeasonList(
-                                  seasons: snapshot.data?.seasons,
-                                )
-                              : Container(),
+                          if (item.mediaType == MediaType.tvSeries.string)
+                            SeasonList(
+                              seasons: content.seasons,
+                              onPressed: (seenCount, seasonNumber) {
+                                content.seasons?[findSeason(seasonNumber)]
+                                    .episodesSeen = seenCount;
+                                log(content.seasons![findSeason(seasonNumber)]
+                                    .episodesSeen
+                                    .toString());
+                              },
+                            )
+                          else
+                            Container(),
                           // Text(snapshot.data!.toJson().toString()),
                         ],
                       ),
@@ -156,14 +174,16 @@ class DetailPage extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Padding(
                       padding: const EdgeInsets.only(
-                          left: 16, right: 16, bottom: 16),
+                        left: 16,
+                        right: 16,
+                        bottom: 16,
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
-                            padding:
-                                EdgeInsets.only(left: 8, top: 24, bottom: 8),
+                            padding: EdgeInsets.only(left: 8, bottom: 8),
                             child: Text(
                               'Credits',
                               textScaleFactor: 1.5,
@@ -177,14 +197,15 @@ class DetailPage extends StatelessWidget {
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshot.data?.cast?.length ?? 0,
-                              itemBuilder: (BuildContext context, int index) {
-                                var name = snapshot.data?.cast?[index].name !=
+                              itemBuilder: (context, index) {
+                                final name = snapshot.data?.cast?[index].name !=
                                         null
                                     ? 'credits_${snapshot.data?.cast?[index].name}'
                                     : 'credits_${snapshot.data?.cast?[index].id}';
                                 return PosterCard(
                                   item: TMDBResults.fromCredits(
-                                      snapshot.data?.cast?[index]),
+                                    snapshot.data?.cast?[index],
+                                  ),
                                   index: index,
                                   listName: name,
                                   extraLine: true,
@@ -234,13 +255,17 @@ class DetailPage extends StatelessWidget {
       date = '';
     }
 
-    var vote = data.voteAverage != null ? data.voteAverage.toString() : '';
+    final vote = data.voteAverage != null ? data.voteAverage.toString() : '';
 
-    var runtime = data.runtime?.toString() ?? '';
+    final runtime = data.runtime ?? 0;
     var company = '';
 
     if (data.companies != null && data.companies!.isNotEmpty) {
       company = data.companies![0].name ?? '';
+    }
+
+    if (runtime > 60) {
+      return '$date  •  ${runtime ~/ 60}h ${runtime % 60}m  •  $company';
     }
 
     return '$date  •  $runtime min  •  $company';
@@ -279,5 +304,21 @@ class DetailPage extends StatelessWidget {
       }
     }
     return genres;
+  }
+
+  /// Some Series have a Season 0, aka Specials
+  findSeason(int number) {
+    if (content.seasons == null) {
+      return number - 1;
+    }
+
+    var length = content.seasons?.length ?? 0;
+    var lastSeason = content.seasons?.last.seasonNumber ?? 0;
+
+    if (length == lastSeason + 1) {
+      return number;
+    }
+
+    return number - 1;
   }
 }
