@@ -23,6 +23,7 @@ class ListCard extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => {
         spService.addHistory(jsonEncode(item)),
         Navigator.push(

@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:binge/models/db/media_content.dart';
+import 'package:binge/pages/episode_page.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_indicator/progress_indicator.dart';
 
-import '../models/tv/season.dart';
+import '../models/db/media_content.dart';
 import '../utils/utils.dart';
 
 class SeasonList extends StatelessWidget {
@@ -64,38 +65,64 @@ class _SeasonCardState extends State<SeasonCard> {
     log('Build - SeasonCard');
 
     return Row(
-      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .75,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.season.name ??
-                    generateFallbackTitle(widget.season.seasonNumber),
-                textScaleFactor: 1.4,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            log('SeasonCard - Tapped ID: ${widget.season.seasonNumber}');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EpisodesPage(
+                  season: widget.season,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  '${widget.season.episodesSeen} / ${widget.season.episodes}',
+            );
+          },
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 96,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.season.name ??
+                      generateFallbackTitle(widget.season.seasonNumber),
+                  textScaleFactor: 1.4,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 32),
-                child: LinearProgressIndicator(
-                  value: calculateProgress(
-                      widget.season.episodes, widget.season.episodesSeen),
-                  minHeight: 8,
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    '${widget.season.episodesSeen} / ${widget.season.episodes}',
+                  ),
                 ),
-              ),
-            ],
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 8, bottom: 32),
+                //   child: LinearProgressIndicator(
+                //     value: calculateProgress(
+                //         widget.season.episodes, widget.season.episodesSeen),
+                //     minHeight: 8,
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 32),
+                  child: BarProgress(
+                    percentage: calculateProgress(widget.season.episodes,
+                            widget.season.episodesSeen) *
+                        100,
+                    backColor: Colors.black,
+                    color: Theme.of(context).primaryColor,
+                    showPercentage: false,
+                    stroke: 8,
+                    round: false,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(
