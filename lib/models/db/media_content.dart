@@ -9,12 +9,14 @@ class DBSeasons {
   int? episodes;
   int? seasonNumber;
   String? name;
+  List<int>? episodesSeenArray;
 
   DBSeasons({
     this.episodesSeen,
     this.episodes,
     this.seasonNumber,
     this.name,
+    this.episodesSeenArray,
   });
 }
 

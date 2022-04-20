@@ -9,6 +9,7 @@ import '../enums/media_type.dart';
 import '../models/tmdb/tmdb_credit.dart';
 import '../models/tmdb/tmdb_detail.dart';
 import '../models/tmdb/tmdb_response.dart';
+import '../models/tmdb/tmdb_season.dart';
 
 class TMDBService {
   // Base Url for the API
@@ -57,6 +58,21 @@ class TMDBService {
       return TMDBDetail.fromJson(jsonDecode(request.body));
     } else {
       throw Exception('Status Code on Get Detail is not 200');
+    }
+  }
+
+  /// Gets a Season and its Episodes of a TV Show.
+  Future<TMDBSeason> getTVSeason(int showId, int season) async {
+    final endpoint = '/tv/$showId/season/$season';
+
+    final uri = createUri(endpoint, {'api_key': apiKey});
+    log(uri.toString());
+    final request = await client.get(uri);
+
+    if (request.statusCode == 200) {
+      return TMDBSeason.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception('Status Code on Get Trending is not 200');
     }
   }
 

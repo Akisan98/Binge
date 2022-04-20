@@ -27,6 +27,7 @@ class Binge extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
+          useMaterial3: true,
           // Light Theme
           brightness: Brightness.light,
           backgroundColor: light,
@@ -63,6 +64,7 @@ class Binge extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(
+          useMaterial3: true,
           // Dark Theme
           backgroundColor: dark,
           brightness: Brightness.dark,

@@ -112,7 +112,7 @@ class DetailPage extends StatelessWidget {
                               ],
                             )
                           else
-                            Container(),
+                            const SizedBox.shrink(),
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: item.mediaType != MediaType.person.string
@@ -137,7 +137,7 @@ class DetailPage extends StatelessWidget {
                               ),
                             )
                           else
-                            Container(),
+                            const SizedBox.shrink(),
                           Padding(
                             padding: const EdgeInsets.only(top: 24),
                             child: Text(snapshot.data?.tagline ?? ''),
@@ -149,6 +149,7 @@ class DetailPage extends StatelessWidget {
                           if (item.mediaType == MediaType.tvSeries.string)
                             SeasonList(
                               seasons: content.seasons,
+                              showId: item.id ?? 1,
                               onPressed: (seenCount, seasonNumber) {
                                 content.seasons?[findSeason(seasonNumber)]
                                     .episodesSeen = seenCount;
@@ -158,7 +159,7 @@ class DetailPage extends StatelessWidget {
                               },
                             )
                           else
-                            Container(),
+                            const SizedBox.shrink(),
                           // Text(snapshot.data!.toJson().toString()),
                         ],
                       ),

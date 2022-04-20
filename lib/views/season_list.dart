@@ -8,11 +8,16 @@ import '../models/db/media_content.dart';
 import '../utils/utils.dart';
 
 class SeasonList extends StatelessWidget {
-  const SeasonList({Key? key, required this.seasons, required this.onPressed})
+  const SeasonList(
+      {Key? key,
+      required this.showId,
+      required this.seasons,
+      required this.onPressed})
       : super(key: key);
 
   final List<DBSeasons>? seasons;
   static Utils utils = Utils();
+  final int showId;
 
   /// What happens when + button is pressed.
   final SeasonCallback onPressed;
@@ -32,6 +37,7 @@ class SeasonList extends StatelessWidget {
               SeasonCard(
                 season: item,
                 callback: onPressed,
+                showId: showId,
               ),
           ],
         ),
@@ -46,10 +52,15 @@ typedef SeasonCallback = void Function(
 );
 
 class SeasonCard extends StatefulWidget {
-  const SeasonCard({Key? key, required this.season, required this.callback})
+  const SeasonCard(
+      {Key? key,
+      required this.showId,
+      required this.season,
+      required this.callback})
       : super(key: key);
 
   final DBSeasons season;
+  final int showId;
 
   /// What happens when + button is pressed.
   final SeasonCallback callback;
@@ -76,6 +87,7 @@ class _SeasonCardState extends State<SeasonCard> {
               MaterialPageRoute(
                 builder: (context) => EpisodesPage(
                   season: widget.season,
+                  showId: widget.showId,
                 ),
               ),
             );
