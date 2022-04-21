@@ -7,7 +7,7 @@ import '../models/tmdb/tmdb_result.dart';
 import '../pages/detail_page.dart';
 import '../services/shared_preferences_service.dart';
 import '../utils/utils.dart';
-import 'poster_image.dart';
+import 'tmdb_image.dart';
 
 class ListCard extends StatelessWidget {
   const ListCard({Key? key, required this.item, required this.index})
@@ -42,7 +42,7 @@ class ListCard extends StatelessWidget {
           children: [
             Hero(
               tag: 'poster$index',
-              child: PosterImage(scaleFactor: 1, imagePath: item.posterPath),
+              child: TMDBImage(scaleFactor: 1, imagePath: item.posterPath),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),

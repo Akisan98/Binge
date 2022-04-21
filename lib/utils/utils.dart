@@ -12,6 +12,14 @@ class Utils {
     return list == null || list.isEmpty;
   }
 
+  static bool isStringEmpty(String? string) {
+    if (string == null || string == '') {
+      return true;
+    }
+
+    return false;
+  }
+
   bool isNullOrEmpty(double? number) {
     if (number == null || number == 0) {
       return true;

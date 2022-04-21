@@ -1,8 +1,10 @@
 import 'package:binge/models/tmdb/tmdb_season.dart';
 import 'package:flutter/material.dart';
 import '../models/db/media_content.dart';
+import '../models/tmdb/tmdb_result.dart';
 import '../services/tmdb_service.dart';
-import '../views/poster_image.dart';
+import '../views/poster_card.dart';
+import '../views/tmdb_image.dart';
 
 class EpisodesPage extends StatelessWidget {
   const EpisodesPage({Key? key, required this.showId, required this.season})
@@ -23,13 +25,16 @@ class EpisodesPage extends StatelessWidget {
                 if (snapshot.data?.episodes != null) {
                   list.addAll(snapshot.data!.episodes!);
                 }
-                return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) => index == 0
-                      ? const Text('Header')
-                      : EpisodeCard(
-                          episode: list[index],
-                        ),
+                return Padding(
+                  padding: EdgeInsets.all(16),
+                  child: ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, index) => index == 0
+                        ? const Text('Header')
+                        : EpisodeCard(
+                            episode: list[index],
+                          ),
+                  ),
                 );
               }
 
@@ -79,14 +84,39 @@ class EpisodeCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(episode.name ?? ''),
+            Text(
+              episode.name ?? '',
+              textScaleFactor: 1.25,
+            ),
             Text(formatEpisodeNumber(
                 episode.episodeNumber, episode.seasonNumber)),
             Text(episode.airDate ?? ''),
             Text(episode.voteAverage.toString()),
-            Text(episode.guestStars.toString()),
+            //  for (var star in episode.guestStars) Text(star.toString())
+
+            episode.guestStars != null
+                ? SizedBox(
+                    height: 0.8 * 206,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: episode.guestStars?.length ?? 0,
+                      itemBuilder: (context, index) => PosterCard(
+                        index: index,
+                        listName: 'guestStars${episode.name}',
+                        item:
+                            TMDBResults.fromCredits(episode.guestStars?[index]),
+                        scaleFactor: 0.8,
+                      ),
+                    ),
+                  )
+                : Text("JK"),
+
             Text(episode.overview ?? ''),
-            PosterImage(scaleFactor: 1, imagePath: episode.stillPath)
+            TMDBImage(
+              imagePath: episode.stillPath,
+              bannerImage: true,
+              width: MediaQuery.of(context).size.width - 32,
+            )
           ],
         ),
       );

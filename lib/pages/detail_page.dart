@@ -11,8 +11,8 @@ import '../services/tmdb_service.dart';
 import '../utils/utils.dart';
 import '../views/genre_card.dart';
 import '../views/poster_card.dart';
-import '../views/poster_image.dart';
 import '../views/season_list.dart';
+import '../views/tmdb_image.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({
@@ -39,10 +39,10 @@ class DetailPage extends StatelessWidget {
             children: [
               Hero(
                 tag: heroKey,
-                child: PosterImage(
-                  scaleFactor: MediaQuery.of(context).size.width / 92,
+                child: TMDBImage(
+                  width: MediaQuery.of(context).size.width,
                   imagePath: item.posterPath,
-                  hero: true,
+                  heroImage: true,
                 ),
               ),
               FutureBuilder<TMDBDetail>(
@@ -313,8 +313,8 @@ class DetailPage extends StatelessWidget {
       return number - 1;
     }
 
-    var length = content.seasons?.length ?? 0;
-    var lastSeason = content.seasons?.last.seasonNumber ?? 0;
+    final length = content.seasons?.length ?? 0;
+    final lastSeason = content.seasons?.last.seasonNumber ?? 0;
 
     if (length == lastSeason + 1) {
       return number;

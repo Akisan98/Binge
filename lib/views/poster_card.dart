@@ -1,9 +1,10 @@
 import 'package:binge/models/tmdb/tmdb_result.dart';
 import 'package:binge/pages/detail_page.dart';
-import 'package:binge/views/poster_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+
+import 'tmdb_image.dart';
 
 class PosterCard extends StatelessWidget {
   const PosterCard({
@@ -45,7 +46,7 @@ class PosterCard extends StatelessWidget {
             children: [
               Hero(
                 tag: '$listName$index',
-                child: PosterImage(
+                child: TMDBImage(
                     scaleFactor: scaleFactor, imagePath: item.posterPath),
               ),
               Padding(
