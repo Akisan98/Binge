@@ -18,11 +18,11 @@ class DetailPage extends StatelessWidget {
   const DetailPage({
     Key? key,
     required this.item,
-    required this.heroKey,
+    this.heroKey,
   }) : super(key: key);
 
   final TMDBResults item;
-  final String heroKey;
+  final String? heroKey;
   static Utils utils = Utils();
   static TMDBService tmdb = TMDBService();
 
@@ -38,7 +38,7 @@ class DetailPage extends StatelessWidget {
           child: Column(
             children: [
               Hero(
-                tag: heroKey,
+                tag: heroKey ?? '',
                 child: TMDBImage(
                   width: MediaQuery.of(context).size.width,
                   imagePath: item.posterPath,

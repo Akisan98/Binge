@@ -1,9 +1,9 @@
-import 'package:binge/models/tmdb/tmdb_season.dart';
 import 'package:flutter/material.dart';
 import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_result.dart';
+import '../models/tmdb/tmdb_season.dart';
 import '../services/tmdb_service.dart';
-import '../views/poster_card.dart';
+import '../views/text_card.dart';
 import '../views/tmdb_image.dart';
 
 class EpisodesPage extends StatelessWidget {
@@ -21,12 +21,12 @@ class EpisodesPage extends StatelessWidget {
             future: tmdb.getTVSeason(showId, season.seasonNumber ?? 1),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                var list = <dynamic>["test"];
+                var list = <dynamic>['test'];
                 if (snapshot.data?.episodes != null) {
                   list.addAll(snapshot.data!.episodes!);
                 }
                 return Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, index) => index == 0
@@ -80,43 +80,71 @@ class EpisodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               episode.name ?? '',
               textScaleFactor: 1.25,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text(formatEpisodeNumber(
-                episode.episodeNumber, episode.seasonNumber)),
-            Text(episode.airDate ?? ''),
-            Text(episode.voteAverage.toString()),
-            //  for (var star in episode.guestStars) Text(star.toString())
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                formatEpisodeNumber(
+                  episode.episodeNumber,
+                  episode.seasonNumber,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(episode.airDate ?? ''),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(episode.voteAverage.toString()),
+            ),
 
-            episode.guestStars != null
-                ? SizedBox(
-                    height: 0.8 * 206,
-                    child: ListView.builder(
+            
+            if (episode.guestStars != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: SizedBox(
+                  height: 16,
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => const Text(', '),
                       scrollDirection: Axis.horizontal,
                       itemCount: episode.guestStars?.length ?? 0,
-                      itemBuilder: (context, index) => PosterCard(
-                        index: index,
-                        listName: 'guestStars${episode.name}',
+                    itemBuilder: (context, index) => TextCard(
                         item:
-                            TMDBResults.fromCredits(episode.guestStars?[index]),
-                        scaleFactor: 0.8,
+                            TMDBResults.fromCredits(
+                        episode.guestStars?[index],
                       ),
                     ),
-                  )
-                : Text("JK"),
+                  ),
+                ),
+              ) 
+            else
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text('JK'),
+              ),
 
-            Text(episode.overview ?? ''),
-            TMDBImage(
-              imagePath: episode.stillPath,
-              bannerImage: true,
-              width: MediaQuery.of(context).size.width - 32,
-            )
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(episode.overview ?? ''),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 24),
+              child: TMDBImage(
+                imagePath: episode.stillPath,
+                bannerImage: true,
+                width: MediaQuery.of(context).size.width - 32,
+              ),
+            ),
           ],
         ),
       );
