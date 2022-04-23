@@ -55,8 +55,8 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
   /// Method to performing some actions when search bar is
   /// dismissed.
-  dismissSearch() {
-    FocusScopeNode currentFocus = FocusScope.of(context);
+  void dismissSearch() {
+    final currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
       inFocus = false;
@@ -95,9 +95,9 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
 
     return AnimatedContainer(
       height: inFocus ? 62 : 50,
-      padding: inFocus ? const EdgeInsets.all(0) : const EdgeInsets.all(4),
+      padding: inFocus ? EdgeInsets.zero : const EdgeInsets.all(4),
       margin: inFocus
-          ? const EdgeInsets.all(0)
+          ? EdgeInsets.zero
           : const EdgeInsets.only(
               left: 24,
               right: 24,

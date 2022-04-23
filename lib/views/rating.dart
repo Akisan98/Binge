@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Shows the rating of a Movie, Series or an Episode.
 class Rating extends StatelessWidget {
   const Rating({
     Key? key,
@@ -10,6 +11,7 @@ class Rating extends StatelessWidget {
   final double? rating;
   final bool mini;
 
+  /// Gets the rating from API response.
   double formatRating(double? rating) {
     if (rating != null) {
       return rating;
@@ -24,7 +26,7 @@ class Rating extends StatelessWidget {
       return Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 8),
             child: Icon(
               Icons.star,
               color: Colors.amber,

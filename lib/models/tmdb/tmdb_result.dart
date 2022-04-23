@@ -49,8 +49,8 @@ class TMDBResults {
     mediaType = credit?.mediaType ?? MediaType.person.string;
   }
 
-  createName(Cast? credit) {
-    String output = '';
+  String createName(Cast? credit) {
+    var output = '';
 
     if (credit == null || (credit.name == null && credit.character == null)) {
       return '';
@@ -59,7 +59,7 @@ class TMDBResults {
     output += credit.name ?? '';
 
     output += credit.character != null && credit.character != ''
-        ? ' as ' + credit.character!
+        ? ' as ${credit.character!}'
         : '';
 
     return output;
@@ -93,7 +93,7 @@ class TMDBResults {
     if (json['known_for'] != null) {
       knownFor = <TMDBResults>[];
       json['known_for'].forEach((v) {
-        knownFor!.add(new TMDBResults.fromJson(v));
+        knownFor!.add(TMDBResults.fromJson(v));
       });
     }
   }
@@ -118,7 +118,5 @@ class TMDBResults {
       };
 
   @override
-  String toString() {
-    return toJson().toString();
-  }
+  String toString() => toJson().toString();
 }

@@ -1,31 +1,33 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 class Utils {
-  isEmptyOrNull(input) {
-    if (input == null || input?.length == 0 || input == '') return true;
-    return false;
-  }
+  static getGenre(int id) =>
+      genres.firstWhere((element) => element['id'] == id)['name'];
 
-  getGenre(int id) {
-    return genres.firstWhere((element) => element['id'] == id)['name'];
-  }
+  /// Checks whether date from API is empty or not.
+  static bool isDateEmpty(String? date) => date == null || date == '';
 
-  isListEmpty(List<dynamic>? list) {
-    return list == null || list.isEmpty;
-  }
+  /// Checks if list from API is empty or not.
+  static bool isListEmpty(List<dynamic>? list) => list == null || list.isEmpty;
 
-  static bool isStringEmpty(String? string) {
-    if (string == null || string == '') {
-      return true;
+  /// Checks if string from API is empty or not.
+  static bool isStringEmpty(String? string) => string == null || string == '';
+
+  /// Checks if number from API is empty or not.
+  static bool isNumberEmpty(double? number) => number == null || number == 0;
+
+  /// Converts the API MediaTypes into "Better" MediaTypes to display to user
+  static String resolveMediaType(String? type, int? gender) {
+    switch (type) {
+      case 'tv':
+        return 'TV Series';
+      case 'person':
+        return gender == 1 ? 'Actress' : 'Actor';
+      case 'movie':
+        return 'Movie';
+      default:
+        return '';
     }
-
-    return false;
-  }
-
-  bool isNullOrEmpty(double? number) {
-    if (number == null || number == 0) {
-      return true;
-    }
-
-    return false;
   }
 
   // Avoid another call for string value.

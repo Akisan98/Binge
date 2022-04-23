@@ -51,15 +51,15 @@ class MediaContent {
     nextToWatch = details?.nextEpisodeToAir;
   }
 
-  toDBSeason(List<Seasons>? seasons) {
-    var newSesons = <DBSeasons>[];
+  List<DBSeasons> toDBSeason(List<Seasons>? seasons) {
+    final newSeasons = <DBSeasons>[];
 
     if (seasons == null) {
-      return newSesons;
+      return newSeasons;
     }
 
     for (var item in seasons) {
-      newSesons.add(
+      newSeasons.add(
         DBSeasons(
           episodesSeen: 0,
           episodes: item.episodeCount,
@@ -69,6 +69,6 @@ class MediaContent {
       );
     }
 
-    return newSesons;
+    return newSeasons;
   }
 }

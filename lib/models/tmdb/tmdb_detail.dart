@@ -138,12 +138,13 @@ class TMDBDetail {
     deathday = json['deathday'];
   }
 
-  getRuntime(json) {
+  /// Gets the runtime for selected media.
+  int? getRuntime(Map<String, dynamic> json) {
     if (json['runtime'] != null) {
       return json['runtime'];
     }
     if (json['episode_run_time'] != null) {
-      List<int>? list = json['episode_run_time'].cast<int>();
+      final List<int>? list = json['episode_run_time'].cast<int>();
 
       if (list != null && list.isNotEmpty) {
         return list.first;

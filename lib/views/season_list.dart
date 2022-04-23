@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:binge/pages/episode_page.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 
 import '../models/db/media_content.dart';
+import '../pages/episode_page.dart';
 import '../utils/utils.dart';
 
 class SeasonList extends StatelessWidget {
@@ -12,11 +12,11 @@ class SeasonList extends StatelessWidget {
       {Key? key,
       required this.showId,
       required this.seasons,
-      required this.onPressed})
+    required this.onPressed,
+  })
       : super(key: key);
 
   final List<DBSeasons>? seasons;
-  static Utils utils = Utils();
   final int showId;
 
   /// What happens when + button is pressed.
@@ -25,7 +25,7 @@ class SeasonList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('Build - SeasonList');
-    if (utils.isListEmpty(seasons)) {
+    if (Utils.isListEmpty(seasons)) {
       return const Text('No Data');
     } else {
       return Padding(
@@ -56,7 +56,8 @@ class SeasonCard extends StatefulWidget {
       {Key? key,
       required this.showId,
       required this.season,
-      required this.callback})
+    required this.callback,
+  })
       : super(key: key);
 
   final DBSeasons season;
@@ -124,7 +125,8 @@ class _SeasonCardState extends State<SeasonCard> {
                   padding: const EdgeInsets.only(top: 16, bottom: 32),
                   child: BarProgress(
                     percentage: calculateProgress(widget.season.episodes,
-                            widget.season.episodesSeen) *
+                          widget.season.episodesSeen,
+                        ) *
                         100,
                     backColor: Colors.black,
                     color: Theme.of(context).primaryColor,
@@ -142,7 +144,9 @@ class _SeasonCardState extends State<SeasonCard> {
           child: IconButton(
             onPressed: () {
               widget.callback(
-                  widget.season.episodes!, widget.season.seasonNumber!);
+                widget.season.episodes!,
+                widget.season.seasonNumber!,
+              );
               setState(() {});
             },
             icon: const Icon(

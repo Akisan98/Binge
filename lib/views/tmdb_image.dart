@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../services/tmdb_service.dart';
-
 class TMDBImage extends StatelessWidget {
   const TMDBImage({
     Key? key,

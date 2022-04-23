@@ -1,9 +1,8 @@
-import 'package:binge/models/tmdb/tmdb_result.dart';
-import 'package:binge/pages/detail_page.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import 'package:auto_size_text/auto_size_text.dart';
-
+import '../models/tmdb/tmdb_result.dart';
+import '../pages/detail_page.dart';
 import 'tmdb_image.dart';
 
 class PosterCard extends StatelessWidget {
@@ -23,8 +22,7 @@ class PosterCard extends StatelessWidget {
   final bool extraLine;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -47,7 +45,9 @@ class PosterCard extends StatelessWidget {
               Hero(
                 tag: '$listName$index',
                 child: TMDBImage(
-                    scaleFactor: scaleFactor, imagePath: item.posterPath),
+                    scaleFactor: scaleFactor,
+                    imagePath: item.posterPath,
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -61,7 +61,7 @@ class PosterCard extends StatelessWidget {
                           : 38,
                   width: scaleFactor != null ? scaleFactor! * 92 : 92,
                   child: AutoSizeText(
-                    item.name ?? "",
+                      item.name ?? '',
                     textAlign: TextAlign.center,
                     maxLines: extraLine ? 3 : 2,
                     overflow: TextOverflow.ellipsis,
@@ -72,6 +72,5 @@ class PosterCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+      );
 }

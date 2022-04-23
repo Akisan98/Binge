@@ -21,15 +21,15 @@ class InfiniteList extends StatefulWidget {
 class _InfiniteListState extends State<InfiniteList> {
   final PagingController<int, TMDBResults> _controller =
       PagingController<int, TMDBResults>(
-          firstPageKey: 1, invisibleItemsThreshold: 3);
+    firstPageKey: 1,
+    invisibleItemsThreshold: 3,
+  );
 
-  static const num? _scaleFactor = 0.8;
+  static const num _scaleFactor = 0.8;
 
   @override
   void initState() {
-    _controller.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    _controller.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -57,8 +57,7 @@ class _InfiniteListState extends State<InfiniteList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 8, top: 24, bottom: 8),
@@ -74,7 +73,7 @@ class _InfiniteListState extends State<InfiniteList> {
           ),
         ),
         SizedBox(
-          height: _scaleFactor != null ? _scaleFactor! * 206 : 206,
+            height: _scaleFactor * 206,
           child: PagedListView<int, TMDBResults>(
             scrollDirection: Axis.horizontal,
             pagingController: _controller,
@@ -85,10 +84,10 @@ class _InfiniteListState extends State<InfiniteList> {
                       item: item,
                       scaleFactor: _scaleFactor,
                     ),
-                animateTransitions: true),
+                animateTransitions: true,
+              ),
           ),
         ),
       ],
-    );
-  }
+      );
 }

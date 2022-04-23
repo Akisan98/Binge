@@ -25,8 +25,8 @@ class _ActiveSearchPageState extends State<ActiveSearchPage> {
   String liveQuery = '';
   TMDBService tmdb = TMDBService();
 
-  dismissSearch() {
-    FocusScopeNode currentFocus = FocusScope.of(context);
+  void dismissSearch() {
+    final currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }

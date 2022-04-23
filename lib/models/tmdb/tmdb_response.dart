@@ -14,7 +14,7 @@ class TMDBResponse {
     if (json['results'] != null) {
       results = <TMDBResults>[];
       json['results'].forEach((v) {
-        var item = TMDBResults.fromJson(v);
+        final item = TMDBResults.fromJson(v);
         if (type != null) {
           item.mediaType = type.string;
         }
@@ -26,7 +26,7 @@ class TMDBResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['page'] = page;
     if (results != null) {
       data['results'] = results!.map((v) => v.toJson()).toList();

@@ -15,12 +15,11 @@ class ListCard extends StatelessWidget {
 
   final TMDBResults item;
   final num scaleFactor = 1;
-  static Utils utils = Utils();
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -53,7 +52,7 @@ class ListCard extends StatelessWidget {
                     child: SizedBox(
                       width: screenWidth - 92 - 16 - 16 - 16 - 16,
                       child: AutoSizeText(
-                        item.name ?? "",
+                        item.name ?? '',
                         textAlign: TextAlign.start,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -67,7 +66,7 @@ class ListCard extends StatelessWidget {
                   SizedBox(
                     width: screenWidth - 92 - 16 - 16 - 16 - 16,
                     child: AutoSizeText(
-                      resolveMediaType(item.mediaType, item.gender) +
+                      Utils.resolveMediaType(item.mediaType, item.gender) +
                           resolveYear(item.firstAirDate),
                       textAlign: TextAlign.start,
                       maxLines: 2,
@@ -97,35 +96,24 @@ class ListCard extends StatelessWidget {
     );
   }
 
-  resolveMediaType(String? type, int? gender) {
-    switch (type) {
-      case 'tv':
-        return 'TV Series';
-      case 'person':
-        return gender == 1 ? 'Actress' : 'Actor';
-      case 'movie':
-        return 'Movie';
-      default:
-        return '';
-    }
-  }
-
-  resolveYear(String? date) {
-    if (!utils.isEmptyOrNull(date)) {
+  /// Gets year if applicable
+  String resolveYear(String? date) {
+    if (!Utils.isDateEmpty(date)) {
       return '  •  ${DateTime.parse(date!).year.toString()}';
     }
     return '';
   }
 
-  resolveGenre(List<int>? ids) {
-    String genres = '';
+  /// Converts Genres Array into a String.
+  String resolveGenre(List<int>? ids) {
+    var genres = '';
 
-    if (!utils.isEmptyOrNull(ids)) {
+    if (!Utils.isListEmpty(ids)) {
       for (var i = 0; i < ids!.length; i++) {
         if (i != ids.length - 1) {
-          genres += '${utils.getGenre(ids[i])}, ';
+          genres += '${Utils.getGenre(ids[i])}, ';
         } else {
-          genres += utils.getGenre(ids[i]);
+          genres += Utils.getGenre(ids[i]);
         }
       }
     }

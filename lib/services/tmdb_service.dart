@@ -23,24 +23,24 @@ class TMDBService {
   // One client instance for all the requests
   Client client = Client();
 
-  Future<TMDBDetail> getDetails(String? type, int? id) async {
-    var _endpoint;
-    final _id = id ?? 1;
+  Future<TMDBDetail> getDetails(String? type, int? tmdbId) async {
+    String endpoint;
+    final id = tmdbId ?? 1;
 
     switch (type) {
       case 'person':
-        _endpoint = '/person/$_id';
+        endpoint = '/person/$id';
         break;
       case 'tv':
-        _endpoint = '/tv/$_id';
+        endpoint = '/tv/$id';
         break;
       case 'movie':
       default:
-        _endpoint = '/movie/$_id';
+        endpoint = '/movie/$id';
         break;
     }
 
-    final uri = createUri(_endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint, {'api_key': apiKey});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -68,9 +68,9 @@ class TMDBService {
 
   /// Fetches Credits for selected Media from the TMDB DB.
   Future<TMDBResponse> search(String query) async {
-    const _endpoint = '/search/multi';
+    const endpoint = '/search/multi';
 
-    final uri = createUri(_endpoint, {'api_key': apiKey, 'query': query});
+    final uri = createUri(endpoint, {'api_key': apiKey, 'query': query});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -82,19 +82,19 @@ class TMDBService {
   }
 
   /// Searches the TMDB DB for content matching query.
-  Future<TMDBCredit> getCredits(int? id, String? mediaType) async {
-    final _id = id ?? 1;
-    var _endpoint = '/movie/$_id/credits';
+  Future<TMDBCredit> getCredits(int? tmdbId, String? mediaType) async {
+    final id = tmdbId ?? 1;
+    var endpoint = '/movie/$id/credits';
 
     if (mediaType == MediaType.tvSeries.string) {
-      _endpoint = '/tv/$_id/credits';
+      endpoint = '/tv/$id/credits';
     }
 
     if (mediaType == MediaType.person.string) {
-      _endpoint = '/person/$_id/combined_credits';
+      endpoint = '/person/$id/combined_credits';
     }
 
-    final uri = createUri(_endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint, {'api_key': apiKey});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -107,7 +107,7 @@ class TMDBService {
 
   /// Gets a list of TV Shows that is airing today.
   Future<TMDBResponse> getTodaysTVShows(int pageKey) async {
-    const _endpoint = '/tv/airing_today';
+    const endpoint = '/tv/airing_today';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -115,7 +115,7 @@ class TMDBService {
     }
 
     final uri =
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+        createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -130,7 +130,7 @@ class TMDBService {
   }
 
   Future<TMDBResponse> getTrendingTVShows(int pageKey) async {
-    const _endpoint = '/trending/tv/week';
+    const endpoint = '/trending/tv/week';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -138,7 +138,7 @@ class TMDBService {
     }
 
     final uri =
-        createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+        createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -153,7 +153,7 @@ class TMDBService {
   }
 
   Future<TMDBResponse> getPopularTVShows(int pageKey) async {
-    const _endpoint = '/tv/popular';
+    const endpoint = '/tv/popular';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -161,7 +161,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -175,7 +175,7 @@ class TMDBService {
   }
 
   Future<TMDBResponse> getCurrentMovies(int pageKey) async {
-    const _endpoint = '/movie/now_playing';
+    const endpoint = '/movie/now_playing';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -183,7 +183,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -194,7 +194,7 @@ class TMDBService {
   }
 
   Future<TMDBResponse> getTopRatedMovies(int pageKey) async {
-    const _endpoint = '/movie/top_rated';
+    const endpoint = '/movie/top_rated';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -202,7 +202,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -213,7 +213,7 @@ class TMDBService {
   }
 
   Future<TMDBResponse> getPopularMovies(int pageKey) async {
-    const _endpoint = '/movie/popular';
+    const endpoint = '/movie/popular';
 
     // Max range in docs
     if (pageKey <= 0 || pageKey > 1000) {
@@ -221,7 +221,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(_endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {

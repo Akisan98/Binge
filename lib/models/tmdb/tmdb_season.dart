@@ -1,4 +1,4 @@
-import 'package:binge/models/tmdb/tmdb_credit.dart';
+import 'tmdb_credit.dart';
 
 class TMDBSeason {
   String? sId;
@@ -18,7 +18,8 @@ class TMDBSeason {
       this.overview,
       this.id,
       this.posterPath,
-      this.seasonNumber});
+    this.seasonNumber,
+  });
 
   TMDBSeason.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -81,7 +82,8 @@ class Episodes {
       this.seasonNumber,
       this.stillPath,
       this.voteAverage,
-      this.voteCount});
+    this.voteCount,
+  });
 
   Episodes.fromJson(Map<String, dynamic> json) {
     airDate = json['air_date'];

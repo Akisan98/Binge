@@ -24,7 +24,6 @@ class DetailPage extends StatelessWidget {
 
   final TMDBResults item;
   final String? heroKey;
-  static Utils utils = Utils();
   static TMDBService tmdb = TMDBService();
 
   static late MediaContent content;
@@ -120,7 +119,8 @@ class DetailPage extends StatelessWidget {
                                     .episodesSeen = seenCount;
                                 log(content.seasons![findSeason(seasonNumber)]
                                     .episodesSeen
-                                    .toString());
+                                      .toString(),
+                                );
                               },
                             )
                           else
@@ -200,20 +200,20 @@ class DetailPage extends StatelessWidget {
     return text;
   }
 
-  formatString(TMDBDetail? data) {
+  String formatString(TMDBDetail? data) {
     if (data == null) {
       return '';
     }
 
-    var date;
+    String date;
 
-    if (data.releaseDate != null && data.releaseDate != "") {
+    if (data.releaseDate != null && data.releaseDate != '') {
       date = DateTime.parse(data.releaseDate!).year.toString();
     } else {
       date = '';
     }
 
-    final vote = data.voteAverage != null ? data.voteAverage.toString() : '';
+    // final vote = data.voteAverage != null ? data.voteAverage.toString() : '';
 
     final runtime = data.runtime ?? 0;
     var company = '';
@@ -229,43 +229,16 @@ class DetailPage extends StatelessWidget {
     return '$date  •  $runtime min  •  $company';
   }
 
-  resolveMediaType(String? type, int? gender) {
-    switch (type) {
-      case 'tv':
-        return 'TV Series';
-      case 'person':
-        return gender == 1 ? 'Actress' : 'Actor';
-      case 'movie':
-        return 'Movie';
-      default:
-        return '';
-    }
-  }
-
-  resolveYear(String? date) {
-    if (!utils.isEmptyOrNull(date)) {
+  /// Gets year if date is present.
+  String resolveYear(String? date) {
+    if (!Utils.isDateEmpty(date)) {
       return '  •  ${DateTime.parse(date!).year.toString()}';
     }
     return '';
   }
 
-  resolveGenre(List<int>? ids) {
-    String genres = '';
-
-    if (!utils.isEmptyOrNull(ids)) {
-      for (var i = 0; i < ids!.length; i++) {
-        if (i != ids.length - 1) {
-          genres += '${utils.getGenre(ids[i])}, ';
-        } else {
-          genres += utils.getGenre(ids[i]);
-        }
-      }
-    }
-    return genres;
-  }
-
   /// Some Series have a Season 0, aka Specials
-  findSeason(int number) {
+  int findSeason(int number) {
     if (content.seasons == null) {
       return number - 1;
     }

@@ -7,7 +7,7 @@ void main() {
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
   testWidgets('Animated Search bar starts in Focused mode', (tester) async {
-    final _searchcontroller = TextEditingController();
+    final searchcontroller = TextEditingController();
 
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -15,7 +15,7 @@ void main() {
         home: Scaffold(
           body: SafeArea(
             child: AnimatedSearch(
-              searchTextController: _searchcontroller,
+              searchTextController: searchcontroller,
             ),
           ),
         ),
@@ -45,7 +45,7 @@ void main() {
   });
 
   testWidgets('Animated Search bar shows text when dismissed', (tester) async {
-    final _searchcontroller = TextEditingController();
+    final searchcontroller = TextEditingController();
 
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -53,7 +53,7 @@ void main() {
         home: Scaffold(
           body: SafeArea(
             child: AnimatedSearch(
-              searchTextController: _searchcontroller,
+              searchTextController: searchcontroller,
             ),
           ),
         ),

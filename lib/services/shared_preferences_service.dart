@@ -11,12 +11,12 @@ class SharedPreferencesService {
 
   SharedPreferencesService._private();
 
-  setup() async {
+  Future<void> setup() async {
     log('Setting Up - SharedPreferencesService');
     prefs = await SharedPreferences.getInstance();
 
     var searchHistory = prefs.getStringList('search_history');
-    log('History' + searchHistory.toString() + ' - SharedPreferencesService');
+    log('History $searchHistory - SharedPreferencesService');
 
     controller.sink.add(searchHistory ?? '');
   }
@@ -27,7 +27,7 @@ class SharedPreferencesService {
     return controller.stream;
   }
 
-  addHistory(String newItem) async {
+  Future<void> addHistory(String newItem) async {
     var newList = <String>[];
 
     if (prefs.getStringList('search_history') == null) {
@@ -48,7 +48,7 @@ class SharedPreferencesService {
     controller.sink.add(prefs.getStringList('search_history'));
   }
 
-  clearHistory() async {
+  Future<void> clearHistory() async {
     await prefs.remove('search_history');
     controller.sink.add('');
   }

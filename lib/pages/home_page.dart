@@ -1,7 +1,8 @@
-import 'package:binge/services/tmdb_service.dart';
-import 'package:binge/views/infinite_list.dart';
-import 'package:binge/views/search_bar/search_bar.dart';
 import 'package:flutter/material.dart';
+
+import '../services/tmdb_service.dart';
+import '../views/infinite_list.dart';
+import '../views/search_bar/search_bar.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);

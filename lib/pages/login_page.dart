@@ -1,12 +1,13 @@
-import 'package:binge/pages/home_page.dart';
 import 'package:flutter/material.dart';
+
+import 'home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -16,7 +17,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "Welcome 👋",
+                  'Welcome 👋',
                   style: theme.textTheme.headline1,
                 ),
                 const Padding(
@@ -26,7 +27,7 @@ class LoginPage extends StatelessWidget {
                     right: 16,
                   ),
                   child: Text(
-                    "Binge is the app to keep track of all of your TV Shows and movies and how far you have progressed.",
+                    'Binge is the app to keep track of all of your TV Shows and movies and how far you have progressed.',
                     textScaleFactor: 1.1,
                     textAlign: TextAlign.center,
                   ),
@@ -36,7 +37,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: (() {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Privacy is a good thing!"),
+                        content: Text('Privacy is a good thing!'),
                       ),
                     );
 
