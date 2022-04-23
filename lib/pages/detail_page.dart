@@ -11,6 +11,7 @@ import '../services/tmdb_service.dart';
 import '../utils/utils.dart';
 import '../views/genre_card.dart';
 import '../views/poster_card.dart';
+import '../views/rating.dart';
 import '../views/season_list.dart';
 import '../views/tmdb_image.dart';
 
@@ -73,44 +74,8 @@ class DetailPage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          if (item.mediaType != MediaType.person.string &&
-                              !utils.isNullOrEmpty(snapshot.data?.voteAverage))
-                            Row(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 28,
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: formatRating(
-                                      snapshot.data?.voteAverage,
-                                    ).toString(),
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    children: const [
-                                      TextSpan(
-                                        text: ' / 10.0',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 32),
-                                  child: Text('Rate'),
-                                ),
-                              ],
-                            )
+                          if (item.mediaType != MediaType.person.string)
+                            Rating(rating: snapshot.data?.voteAverage)
                           else
                             const SizedBox.shrink(),
                           Padding(
@@ -233,14 +198,6 @@ class DetailPage extends StatelessWidget {
       return '';
     }
     return text;
-  }
-
-  formatRating(double? rating) {
-    if (rating != null) {
-      return rating;
-    }
-
-    return 0.0;
   }
 
   formatString(TMDBDetail? data) {

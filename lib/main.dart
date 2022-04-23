@@ -35,8 +35,8 @@ class Binge extends StatelessWidget {
           splashColor: Colors.black,
           colorScheme: ColorScheme.fromSeed(
             seedColor: purple,
-            secondary: dark,
-            tertiary: white,
+            secondary: white,
+            tertiary: dark,
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

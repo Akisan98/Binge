@@ -3,6 +3,7 @@ import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_result.dart';
 import '../models/tmdb/tmdb_season.dart';
 import '../services/tmdb_service.dart';
+import '../views/rating.dart';
 import '../views/text_card.dart';
 import '../views/tmdb_image.dart';
 
@@ -21,13 +22,17 @@ class EpisodesPage extends StatelessWidget {
             future: tmdb.getTVSeason(showId, season.seasonNumber ?? 1),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                var list = <dynamic>['test'];
+                final list = <dynamic>['test'];
                 if (snapshot.data?.episodes != null) {
                   list.addAll(snapshot.data!.episodes!);
                 }
                 return Padding(
                   padding: const EdgeInsets.all(16),
-                  child: ListView.builder(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                      thickness: 2,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
                     itemCount: list.length,
                     itemBuilder: (context, index) => index == 0
                         ? const Text('Header')
@@ -104,12 +109,15 @@ class EpisodeCard extends StatelessWidget {
               child: Text(episode.airDate ?? ''),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(episode.voteAverage.toString()),
+              padding: EdgeInsets.only(top: 8),
+              child: Rating(
+                rating: episode.voteAverage,
+                mini: true,
+              ),
             ),
 
             
-            if (episode.guestStars != null)
+            if (episode.guestStars != null && episode.guestStars!.length > 0)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: SizedBox(
@@ -128,17 +136,14 @@ class EpisodeCard extends StatelessWidget {
                 ),
               ) 
             else
-              const Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Text('JK'),
-              ),
+              const SizedBox.shrink(),
 
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(episode.overview ?? ''),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 24),
+              padding: const EdgeInsets.only(top: 16, bottom: 24),
               child: TMDBImage(
                 imagePath: episode.stillPath,
                 bannerImage: true,
