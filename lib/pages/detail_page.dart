@@ -28,6 +28,28 @@ class DetailPage extends StatelessWidget {
 
   static late MediaContent content;
 
+  void seasonOnPressed(int seenCount, int seasonNumber) {
+    final season = content.seasons?[findSeason(seasonNumber)];
+
+    if (seenCount == 0) {
+      season?.episodesSeenArray = List.filled(
+        content.seasons?[findSeason(seasonNumber)].episodes ?? 0,
+        0,
+      );
+    } else {
+      season?.episodesSeenArray = List.filled(
+        seenCount,
+        1,
+      );
+    }
+
+    season?.episodesSeen = seenCount;
+
+    log(
+      season!.episodesSeen.toString(),
+    );
+  }
+
   @override
   // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
@@ -49,8 +71,10 @@ class DetailPage extends StatelessWidget {
                 future: tmdb.getDetails(item.mediaType, item.id),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    if (item.mediaType == 'tv') {
                     content = MediaContent.fromDetails(snapshot.data);
 
+                    }
                     // log(snapshot.data!.toString());
                     return Padding(
                       padding: const EdgeInsets.all(16),
@@ -114,14 +138,7 @@ class DetailPage extends StatelessWidget {
                             SeasonList(
                               seasons: content.seasons,
                               showId: item.id ?? 1,
-                              onPressed: (seenCount, seasonNumber) {
-                                content.seasons?[findSeason(seasonNumber)]
-                                    .episodesSeen = seenCount;
-                                log(content.seasons![findSeason(seasonNumber)]
-                                    .episodesSeen
-                                      .toString(),
-                                );
-                              },
+                              onPressed: seasonOnPressed,
                             )
                           else
                             const SizedBox.shrink(),
@@ -175,6 +192,21 @@ class DetailPage extends StatelessWidget {
                                   index: index,
                                   listName: name,
                                   extraLine: true,
+                                  // onPressed: () {
+                                  //   Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => DetailPage(
+                                  //         item: TMDBResults.fromCredits(
+                                  //           snapshot.data?.cast?[index],
+                                  //         ),
+                                  //         heroKey: '$name$index',
+                                  //       ),
+                                  //     ),
+                                  //   ).then((value) {
+                                  //     // content =
+                                  //   });
+                                  // },
                                 );
                               },
                             ),
@@ -239,6 +271,7 @@ class DetailPage extends StatelessWidget {
 
   /// Some Series have a Season 0, aka Specials
   int findSeason(int number) {
+    log(content.toString());
     if (content.seasons == null) {
       return number - 1;
     }

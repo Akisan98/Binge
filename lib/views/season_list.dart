@@ -8,13 +8,12 @@ import '../pages/episode_page.dart';
 import '../utils/utils.dart';
 
 class SeasonList extends StatelessWidget {
-  const SeasonList(
-      {Key? key,
-      required this.showId,
-      required this.seasons,
+  const SeasonList({
+    Key? key,
+    required this.showId,
+    required this.seasons,
     required this.onPressed,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   final List<DBSeasons>? seasons;
   final int showId;
@@ -52,13 +51,12 @@ typedef SeasonCallback = void Function(
 );
 
 class SeasonCard extends StatefulWidget {
-  const SeasonCard(
-      {Key? key,
-      required this.showId,
-      required this.season,
+  const SeasonCard({
+    Key? key,
+    required this.showId,
+    required this.season,
     required this.callback,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   final DBSeasons season;
   final int showId;
@@ -91,7 +89,9 @@ class _SeasonCardState extends State<SeasonCard> {
                   showId: widget.showId,
                 ),
               ),
-            );
+            ).then((value) {
+              setState(() {});
+            });
           },
           child: SizedBox(
             width: MediaQuery.of(context).size.width - 96,
@@ -124,7 +124,8 @@ class _SeasonCardState extends State<SeasonCard> {
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 32),
                   child: BarProgress(
-                    percentage: calculateProgress(widget.season.episodes,
+                    percentage: calculateProgress(
+                          widget.season.episodes,
                           widget.season.episodesSeen,
                         ) *
                         100,
@@ -143,10 +144,16 @@ class _SeasonCardState extends State<SeasonCard> {
           padding: const EdgeInsets.only(left: 16, top: 8),
           child: IconButton(
             onPressed: () {
+              var newValue = 0;
+              if (widget.season.episodesSeen != widget.season.episodes) {
+                newValue = widget.season.episodes ?? 0;
+              }
+
               widget.callback(
-                widget.season.episodes!,
+                newValue,
                 widget.season.seasonNumber!,
               );
+
               setState(() {});
             },
             icon: const Icon(

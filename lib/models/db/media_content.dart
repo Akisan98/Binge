@@ -18,6 +18,19 @@ class DBSeasons {
     this.name,
     this.episodesSeenArray,
   });
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['episodesSeen'] = episodesSeen;
+    data['episodes'] = episodes;
+    data['seasonNumber'] = seasonNumber;
+    data['name'] = name;
+    data['episodesSeenArray'] = episodesSeenArray;
+    return data;
+  }
+
+  @override
+  String toString() => toJson().toString();
 }
 
 class MediaContent {
@@ -40,6 +53,22 @@ class MediaContent {
     this.nextToWatch,
     this.type,
   });
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['title'] = title;
+    data['runtime'] = runtime;
+    data['seasons'] = seasons;
+    data['posterPath'] = posterPath;
+    data['genres'] = genres;
+    data['nextToAir'] = nextToAir;
+    data['nextToWatch'] = nextToWatch;
+    data['type'] = type;
+    return data;
+  }
+
+  @override
+  String toString() => toJson().toString();
 
   MediaContent.fromDetails(TMDBDetail? details) {
     title = details?.title;
@@ -71,4 +100,6 @@ class MediaContent {
 
     return newSeasons;
   }
+
+  
 }

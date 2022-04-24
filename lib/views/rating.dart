@@ -14,7 +14,8 @@ class Rating extends StatelessWidget {
   /// Gets the rating from API response.
   double formatRating(double? rating) {
     if (rating != null) {
-      return rating;
+      final inString = rating.toStringAsFixed(1);
+      return double.parse(inString);
     }
 
     return 0;
