@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import '../models/db/db_season.dart';
 import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_result.dart';
 import '../models/tmdb/tmdb_season.dart';

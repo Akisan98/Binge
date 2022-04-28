@@ -1,13 +1,37 @@
+import 'package:hive/hive.dart';
+
+part 'episode_to_air.g.dart';
+
+@HiveType(typeId: 3)
 class EpisodeToAir {
+  @HiveField(0)
   String? airDate;
+
+  @HiveField(1)
   int? episodeNumber;
+  
+  @HiveField(2)
   int? id;
+  
+  @HiveField(3)
   String? name;
+  
+  @HiveField(4)
   String? overview;
+  
+  @HiveField(5)
   String? productionCode;
+  
+  @HiveField(6)
   int? seasonNumber;
+  
+  @HiveField(7)
   String? stillPath;
+  
+  @HiveField(8)
   double? voteAverage;
+  
+  @HiveField(9)
   int? voteCount;
 
   EpisodeToAir({

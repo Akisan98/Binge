@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../enums/media_type.dart';
 import '../models/db/media_content.dart';
@@ -15,7 +16,7 @@ import '../views/rating.dart';
 import '../views/season_list.dart';
 import '../views/tmdb_image.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   const DetailPage({
     Key? key,
     required this.item,
@@ -24,11 +25,44 @@ class DetailPage extends StatelessWidget {
 
   final TMDBResults item;
   final String? heroKey;
+
+  @override
+  State<StatefulWidget> createState() => DetailPageState();
+}
+
+class DetailPageState extends State<DetailPage> {
+  late TMDBResults item;
+  late String? heroKey;
   static TMDBService tmdb = TMDBService();
 
   static late MediaContent content;
+  late Box<MediaContent> box;
 
-  void seasonOnPressed(int seenCount, int seasonNumber) {
+  @override
+  void initState() {
+    setupDB();
+    item = widget.item;
+    heroKey = widget.heroKey;
+    super.initState();
+  }
+
+  setupDB() async {
+    box = Hive.box('myBox');
+  }
+
+  seasonOnPressed(
+      int seenCount, int seasonNumber, TMDBDetail? snapshot, dynamic context) {
+    // log("media: " + content.toString());
+    // log("snap: " + (snapshot != null ? snapshot.toString() : ''));
+
+    if (content.title != snapshot?.title) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Reopen page to make changes'),
+        ),
+      );
+    }
+
     final season = content.seasons?[findSeason(seasonNumber)];
 
     if (seenCount == 0) {
@@ -48,6 +82,8 @@ class DetailPage extends StatelessWidget {
     log(
       season!.episodesSeen.toString(),
     );
+
+    box.put('${item.mediaType}_${item.id}', content);
   }
 
   @override
@@ -72,8 +108,10 @@ class DetailPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (item.mediaType == 'tv') {
-                    content = MediaContent.fromDetails(snapshot.data);
+                      var content2 = box.get('${item.mediaType}_${item.id}');
 
+                      content =
+                          content2 ?? MediaContent.fromDetails(snapshot.data);
                     }
                     // log(snapshot.data!.toString());
                     return Padding(
@@ -138,7 +176,10 @@ class DetailPage extends StatelessWidget {
                             SeasonList(
                               seasons: content.seasons,
                               showId: item.id ?? 1,
-                              onPressed: seasonOnPressed,
+                              onPressed: (int seenCount, int seasonNumber) {
+                                seasonOnPressed(seenCount, seasonNumber,
+                                    snapshot.data, context);
+                              },
                             )
                           else
                             const SizedBox.shrink(),
@@ -192,21 +233,21 @@ class DetailPage extends StatelessWidget {
                                   index: index,
                                   listName: name,
                                   extraLine: true,
-                                  // onPressed: () {
-                                  //   Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => DetailPage(
-                                  //         item: TMDBResults.fromCredits(
-                                  //           snapshot.data?.cast?[index],
-                                  //         ),
-                                  //         heroKey: '$name$index',
-                                  //       ),
-                                  //     ),
-                                  //   ).then((value) {
-                                  //     // content =
-                                  //   });
-                                  // },
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPage(
+                                          item: TMDBResults.fromCredits(
+                                            snapshot.data?.cast?[index],
+                                          ),
+                                          heroKey: '$name$index',
+                                        ),
+                                      ),
+                                    ).then((value) {
+                                      setState(() {});
+                                    });
+                                  },
                                 );
                               },
                             ),
@@ -271,7 +312,7 @@ class DetailPage extends StatelessWidget {
 
   /// Some Series have a Season 0, aka Specials
   int findSeason(int number) {
-    log(content.toString());
+    //log(content.toString());
     if (content.seasons == null) {
       return number - 1;
     }

@@ -1,49 +1,45 @@
+import 'package:hive/hive.dart';
+
 import '../../enums/media_type.dart';
 import '../genres.dart';
 import '../tmdb/tmdb_detail.dart';
 import '../tv/episode_to_air.dart';
 import '../tv/season.dart';
+import 'db_season.dart';
 
-class DBSeasons {
-  int? episodesSeen;
-  int? episodes;
-  int? seasonNumber;
-  String? name;
-  List<int>? episodesSeenArray;
+part 'media_content.g.dart';
 
-  DBSeasons({
-    this.episodesSeen,
-    this.episodes,
-    this.seasonNumber,
-    this.name,
-    this.episodesSeenArray,
-  });
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['episodesSeen'] = episodesSeen;
-    data['episodes'] = episodes;
-    data['seasonNumber'] = seasonNumber;
-    data['name'] = name;
-    data['episodesSeenArray'] = episodesSeenArray;
-    return data;
-  }
-
-  @override
-  String toString() => toJson().toString();
-}
-
+@HiveType(typeId: 0)
 class MediaContent {
+  @HiveField(0)
+  int? tmdbId;
+
+  @HiveField(1)
   String? title;
+
+  @HiveField(2)
   int? runtime;
+
+  @HiveField(3)
   List<DBSeasons>? seasons;
+
+  @HiveField(4)
   String? posterPath;
+
+  @HiveField(5)
   List<Genres>? genres;
+
+  @HiveField(6)
   EpisodeToAir? nextToAir;
+
+  @HiveField(7)
   EpisodeToAir? nextToWatch;
+
+  @HiveField(8)
   MediaType? type;
 
   MediaContent({
+    this.tmdbId,
     this.title,
     this.runtime,
     this.seasons,
@@ -56,6 +52,7 @@ class MediaContent {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+    data['id'] = tmdbId;
     data['title'] = title;
     data['runtime'] = runtime;
     data['seasons'] = seasons;
@@ -71,6 +68,7 @@ class MediaContent {
   String toString() => toJson().toString();
 
   MediaContent.fromDetails(TMDBDetail? details) {
+    tmdbId = details?.id ?? 0;
     title = details?.title;
     runtime = details?.runtime;
     seasons = toDBSeason(details?.seasons);
@@ -100,6 +98,4 @@ class MediaContent {
 
     return newSeasons;
   }
-
-  
 }

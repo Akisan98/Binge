@@ -180,6 +180,10 @@ class TMDBDetail {
     data['video'] = video;
     data['vote_average'] = voteAverage;
     data['vote_count'] = voteCount;
+    data['seasons'] = seasons;
     return data;
   }
+
+  @override
+  String toString() => toJson().toString();
 }

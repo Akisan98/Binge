@@ -1,9 +1,26 @@
+import 'dart:developer';
+
+import 'package:binge/models/genres.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import 'enums/media_type.dart';
+import 'models/db/db_season.dart';
+import 'models/db/media_content.dart';
+import 'models/tv/episode_to_air.dart';
 import 'pages/home_page.dart';
 
 Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(MediaContentAdapter());
+  Hive.registerAdapter(DBSeasonsAdapter());
+  Hive.registerAdapter(GenresAdapter());
+  Hive.registerAdapter(EpisodeToAirAdapter());
+  Hive.registerAdapter(MediaTypeAdapter());
+  var box = await Hive.openBox<MediaContent>('myBox');
+  log(box.length.toString());
   await dotenv.load();
   runApp(const Binge());
 }

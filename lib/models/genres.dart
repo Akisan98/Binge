@@ -1,5 +1,13 @@
+import 'package:hive/hive.dart';
+
+part 'genres.g.dart';
+
+@HiveType(typeId: 2)
 class Genres {
+  @HiveField(0)
   int? id;
+
+  @HiveField(1)
   String? name;
 
   Genres({this.id, this.name});
