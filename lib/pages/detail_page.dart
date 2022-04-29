@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../enums/media_type.dart';
 import '../models/db/media_content.dart';
@@ -107,11 +108,12 @@ class DetailPageState extends State<DetailPage> {
                 future: tmdb.getDetails(item.mediaType, item.id),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (item.mediaType == 'tv') {
-                      var content2 = box.get('${item.mediaType}_${item.id}');
+                    if (item.mediaType != 'person') {
+                      final content2 = box.get('${item.mediaType}_${item.id}');
 
-                      content =
-                          content2 ?? MediaContent.fromDetails(snapshot.data);
+                      content = content2 ??
+                          MediaContent.fromDetails(
+                              snapshot.data, item.mediaType);
                     }
                     // log(snapshot.data!.toString());
                     return Padding(
@@ -122,7 +124,7 @@ class DetailPageState extends State<DetailPage> {
                           Row(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width - 100,
+                                width: MediaQuery.of(context).size.width - 80,
                                 child: AutoSizeText(
                                   snapshot.data?.title ?? '',
                                   maxLines: 2,
@@ -133,6 +135,48 @@ class DetailPageState extends State<DetailPage> {
                                   textAlign: TextAlign.start,
                                 ),
                               ),
+                              if (item.mediaType != 'person')
+                                ValueListenableBuilder<Box<MediaContent>>(
+                                  valueListenable:
+                                      Hive.box<MediaContent>('myBox')
+                                          .listenable(),
+                                  builder: (context, box, widget) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        if (box.get(
+                                                '${item.mediaType}_${item.id}') !=
+                                            null) {
+                                          setState(() {
+                                            box.delete(
+                                                '${item.mediaType}_${item.id}');
+
+                                            log('gg:' + content.toString());
+                                            content.seasons?.forEach((element) {
+                                              element.episodesSeen = 0;
+                                              element.episodesSeenArray =
+                                                  List.filled(
+                                                      element?.episodes ?? 0,
+                                                      0);
+                                            });
+                                          });
+                                        } else {
+                                          setState(() {
+                                            box.put(
+                                                '${item.mediaType}_${item.id}',
+                                                content);
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(
+                                          box.get('${item.mediaType}_${item.id}') !=
+                                                  null
+                                              ? Icons.check
+                                              : Icons.add),
+                                    );
+                                  },
+                                )
+                              else
+                                SizedBox.shrink(),
                             ],
                           ),
                           if (item.mediaType != MediaType.person.string)

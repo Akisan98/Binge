@@ -38,17 +38,20 @@ class MediaContent {
   @HiveField(8)
   MediaType? type;
 
-  MediaContent({
-    this.tmdbId,
-    this.title,
-    this.runtime,
-    this.seasons,
-    this.posterPath,
-    this.genres,
-    this.nextToAir,
-    this.nextToWatch,
-    this.type,
-  });
+  @HiveField(9)
+  String? nextRelease;
+
+  MediaContent(
+      {this.tmdbId,
+      this.title,
+      this.runtime,
+      this.seasons,
+      this.posterPath,
+      this.genres,
+      this.nextToAir,
+      this.nextToWatch,
+      this.type,
+      this.nextRelease});
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -61,13 +64,14 @@ class MediaContent {
     data['nextToAir'] = nextToAir;
     data['nextToWatch'] = nextToWatch;
     data['type'] = type;
+    data['nextRelease'] = nextRelease;
     return data;
   }
 
   @override
   String toString() => toJson().toString();
 
-  MediaContent.fromDetails(TMDBDetail? details) {
+  MediaContent.fromDetails(TMDBDetail? details, String? mediaType) {
     tmdbId = details?.id ?? 0;
     title = details?.title;
     runtime = details?.runtime;
@@ -76,6 +80,18 @@ class MediaContent {
     genres = details?.genres;
     nextToAir = details?.nextEpisodeToAir;
     nextToWatch = details?.nextEpisodeToAir;
+    type = resolveType(mediaType);
+    nextRelease = mediaType == MediaType.movie.string
+        ? details?.releaseDate
+        : details?.nextEpisodeToAir?.airDate;
+  }
+
+  MediaType resolveType(String? type) {
+    if (type == null || type == MediaType.movie.string) {
+      return MediaType.movie;
+    }
+
+    return MediaType.tvSeries;
   }
 
   List<DBSeasons> toDBSeason(List<Seasons>? seasons) {

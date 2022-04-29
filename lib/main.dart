@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:binge/models/genres.dart';
+import 'package:binge/pages/navigation_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
@@ -120,6 +121,6 @@ class Binge extends StatelessWidget {
         ),
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: NavigationTest(),
       );
 }
