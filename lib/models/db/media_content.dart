@@ -41,17 +41,22 @@ class MediaContent {
   @HiveField(9)
   String? nextRelease;
 
-  MediaContent(
-      {this.tmdbId,
-      this.title,
-      this.runtime,
-      this.seasons,
-      this.posterPath,
-      this.genres,
-      this.nextToAir,
-      this.nextToWatch,
-      this.type,
-      this.nextRelease});
+  @HiveField(10)
+  String? status;
+
+  MediaContent({
+    this.tmdbId,
+    this.title,
+    this.runtime,
+    this.seasons,
+    this.posterPath,
+    this.genres,
+    this.nextToAir,
+    this.nextToWatch,
+    this.type,
+    this.nextRelease,
+    this.status,
+  });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -65,6 +70,7 @@ class MediaContent {
     data['nextToWatch'] = nextToWatch;
     data['type'] = type;
     data['nextRelease'] = nextRelease;
+    data['status'] = status;
     return data;
   }
 
@@ -84,6 +90,7 @@ class MediaContent {
     nextRelease = mediaType == MediaType.movie.string
         ? details?.releaseDate
         : details?.nextEpisodeToAir?.airDate;
+    status = details?.status;
   }
 
   MediaType resolveType(String? type) {

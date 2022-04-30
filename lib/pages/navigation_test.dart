@@ -38,18 +38,18 @@ class _NavigationTestState extends State<NavigationTest> {
           data: NavigationBarThemeData(
             indicatorColor: Colors.purple[800]?.withOpacity(0.5),
             iconTheme: MaterialStateProperty.all(
-              IconThemeData(color: Colors.purple[800]),
+              const IconThemeData(color: Colors.black),
             ),
             labelTextStyle: MaterialStateProperty.all(
-              TextStyle(
+              const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Colors.purple[800],
+                color: Colors.black,
               ),
             ),
           ),
           child: NavigationBar(
-            height: 70,
+            height: 60,
             backgroundColor: Colors.white,
             animationDuration: const Duration(seconds: 1),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,

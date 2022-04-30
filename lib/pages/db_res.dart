@@ -17,11 +17,7 @@ class DBRes extends StatelessWidget {
           child: SizedBox.expand(
         child: ValueListenableBuilder<Box<MediaContent>>(
           valueListenable: Hive.box<MediaContent>('myBox').listenable(),
-          builder: (context, box, widget) => ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              thickness: 2,
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
+          builder: (context, box, widget) => ListView.builder(
             itemCount: box
                 //.values.where((element) => element.type == MediaType.movie)
                 .length,

@@ -11,11 +11,16 @@ import '../pages/detail_page.dart';
 import 'tmdb_image.dart';
 
 class DBContent extends StatelessWidget {
-  const DBContent({Key? key, required this.item, required this.index})
+  const DBContent(
+      {Key? key,
+      required this.item,
+      required this.index,
+      this.countDown = false})
       : super(key: key);
 
   final MediaContent? item;
   final int index;
+  final bool countDown;
 
   TMDBResults toRes(MediaContent? dbContent) => TMDBResults(
         id: dbContent?.tmdbId,
@@ -27,6 +32,7 @@ class DBContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('DBContent - Build');
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
@@ -57,7 +63,13 @@ class DBContent extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: SizedBox(
-                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      width: screenWidth -
+                          92 -
+                          16 -
+                          16 -
+                          16 -
+                          16 -
+                          (countDown ? 64 : 0),
                       child: AutoSizeText(
                         item?.title ?? '',
                         textAlign: TextAlign.start,
@@ -71,7 +83,13 @@ class DBContent extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                    width: screenWidth -
+                        92 -
+                        16 -
+                        16 -
+                        16 -
+                        16 -
+                        (countDown ? 64 : 0),
                     child: AutoSizeText(
                       item?.nextRelease ?? '',
                       textAlign: TextAlign.start,
@@ -82,7 +100,13 @@ class DBContent extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: SizedBox(
-                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      width: screenWidth -
+                          92 -
+                          16 -
+                          16 -
+                          16 -
+                          16 -
+                          (countDown ? 64 : 0),
                       child: AutoSizeText(
                         resolveSubtext(item),
                         textAlign: TextAlign.start,
@@ -94,22 +118,51 @@ class DBContent extends StatelessWidget {
                 ],
               ),
             ),
-            // Spacer(),
-            // Icon(Icons.add),
+            countDown
+                ? Container(
+                    height: 64,
+                    width: 64,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            resolveCounter(item)[0],
+                            textScaleFactor: 1.25,
+                          ),
+                          Text(
+                            resolveCounter(item)[1],
+                            textScaleFactor: 0.75,
+                          )
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.purple,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(100),
+                        )))
+                : SizedBox.shrink(),
           ],
         ),
       ),
     );
   }
 
-  String resolveSubtext(MediaContent? db) {
+  List<String> resolveCounter(MediaContent? db) {
+    if (db == null || item?.nextRelease == null || item?.nextRelease == '') {
+      return ['', ''];
+    }
 
-    return db?.nextRelease != null
-        ? DateTime.now()
-            .difference(DateTime.parse(db!.nextRelease!))
-            .inHours
-            .toString()
-        : '';
+    final comp = DateTime.now().difference(DateTime.parse(item!.nextRelease!));
+    if (comp.inDays < 0) {
+      return [(comp.inDays - 1).abs().toString(), 'Days'];
+    }
+
+    return [comp.inHours.abs().toString(), 'Hours'];
+  }
+
+  String resolveSubtext(MediaContent? db) {
     log(db.toString());
     if (db?.type == MediaType.movie) {
       if (db?.genres != null) {
@@ -120,7 +173,6 @@ class DBContent extends StatelessWidget {
       int episode;
       String episodeName;
       String output = '';
-      
 
       if (db?.nextToAir != null) {
         episodeName = db!.nextToAir?.name ?? '';
@@ -139,7 +191,7 @@ class DBContent extends StatelessWidget {
           }
         }
       }
-      
+
       return output;
     }
     return '';

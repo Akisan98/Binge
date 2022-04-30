@@ -27,13 +27,14 @@ class MediaContentAdapter extends TypeAdapter<MediaContent> {
       nextToWatch: fields[7] as EpisodeToAir?,
       type: fields[8] as MediaType?,
       nextRelease: fields[9] as String?,
+      status: fields[10] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MediaContent obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.tmdbId)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class MediaContentAdapter extends TypeAdapter<MediaContent> {
       ..writeByte(8)
       ..write(obj.type)
       ..writeByte(9)
-      ..write(obj.nextRelease);
+      ..write(obj.nextRelease)
+      ..writeByte(10)
+      ..write(obj.status);
   }
 
   @override

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 
 import '../models/db/db_season.dart';
-import '../models/db/media_content.dart';
 import '../pages/episode_page.dart';
 import '../utils/utils.dart';
 
