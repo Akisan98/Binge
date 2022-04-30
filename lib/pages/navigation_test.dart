@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'my_library.dart';
 
 class NavigationTest extends StatefulWidget {
   const NavigationTest({Key? key}) : super(key: key);
@@ -16,12 +17,9 @@ class _NavigationTestState extends State<NavigationTest> {
 
   int _currentIndex = 0;
   List<Widget> pages = [
-    DBRes(),
+    const DBRes(),
     HomePage(),
-    const Text(
-      'Three',
-      style: _textStyle,
-    ),
+   const MyLibrary()
   ];
 
   @override

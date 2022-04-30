@@ -103,6 +103,13 @@ class DBContent extends StatelessWidget {
   }
 
   String resolveSubtext(MediaContent? db) {
+
+    return db?.nextRelease != null
+        ? DateTime.now()
+            .difference(DateTime.parse(db!.nextRelease!))
+            .inHours
+            .toString()
+        : '';
     log(db.toString());
     if (db?.type == MediaType.movie) {
       if (db?.genres != null) {
@@ -113,6 +120,7 @@ class DBContent extends StatelessWidget {
       int episode;
       String episodeName;
       String output = '';
+      
 
       if (db?.nextToAir != null) {
         episodeName = db!.nextToAir?.name ?? '';
@@ -131,6 +139,7 @@ class DBContent extends StatelessWidget {
           }
         }
       }
+      
       return output;
     }
     return '';
