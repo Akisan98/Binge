@@ -282,7 +282,9 @@ class Released extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = db.values.where((element) {
-      if (element.type == MediaType.movie && element.status == 'Released') {
+      if (element.type == MediaType.movie &&
+          element.status == 'Released' &&
+          element.notificationOnly != true) {
         return true;
       }
 
@@ -334,7 +336,13 @@ class Returning extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = db.values.where((element) {
       if (element.type == MediaType.tvSeries &&
-          (element.nextRelease == null || element.nextRelease == '') &&
+          (element.nextRelease == null ||
+              element.nextRelease == '' ||
+              (DateTime.now()
+                      .difference(
+                          DateTime.parse(element.nextRelease ?? '2022-01-01'))
+                      .inDays >
+                  0)) &&
           element.status == 'Returning Series') {
         return true;
       }

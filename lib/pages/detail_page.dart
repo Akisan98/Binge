@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../enums/media_type.dart';
@@ -9,6 +8,7 @@ import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_credit.dart';
 import '../models/tmdb/tmdb_detail.dart';
 import '../models/tmdb/tmdb_result.dart';
+import '../models/tv/episode_to_air.dart';
 import '../services/tmdb_service.dart';
 import '../utils/utils.dart';
 import '../views/genre_card.dart';
@@ -38,6 +38,7 @@ class DetailPageState extends State<DetailPage> {
 
   static late MediaContent content;
   late Box<MediaContent> box;
+  bool isSaved = false;
 
   @override
   void initState() {
@@ -51,8 +52,75 @@ class DetailPageState extends State<DetailPage> {
     box = Hive.box('myBox');
   }
 
-  seasonOnPressed(
-      int seenCount, int seasonNumber, TMDBDetail? snapshot, dynamic context) {
+  MediaContent? readEntry() => box.get('${item.mediaType}_${item.id}');
+
+  void createEntry(MediaContent content) async {
+    if (content.type == MediaType.tvSeries) {
+      var next = resolveNextEpisode(content);
+      if (next != null) {
+        content.nextToWatch = await next;
+      }
+    }
+    if (content.type == MediaType.movie && isNonReleasedMovie()) {
+      content.notificationOnly = true;
+    }
+    box.put('${item.mediaType}_${item.id}', content);
+  }
+
+  void deleteEntry() {
+    box.delete('${item.mediaType}_${item.id}');
+  }
+
+  bool isNonReleasedMovie() {
+    if (content.type != MediaType.movie) {
+      return false;
+    }
+
+    DateTime release = DateTime(2099);
+    if (content.nextRelease != null || content.nextRelease != '') {
+      release = DateTime.parse(content.nextRelease ?? '2099-01-01');
+    }
+    return DateTime.now().difference(release).inDays < 0;
+  }
+
+  Future<EpisodeToAir?> resolveNextEpisode(MediaContent content) async {
+    final seasonLength = content.seasons?.length ?? 0;
+
+    for (var seasonIndex = seasonLength; seasonIndex >= 1; seasonIndex--) {
+      if (content.seasons?.elementAt(seasonIndex - 1).episodesSeen != 0) {
+        if (content.seasons?.elementAt(seasonIndex - 1).episodesSeen ==
+            content.seasons?.elementAt(seasonIndex - 1).episodes) {
+          // Check if there is a next season
+          if (seasonLength >= seasonIndex + 1) {
+            log('S: ${(seasonIndex + 1)} E: 1');
+            return tmdb.getTVSeason2(item.id ?? 0, seasonIndex + 1, 1);
+          }
+          log('No New');
+          return null;
+        } else {
+          final episodes =
+              content.seasons?.elementAt(seasonIndex - 1).episodes ?? 1;
+          for (var episodeIndex = episodes; episodeIndex >= 1; episodeIndex--) {
+            if (content.seasons
+                    ?.elementAt(seasonIndex - 1)
+                    .episodesSeenArray
+                    ?.elementAt(episodeIndex - 1) ==
+                1) {
+              log('vS: ${(seasonIndex)} E: ${episodeIndex + 1}');
+              return tmdb.getTVSeason2(
+                  item.id ?? 0, seasonIndex, episodeIndex + 1);
+            }
+          }
+        }
+      }
+    }
+
+    log('S: 1 E: 1');
+    return tmdb.getTVSeason2(item.id ?? 0, 1, 1);
+  }
+
+  seasonOnPressed(int seenCount, int seasonNumber, List<int> seenArray,
+      TMDBDetail? snapshot, dynamic context) {
     // log("media: " + content.toString());
     // log("snap: " + (snapshot != null ? snapshot.toString() : ''));
 
@@ -66,31 +134,20 @@ class DetailPageState extends State<DetailPage> {
 
     final season = content.seasons?[findSeason(seasonNumber)];
 
-    if (seenCount == 0) {
-      season?.episodesSeenArray = List.filled(
-        content.seasons?[findSeason(seasonNumber)].episodes ?? 0,
-        0,
-      );
-    } else {
-      season?.episodesSeenArray = List.filled(
-        seenCount,
-        1,
-      );
-    }
-
+    season?.episodesSeenArray = seenArray;
     season?.episodesSeen = seenCount;
 
     log(
       season!.episodesSeen.toString(),
     );
-
-    box.put('${item.mediaType}_${item.id}', content);
+    createEntry(content);
   }
 
   @override
   // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
     log('Build - DetailPage');
+    log(content.toString());
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -109,11 +166,28 @@ class DetailPageState extends State<DetailPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (item.mediaType != 'person') {
-                      final content2 = box.get('${item.mediaType}_${item.id}');
+                      final content2 = readEntry();
+                      //final tmp = content;
 
-                      content = content2 ??
-                          MediaContent.fromDetails(
-                              snapshot.data, item.mediaType);
+                      // TODO: Should I Flush Cache or not?
+                      // if (tmp != null) {
+                      //   content = tmp;
+                      // }
+
+                      if (content2 != null) {
+                        log('fg2');
+                        var newContent = MediaContent.fromDetails(
+                            snapshot.data, item.mediaType);
+
+                        content =
+                            Utils.combineMediaContents(content2, newContent);
+                      }
+                      // tmp == null &&
+                      if (content2 == null) {
+                        log('fg');
+                        content = MediaContent.fromDetails(
+                            snapshot.data, item.mediaType);
+                      }
                     }
                     // log(snapshot.data!.toString());
                     return Padding(
@@ -143,34 +217,31 @@ class DetailPageState extends State<DetailPage> {
                                   builder: (context, box, widget) {
                                     return IconButton(
                                       onPressed: () {
-                                        if (box.get(
-                                                '${item.mediaType}_${item.id}') !=
-                                            null) {
+                                        if (readEntry() != null) {
                                           setState(() {
-                                            box.delete(
-                                                '${item.mediaType}_${item.id}');
+                                            deleteEntry();
 
-                                            log('gg:' + content.toString());
-                                            content.seasons?.forEach((element) {
-                                              element.episodesSeen = 0;
-                                              element.episodesSeenArray =
-                                                  List.filled(
-                                                      element?.episodes ?? 0,
-                                                      0);
-                                            });
+                                            // log('gg:' + content.toString());
+                                            // content.seasons?.forEach((element) {
+                                            //   element.episodesSeen = 0;
+                                            //   element.episodesSeenArray =
+                                            //       List.filled(
+                                            //           element?.episodes ?? 0,
+                                            //           0);
+                                            // });
                                           });
                                         } else {
                                           setState(() {
-                                            box.put(
-                                                '${item.mediaType}_${item.id}',
-                                                content);
+                                            createEntry(content);
                                           });
                                         }
                                       },
-                                      icon: Icon(
-                                          box.get('${item.mediaType}_${item.id}') !=
-                                                  null
-                                              ? Icons.check
+                                      icon: Icon(readEntry() != null
+                                          ? isNonReleasedMovie()
+                                              ? Icons.notifications
+                                              : Icons.check
+                                          : isNonReleasedMovie()
+                                              ? Icons.notification_add_outlined
                                               : Icons.add),
                                     );
                                   },
@@ -220,9 +291,10 @@ class DetailPageState extends State<DetailPage> {
                             SeasonList(
                               seasons: content.seasons,
                               showId: item.id ?? 1,
-                              onPressed: (int seenCount, int seasonNumber) {
+                              onPressed: (int seenCount, int seasonNumber,
+                                  List<int> seenArray) {
                                 seasonOnPressed(seenCount, seasonNumber,
-                                    snapshot.data, context);
+                                    seenArray, snapshot.data, context);
                               },
                             )
                           else

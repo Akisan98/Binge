@@ -44,6 +44,9 @@ class MediaContent {
   @HiveField(10)
   String? status;
 
+  @HiveField(11)
+  bool? notificationOnly;
+
   MediaContent({
     this.tmdbId,
     this.title,
@@ -56,6 +59,7 @@ class MediaContent {
     this.type,
     this.nextRelease,
     this.status,
+      this.notificationOnly
   });
 
   Map<String, dynamic> toJson() {
@@ -71,13 +75,15 @@ class MediaContent {
     data['type'] = type;
     data['nextRelease'] = nextRelease;
     data['status'] = status;
+    data['notificationOnly'] = notificationOnly;
     return data;
   }
 
   @override
   String toString() => toJson().toString();
 
-  MediaContent.fromDetails(TMDBDetail? details, String? mediaType) {
+  MediaContent.fromDetails(TMDBDetail? details, String? mediaType,
+      {bool? notifyOnly}) {
     tmdbId = details?.id ?? 0;
     title = details?.title;
     runtime = details?.runtime;
@@ -91,6 +97,7 @@ class MediaContent {
         ? details?.releaseDate
         : details?.nextEpisodeToAir?.airDate;
     status = details?.status;
+    notificationOnly = notifyOnly;
   }
 
   MediaType resolveType(String? type) {

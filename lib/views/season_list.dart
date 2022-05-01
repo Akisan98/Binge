@@ -48,6 +48,7 @@ class SeasonList extends StatelessWidget {
 typedef SeasonCallback = void Function(
   int seenCount,
   int seasonNumber,
+  List<int> seenArray,
 );
 
 class SeasonCard extends StatefulWidget {
@@ -90,7 +91,14 @@ class _SeasonCardState extends State<SeasonCard> {
                 ),
               ),
             ).then((value) {
-              setState(() {});
+              setState(() {
+                widget.callback(
+                  widget.season.episodesSeen ?? 0,
+                  widget.season.seasonNumber!,
+                  widget.season.episodesSeenArray ??
+                      List.filled(widget.season.episodes ?? 0, 0),
+                );
+              });
             });
           },
           child: SizedBox(
@@ -152,6 +160,10 @@ class _SeasonCardState extends State<SeasonCard> {
               widget.callback(
                 newValue,
                 widget.season.seasonNumber!,
+                List.filled(
+                  widget.season.episodes ?? 0,
+                  newValue == 0 ? 0 : 1,
+                ),
               );
 
               setState(() {});

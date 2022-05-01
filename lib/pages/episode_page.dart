@@ -72,7 +72,7 @@ class EpisodesPage extends StatelessWidget {
                         )
                       : EpisodeCard(
                           episode: list[index],
-                          index: index - 1,
+                          index: index,
                           seen: season.episodesSeenArray![index - 1],
                           onChanged: (newValue) {
                             episodeOnPressed(newValue, index);

@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import '../models/db/media_content.dart';
+
 class Utils {
   static getGenre(int id) =>
       genres.firstWhere((element) => element['id'] == id)['name'];
@@ -28,6 +30,39 @@ class Utils {
       default:
         return '';
     }
+  }
+
+  static MediaContent combineMediaContents(
+      MediaContent? fromDB, MediaContent live) {
+    live.nextToWatch = fromDB?.nextToWatch;
+    live.notificationOnly = fromDB?.notificationOnly;
+
+    fromDB?.seasons?.forEach((element) {
+      if (element.episodesSeen != 0) {
+        live.seasons?.elementAt((element.seasonNumber ?? 1) - 1).episodesSeen =
+            element.episodesSeen;
+        if (live.seasons?.elementAt((element.seasonNumber ?? 1) - 1).episodes !=
+            element.episodes) {
+          final newEpisodes = (live.seasons
+                      ?.elementAt((element.seasonNumber ?? 1) - 1)
+                      .episodes ??
+                  0) -
+              (element.episodes ?? 0);
+          for (var i = 0; i < newEpisodes; i++) {
+            element.episodesSeenArray?.add(0);
+          }
+          live.seasons
+              ?.elementAt((element.seasonNumber ?? 1) - 1)
+              .episodesSeenArray = element.episodesSeenArray;
+        } else {
+          live.seasons
+              ?.elementAt((element.seasonNumber ?? 1) - 1)
+              .episodesSeenArray = element.episodesSeenArray;
+        }
+      }
+    });
+
+    return live;
   }
 
   // Avoid another call for string value.

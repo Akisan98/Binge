@@ -10,6 +10,7 @@ import '../models/tmdb/tmdb_credit.dart';
 import '../models/tmdb/tmdb_detail.dart';
 import '../models/tmdb/tmdb_response.dart';
 import '../models/tmdb/tmdb_season.dart';
+import '../models/tv/episode_to_air.dart';
 
 class TMDBService {
   // Base Url for the API
@@ -61,6 +62,23 @@ class TMDBService {
 
     if (request.statusCode == 200) {
       return TMDBSeason.fromJson(jsonDecode(request.body));
+    } else {
+      throw Exception('Status Code on Get Trending is not 200');
+    }
+  }
+
+  /// Gets a Season and its Episodes of a TV Show.
+  Future<EpisodeToAir> getTVSeason2(int showId, int season, int episode) async {
+    final endpoint = '/tv/$showId/season/$season/episode/$episode';
+
+    final uri = createUri(endpoint, {'api_key': apiKey});
+    log(uri.toString());
+    final request = await client.get(uri);
+
+    log(jsonDecode(request.body).toString());
+
+    if (request.statusCode == 200) {
+      return EpisodeToAir.fromJson(jsonDecode(request.body));
     } else {
       throw Exception('Status Code on Get Trending is not 200');
     }

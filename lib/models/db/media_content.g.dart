@@ -28,13 +28,13 @@ class MediaContentAdapter extends TypeAdapter<MediaContent> {
       type: fields[8] as MediaType?,
       nextRelease: fields[9] as String?,
       status: fields[10] as String?,
-    );
+    )..notificationOnly = fields[11] as bool?;
   }
 
   @override
   void write(BinaryWriter writer, MediaContent obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.tmdbId)
       ..writeByte(1)
@@ -56,7 +56,9 @@ class MediaContentAdapter extends TypeAdapter<MediaContent> {
       ..writeByte(9)
       ..write(obj.nextRelease)
       ..writeByte(10)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(11)
+      ..write(obj.notificationOnly);
   }
 
   @override

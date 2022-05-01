@@ -163,6 +163,8 @@ class DBContent extends StatelessWidget {
   }
 
   String resolveSubtext(MediaContent? db) {
+    return (db?.nextToWatch ?? '').toString();
+
     log(db.toString());
     if (db?.type == MediaType.movie) {
       if (db?.genres != null) {
