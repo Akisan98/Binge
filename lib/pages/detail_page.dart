@@ -147,7 +147,6 @@ class DetailPageState extends State<DetailPage> {
   // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
     log('Build - DetailPage');
-    log(content.toString());
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

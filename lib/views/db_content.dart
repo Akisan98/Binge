@@ -159,7 +159,7 @@ class DBContent extends StatelessWidget {
       return [(comp.inDays - 1).abs().toString(), 'Days'];
     }
 
-    return [comp.inHours.abs().toString(), 'Hours'];
+    return [(comp.inHours - 1).abs().toString(), 'Hours'];
   }
 
   String resolveSubtext(MediaContent? db) {

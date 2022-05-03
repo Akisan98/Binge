@@ -68,7 +68,7 @@ class Todays extends StatelessWidget {
           (element.nextRelease != null && element.nextRelease != '') &&
           DateTime.now()
                   .difference(DateTime.parse(element.nextRelease!))
-                  .inHours >=
+                  .inHours >
               0 &&
           DateTime.now()
                   .difference(DateTime.parse(element.nextRelease!))
@@ -127,7 +127,7 @@ class CountDown extends StatelessWidget {
                 0 ||
             DateTime.now()
                     .difference(DateTime.parse(element.nextRelease!))
-                    .inHours <
+                    .inHours <=
                 0) {
           return true;
         }
