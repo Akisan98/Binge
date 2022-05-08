@@ -16,22 +16,20 @@ class MyLibrary extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
         child: ValueListenableBuilder<Box<MediaContent>>(
           valueListenable: Hive.box<MediaContent>('myBox').listenable(),
-          builder: (context, box, widget) => Expanded(
-            child: SingleChildScrollView(
-              physics: const ScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Todays(
-                    db: box,
-                  ),
-                  CountDown(db: box),
-                  Returning(db: box),
-                  Canceled(db: box),
-                  const SizedBox.shrink(), //Aired(db: box)
-                  Released(db: box), NotReleased(db: box)
-                ],
-              ),
+          builder: (context, box, widget) => SingleChildScrollView(
+            physics: const ScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Todays(
+                  db: box,
+                ),
+                CountDown(db: box),
+                Returning(db: box),
+                Canceled(db: box),
+                const SizedBox.shrink(), //Aired(db: box)
+                Released(db: box), NotReleased(db: box)
+              ],
             ),
           ),
         ),
@@ -84,7 +82,7 @@ class Todays extends StatelessWidget {
                 SizedBox(
                   height: 206,
                   child: ListView.builder(
-                    shrinkWrap: true,
+                    //shrinkWrap: true,
                     //physics: NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: items.length,
@@ -200,7 +198,7 @@ class Returning extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.53,
+                  childAspectRatio: 0.5,
                   crossAxisCount: 4,
                 ),
                 itemCount: items.length,
@@ -262,7 +260,7 @@ class Canceled extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.53,
+                  childAspectRatio: 0.5,
                   crossAxisCount: 4,
                 ),
                 itemCount: items.length,
@@ -323,7 +321,7 @@ class Released extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.53,
+                  childAspectRatio: 0.5,
                   crossAxisCount: 4,
                 ),
                 itemCount: items.length,
@@ -391,7 +389,7 @@ class NotReleased extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.53,
+                  childAspectRatio: 0.5,
                   crossAxisCount: 4,
                 ),
                 itemCount: items.length,
