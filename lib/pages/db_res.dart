@@ -35,7 +35,10 @@ class DBRes extends StatelessWidget {
                 }
 
                 return false;
-              });
+              }).toList();
+
+              // ignore: cascade_invocations
+              items.sort((a, b) => (a.title ?? '').compareTo(b.title ?? ''));
 
               return ListView.builder(
                 itemCount: items.length,

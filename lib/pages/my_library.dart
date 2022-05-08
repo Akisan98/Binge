@@ -18,6 +18,7 @@ class MyLibrary extends StatelessWidget {
           valueListenable: Hive.box<MediaContent>('myBox').listenable(),
           builder: (context, box, widget) => Expanded(
             child: SingleChildScrollView(
+              physics: const ScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -125,22 +126,17 @@ class CountDown extends StatelessWidget {
         return false;
       }
     }).toList();
-    items.sort((a, b) {
-      if (a.nextRelease == null || a.nextRelease == '') {
-        return -1;
-      }
-      if (b.nextRelease == null || b.nextRelease == '') {
-        return -1;
-      }
-
-      return a.nextRelease!.compareTo(b.nextRelease!);
-    });
+    // ignore: cascade_invocations
+    items.sort(
+      (a, b) => (a.nextRelease ?? '2099-01-01')
+          .compareTo(b.nextRelease ?? '2099-01-01'),
+    );
 
     return SizedBox(
       height: 170.0 * items.length,
       child: ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: items.length,
         itemBuilder: (context, index) => SizedBox(
           height: 170,
@@ -199,10 +195,10 @@ class Returning extends StatelessWidget {
           SizedBox(
             height: 174.0 * ((items.length / 4).ceil()),
             child: Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 0.53,
                   crossAxisCount: 4,
@@ -261,10 +257,10 @@ class Canceled extends StatelessWidget {
           SizedBox(
             height: 174.0 * ((items.length / 4).ceil()),
             child: Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 0.53,
                   crossAxisCount: 4,
@@ -322,10 +318,10 @@ class Released extends StatelessWidget {
           SizedBox(
             height: 174.0 * ((items.length / 4).ceil()),
             child: Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 0.53,
                   crossAxisCount: 4,
@@ -390,10 +386,10 @@ class NotReleased extends StatelessWidget {
           SizedBox(
             height: 174.0 * ((items.length / 4).ceil()),
             child: Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 0.53,
                   crossAxisCount: 4,

@@ -15,7 +15,8 @@ class DBContent extends StatelessWidget {
       {Key? key,
       required this.item,
       required this.index,
-      this.countDown = false})
+    this.countDown = false,
+  })
       : super(key: key);
 
   final MediaContent? item;
@@ -91,7 +92,9 @@ class DBContent extends StatelessWidget {
                         16 -
                         (countDown ? 64 : 0),
                     child: AutoSizeText(
-                      item?.nextRelease ?? '',
+                      countDown
+                          ? item?.nextRelease ?? ''
+                          : item?.nextToWatch?.airDate ?? '',
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -163,9 +166,7 @@ class DBContent extends StatelessWidget {
   }
 
   String resolveSubtext(MediaContent? db) {
-    return (db?.nextToWatch ?? '').toString();
-
-    log(db.toString());
+    //log(db.toString());
     if (db?.type == MediaType.movie) {
       if (db?.genres != null) {
         return db!.genres.toString();
@@ -176,10 +177,16 @@ class DBContent extends StatelessWidget {
       String episodeName;
       String output = '';
 
-      if (db?.nextToAir != null) {
-        episodeName = db!.nextToAir?.name ?? '';
-        season = db.nextToAir?.seasonNumber ?? -1;
-        episode = db.nextToAir?.episodeNumber ?? -1;
+      if (db?.title == 'The Falcon and the Winter Soldier') {
+        log(db.toString());
+      }
+
+      var item = countDown ? db?.nextToAir : db?.nextToWatch;
+
+      if (item != null) {
+        episodeName = item.name ?? '';
+        season = item.seasonNumber ?? -1;
+        episode = item.episodeNumber ?? -1;
 
         if (season != -1 && episode != -1) {
           output += 'S$season E$episode';
@@ -196,6 +203,6 @@ class DBContent extends StatelessWidget {
 
       return output;
     }
-    return '';
+    return 'gg';
   }
 }
