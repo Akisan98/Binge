@@ -14,33 +14,23 @@ class MyLibrary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        child: SizedBox.expand(
-          child: ValueListenableBuilder<Box<MediaContent>>(
-            valueListenable: Hive.box<MediaContent>('myBox').listenable(),
-            builder: (context, box, widget) => ListView.builder(
-              itemCount: 7,
-              itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return Todays(
-                      db: box,
-                    );
-                  case 1:
-                    return CountDown(db: box);
-                  case 2:
-                    return Returning(db: box);
-                  case 3:
-                    return Canceled(db: box);
-                  case 4:
-                    return SizedBox.shrink(); //Aired(db: box);
-                  case 5:
-                    return Released(db: box);
-                  case 6:
-                    return NotReleased(db: box);
-                  default:
-                    return const Text("This shouldn't happen...");
-                }
-              },
+        child: ValueListenableBuilder<Box<MediaContent>>(
+          valueListenable: Hive.box<MediaContent>('myBox').listenable(),
+          builder: (context, box, widget) => Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Todays(
+                    db: box,
+                  ),
+                  CountDown(db: box),
+                  Returning(db: box),
+                  Canceled(db: box),
+                  const SizedBox.shrink(), //Aired(db: box)
+                  Released(db: box), NotReleased(db: box)
+                ],
+              ),
             ),
           ),
         ),
@@ -63,18 +53,16 @@ class Todays extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = db.values.where(
-      (element) =>
-          (element.nextRelease != null && element.nextRelease != '') &&
-          DateTime.now()
-                  .difference(DateTime.parse(element.nextRelease!))
-                  .inHours >
-              0 &&
-          DateTime.now()
-                  .difference(DateTime.parse(element.nextRelease!))
-                  .inHours <=
-              24,
-    );
+    final items = db.values.where((element) =>
+        (element.nextRelease != null && element.nextRelease != '') &&
+        DateTime.now()
+                .difference(DateTime.parse(element.nextRelease!))
+                .inHours >
+            0 &&
+        DateTime.now()
+                .difference(DateTime.parse(element.nextRelease!))
+                .inHours <=
+            24);
 
     return items.isNotEmpty
         ? Padding(
@@ -85,25 +73,26 @@ class Todays extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(left: 8, bottom: 16),
                   child: Text(
-                    'Today!',
+                    'Today',
                     textScaleFactor: 1.5,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Wrap(
-                  children: [
-                    for (var i = 0; i < items.length; i++)
-                      SizedBox(
-                        height: 206,
-                        child: PosterCard(
-                          item: toRes(items.elementAt(i)),
-                          index: i,
-                          listName: 'todays',
-                        ),
-                      ),
-                  ],
+                SizedBox(
+                  height: 206,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    //physics: NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: items.length,
+                    itemBuilder: (context, index) => PosterCard(
+                      item: toRes(items.elementAt(index)),
+                      index: index,
+                      listName: 'todays',
+                    ),
+                  ),
                 )
               ],
             ),
@@ -136,7 +125,7 @@ class CountDown extends StatelessWidget {
         return false;
       }
     }).toList();
-    items.sort(((a, b) {
+    items.sort((a, b) {
       if (a.nextRelease == null || a.nextRelease == '') {
         return -1;
       }
@@ -145,47 +134,51 @@ class CountDown extends StatelessWidget {
       }
 
       return a.nextRelease!.compareTo(b.nextRelease!);
-    }));
+    });
 
-    return Wrap(
-      children: [
-        for (var i = 0; i < items.length; i++)
-          SizedBox(
-            height: 170,
-            child: DBContent(
-              countDown: true,
-              item: items.elementAt(i),
-              index: i,
-            ),
+    return SizedBox(
+      height: 170.0 * items.length,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        itemBuilder: (context, index) => SizedBox(
+          height: 170,
+          child: DBContent(
+            countDown: true,
+            item: items.elementAt(index),
+            index: index,
           ),
-      ],
+        ),
+      ),
     );
   }
 }
 
-class Aired extends StatelessWidget {
-  const Aired({Key? key, required this.db}) : super(key: key);
+class Returning extends StatelessWidget {
+  const Returning({Key? key, required this.db}) : super(key: key);
 
   final Box<MediaContent> db;
 
-  // Returning Series, Ended, Canceled
-
+  // Returning Series, Ended, Canceled, Released, Post Production, In Production
   @override
   Widget build(BuildContext context) {
     final items = db.values.where((element) {
-      if (element.nextRelease != null && element.nextRelease != '') {
-        if (DateTime.now()
-                .difference(DateTime.parse(element.nextRelease!))
-                .inDays >
-            0) {
-          return true;
-        }
-        return false;
+      if (element.type == MediaType.tvSeries &&
+          (element.nextRelease == null ||
+              element.nextRelease == '' ||
+              (DateTime.now()
+                      .difference(
+                        DateTime.parse(element.nextRelease ?? '2022-01-01'),
+                      )
+                      .inDays >
+                  0)) &&
+          element.status == 'Returning Series') {
+        return true;
       }
-      return true;
-    });
 
-    items.forEach((item) => log(item.toString()));
+      return false;
+    });
 
     return Padding(
       padding: const EdgeInsets.only(top: 32, left: 16),
@@ -195,27 +188,38 @@ class Aired extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 8, bottom: 16),
             child: Text(
-              'Aired!',
+              'Returning',
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Wrap(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                SizedBox(
-                  height: 200,
+
+          SizedBox(
+            height: 174.0 * ((items.length / 4).ceil()),
+            child: Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.53,
+                  crossAxisCount: 4,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) => SizedBox(
+                  height: 160,
                   child: PosterCard(
                     scaleFactor: 0.8,
-                    item: toRes(items.elementAt(i)),
-                    index: i,
-                    listName: 'aired',
+                    item: toRes(items.elementAt(index)),
+                    index: index,
+                    listName: 'Returning',
                   ),
                 ),
-            ],
-          )
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -246,27 +250,35 @@ class Canceled extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 8, bottom: 16),
             child: Text(
-              'canceled!',
+              'Canceled',
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Wrap(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                SizedBox(
-                  height: 200,
-                  child: PosterCard(
-                    scaleFactor: 0.8,
-                    item: toRes(items.elementAt(i)),
-                    index: i,
-                    listName: 'canceled',
-                  ),
+
+          SizedBox(
+            height: 174.0 * ((items.length / 4).ceil()),
+            child: Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.53,
+                  crossAxisCount: 4,
                 ),
-            ],
-          )
+                itemCount: items.length,
+                itemBuilder: (context, index) => PosterCard(
+                  scaleFactor: 0.8,
+                  item: toRes(items.elementAt(index)),
+                  index: index,
+                  listName: 'canceled',
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -299,91 +311,42 @@ class Released extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 8, bottom: 16),
             child: Text(
-              'released!',
+              'Released',
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Wrap(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                SizedBox(
-                  height: 200,
-                  child: PosterCard(
-                    scaleFactor: 0.8,
-                    item: toRes(items.elementAt(i)),
-                    index: i,
-                    listName: 'released',
-                  ),
+
+          SizedBox(
+            height: 174.0 * ((items.length / 4).ceil()),
+            child: Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.53,
+                  crossAxisCount: 4,
                 ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class Returning extends StatelessWidget {
-  const Returning({Key? key, required this.db}) : super(key: key);
-
-  final Box<MediaContent> db;
-
-  // Returning Series, Ended, Canceled, Released, Post Production, In Production
-  @override
-  Widget build(BuildContext context) {
-    final items = db.values.where((element) {
-      if (element.type == MediaType.tvSeries &&
-          (element.nextRelease == null ||
-              element.nextRelease == '' ||
-              (DateTime.now()
-                      .difference(
-                          DateTime.parse(element.nextRelease ?? '2022-01-01'))
-                      .inDays >
-                  0)) &&
-          element.status == 'Returning Series') {
-        return true;
-      }
-
-      return false;
-    });
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 32, left: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8, bottom: 16),
-            child: Text(
-              'Returning!',
-              textScaleFactor: 1.5,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+                itemCount: items.length,
+                itemBuilder: (context, index) => PosterCard(
+                  scaleFactor: 0.8,
+                  item: toRes(items.elementAt(index)),
+                  index: index,
+                  listName: 'released',
+                ),
               ),
             ),
           ),
-          Wrap(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                SizedBox(
-                  height: 200,
-                  child: PosterCard(
-                    scaleFactor: 0.8,
-                    item: toRes(items.elementAt(i)),
-                    index: i,
-                    listName: 'Returning',
-                  ),
-                ),
-            ],
-          )
         ],
       ),
     );
   }
 }
+
+
 
 class NotReleased extends StatelessWidget {
   const NotReleased({Key? key, required this.db}) : super(key: key);
@@ -416,27 +379,35 @@ class NotReleased extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 8, bottom: 16),
             child: Text(
-              'Not Released!',
+              'Not Released',
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Wrap(
-            children: [
-              for (var i = 0; i < items.length; i++)
-                SizedBox(
-                  height: 200,
-                  child: PosterCard(
-                    scaleFactor: 0.8,
-                    item: toRes(items.elementAt(i)),
-                    index: i,
-                    listName: 'not_released',
-                  ),
+
+          SizedBox(
+            height: 174.0 * ((items.length / 4).ceil()),
+            child: Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.53,
+                  crossAxisCount: 4,
                 ),
-            ],
-          )
+                itemCount: items.length,
+                itemBuilder: (context, index) => PosterCard(
+                  scaleFactor: 0.8,
+                  item: toRes(items.elementAt(index)),
+                  index: index,
+                  listName: 'not_released',
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

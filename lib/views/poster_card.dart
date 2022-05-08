@@ -44,9 +44,6 @@ class PosterCard extends StatelessWidget {
           color: Colors.transparent,
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.fromLTRB(6, 8, 6, 8),
-          child: SizedBox(
-            width: scaleFactor != null ? scaleFactor! * 92 : 92,
-            height: scaleFactor != null ? scaleFactor! * 138 : 138,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,8 +73,7 @@ class PosterCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       );
