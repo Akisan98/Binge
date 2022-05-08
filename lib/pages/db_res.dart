@@ -14,24 +14,41 @@ class DBRes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-          child: SizedBox.expand(
+        child: SizedBox.expand(
         child: ValueListenableBuilder<Box<MediaContent>>(
           valueListenable: Hive.box<MediaContent>('myBox').listenable(),
-          builder: (context, box, widget) => ListView.builder(
-            itemCount: box
-                //.values.where((element) => element.type == MediaType.movie)
-                .length,
-            itemBuilder: (context, index) => SizedBox(
-              height: 170,
-              child: DBContent(
-                item: box.getAt(index),
-                //.values
-                //.where((element) => element.type == MediaType.movie)
-                //.elementAt(index),
-                index: index,
-              ),
-            ),
+            builder: (context, box, widget) {
+              var items = box.values.where((element) {
+                if (element.type == MediaType.movie) {
+                  if (element.notificationOnly ?? false) {
+                    return true;
+                  }
+                  return false;
+                }
+
+                if (element.nextToWatch != null &&
+                    element.nextToWatch?.airDate != null &&
+                    element.nextToWatch?.airDate != '') {
+                  final date = DateTime.parse(
+                      element.nextToWatch?.airDate ?? '2099-01-01');
+                  return DateTime.now().difference(date).inDays > 0;
+                }
+
+                return false;
+              });
+
+              return ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) => SizedBox(
+                  height: 170,
+                  child: DBContent(
+                    item: items.elementAt(index), //box.getAt(index),
+                    index: index,
+                  ),
+                ),
+              );
+            },
           ),
         ),
-      ));
+      );
 }

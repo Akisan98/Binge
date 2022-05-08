@@ -77,7 +77,7 @@ class DetailPageState extends State<DetailPage> {
     }
 
     DateTime release = DateTime(2099);
-    if (content.nextRelease != null || content.nextRelease != '') {
+    if (content.nextRelease != null && content.nextRelease != '') {
       release = DateTime.parse(content.nextRelease ?? '2099-01-01');
     }
     return DateTime.now().difference(release).inDays < 0;
