@@ -27,7 +27,8 @@ class MyLibrary extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16),
+                        padding:
+                            EdgeInsets.only(left: 16, right: 16, bottom: 8),
                         child: const MyAppBar(
                           title: 'Library',
                           icon: Icons.settings,

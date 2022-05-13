@@ -21,7 +21,7 @@ Future<void> main() async {
   Hive.registerAdapter(EpisodeToAirAdapter());
   Hive.registerAdapter(MediaTypeAdapter());
   var box = await Hive.openBox<MediaContent>('myBox');
-  log(box.length.toString());
+  //log(box.length.toString());
   await dotenv.load();
   runApp(const Binge());
 }

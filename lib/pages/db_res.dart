@@ -42,24 +42,33 @@ class DBRes extends StatelessWidget {
               // ignore: cascade_invocations
               items.sort((a, b) => (a.title ?? '').compareTo(b.title ?? ''));
 
-              items.add(MediaContent());
+              // items.add(MediaContent());
 
-              return items.length > 1
+              log('Items: ${items.length}');
+
+              List<Widget> cards = [];
+
+              for (var i = 0; i < items.length; i++) {
+                cards.add(SizedBox(
+                  height: 170,
+                  child: DBContent(
+                    item: items.elementAt(i), //box.getAt(index),
+                    index: i,
+                  ),
+                ));
+              }
+
+              cards.insert(
+                  0,
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                    child: MyAppBar(title: 'Home'),
+                  ));
+
+              return cards.length > 1
                   ? ListView.builder(
-                      itemCount: items.length,
-                      itemBuilder: (context, index) => index == 0
-                          ? const Padding(
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              child: MyAppBar(title: 'Home'),
-                            )
-                          : SizedBox(
-                              height: 170,
-                              child: DBContent(
-                                item:
-                                    items.elementAt(index), //box.getAt(index),
-                                index: index,
-                              ),
-                            ))
+                      itemCount: cards.length,
+                      itemBuilder: (context, index) => cards[index])
                   : Column(
                       children: [
                         const Padding(
@@ -69,7 +78,6 @@ class DBRes extends StatelessWidget {
                           ),
                           child: const MyAppBar(
                             title: 'Home',
-                            icon: Icons.settings,
                           ),
                         ),
                         NoContent(

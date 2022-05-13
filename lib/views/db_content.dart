@@ -11,13 +11,12 @@ import '../pages/detail_page.dart';
 import 'tmdb_image.dart';
 
 class DBContent extends StatelessWidget {
-  const DBContent(
-      {Key? key,
-      required this.item,
-      required this.index,
+  const DBContent({
+    Key? key,
+    required this.item,
+    required this.index,
     this.countDown = false,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   final MediaContent? item;
   final int index;
@@ -34,6 +33,8 @@ class DBContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('DBContent - Build');
+
+    log(item.toString());
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(

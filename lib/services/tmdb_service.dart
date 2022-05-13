@@ -26,7 +26,7 @@ class TMDBService {
 
   Future<TMDBDetail> getDetails(String? type, int? tmdbId) async {
     String endpoint;
-    final id = tmdbId ?? 1;
+    final id = tmdbId;
 
     switch (type) {
       case 'person':
@@ -46,6 +46,7 @@ class TMDBService {
     final request = await client.get(uri);
 
     if (request.statusCode == 200) {
+      //log(request.body);
       return TMDBDetail.fromJson(jsonDecode(request.body));
     } else {
       throw Exception('Status Code on Get Detail is not 200');
@@ -80,7 +81,7 @@ class TMDBService {
     if (request.statusCode == 200) {
       return EpisodeToAir.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception('Status Code on Get Trending is not 200');
+      throw Exception('Status Code on Season is not 200');
     }
   }
 
@@ -95,13 +96,13 @@ class TMDBService {
     if (request.statusCode == 200) {
       return TMDBResponse.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception('Status Code on Get Trending is not 200');
+      throw Exception('Status Code on Search is not 200');
     }
   }
 
   /// Searches the TMDB DB for content matching query.
   Future<TMDBCredit> getCredits(int? tmdbId, String? mediaType) async {
-    final id = tmdbId ?? 1;
+    final id = tmdbId;
     var endpoint = '/movie/$id/credits';
 
     if (mediaType == MediaType.tvSeries.string) {
@@ -119,7 +120,7 @@ class TMDBService {
     if (request.statusCode == 200) {
       return TMDBCredit.fromJson(jsonDecode(request.body));
     } else {
-      throw Exception('Status Code on Get Trending is not 200');
+      throw Exception('Status Code on Get Credit is not 200');
     }
   }
 

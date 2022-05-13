@@ -29,8 +29,8 @@ class EpisodesPage extends StatelessWidget {
       season.episodesSeen = (season.episodesSeen ?? 1) - 1;
     }
 
-    log(season.episodesSeenArray.toString());
-    log(season.toString());
+    //log(season.episodesSeenArray.toString());
+    //log(season.toString());
   }
 
   @override

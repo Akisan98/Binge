@@ -38,26 +38,20 @@ class Utils {
     live.notificationOnly = fromDB?.notificationOnly;
 
     fromDB?.seasons?.forEach((element) {
+      final season = (live.seasons?.firstWhere(
+          (liveElement) => liveElement.seasonNumber == element.seasonNumber));
+
       if (element.episodesSeen != 0) {
-        live.seasons?.elementAt((element.seasonNumber ?? 1) - 1).episodesSeen =
+        season?.episodesSeen =
             element.episodesSeen;
-        if (live.seasons?.elementAt((element.seasonNumber ?? 1) - 1).episodes !=
-            element.episodes) {
-          final newEpisodes = (live.seasons
-                      ?.elementAt((element.seasonNumber ?? 1) - 1)
-                      .episodes ??
-                  0) -
-              (element.episodes ?? 0);
+        if (season?.episodes != element.episodes) {
+          final newEpisodes = (season?.episodes ?? 0) - (element.episodes ?? 0);
           for (var i = 0; i < newEpisodes; i++) {
             element.episodesSeenArray?.add(0);
           }
-          live.seasons
-              ?.elementAt((element.seasonNumber ?? 1) - 1)
-              .episodesSeenArray = element.episodesSeenArray;
+          season?.episodesSeenArray = element.episodesSeenArray;
         } else {
-          live.seasons
-              ?.elementAt((element.seasonNumber ?? 1) - 1)
-              .episodesSeenArray = element.episodesSeenArray;
+          season?.episodesSeenArray = element.episodesSeenArray;
         }
       }
     });

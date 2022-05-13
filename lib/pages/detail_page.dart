@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../enums/media_type.dart';
+import '../models/db/db_season.dart';
 import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_credit.dart';
 import '../models/tmdb/tmdb_detail.dart';
@@ -64,6 +65,9 @@ class DetailPageState extends State<DetailPage> {
     if (content.type == MediaType.movie && isNonReleasedMovie()) {
       content.notificationOnly = true;
     }
+    log(item.toString());
+    log(item.toString());
+    log('${item.mediaType}_${item.id}');
     box.put('${item.mediaType}_${item.id}', content);
   }
 
@@ -84,31 +88,30 @@ class DetailPageState extends State<DetailPage> {
   }
 
   Future<EpisodeToAir?> resolveNextEpisode(MediaContent content) async {
-    final seasonLength = content.seasons?.length ?? 0;
+    final seasonLength = content.seasons?.last.seasonNumber ?? 0;
 
-    for (var seasonIndex = seasonLength; seasonIndex >= 1; seasonIndex--) {
-      if (content.seasons?.elementAt(seasonIndex - 1).episodesSeen != 0) {
-        if (content.seasons?.elementAt(seasonIndex - 1).episodesSeen ==
-            content.seasons?.elementAt(seasonIndex - 1).episodes) {
-          // Check if there is a next season
-          if (seasonLength >= seasonIndex + 1) {
-            log('S: ${(seasonIndex + 1)} E: 1');
-            return tmdb.getTVSeason2(item.id ?? 0, seasonIndex + 1, 1);
+    for (var season
+        in content.seasons?.reversed ?? List<DBSeasons>.empty().reversed) {
+      if (season.episodesSeen != 0) {
+        if (season.episodesSeen == season.episodes) {
+          if (content.seasons!.length > content.seasons!.indexOf(season) + 1) {
+            log('S: ${(content.seasons!.indexOf(season) + 1)} E: 1');
+            return tmdb.getTVSeason2(
+                item.id ?? 0, content.seasons!.indexOf(season) + 1, 1);
           }
-          log('No New');
+
+          log('No New Episodes');
           return null;
         } else {
-          final episodes =
-              content.seasons?.elementAt(seasonIndex - 1).episodes ?? 1;
+          final episodes = season.episodes ?? 0;
+
           for (var episodeIndex = episodes; episodeIndex >= 1; episodeIndex--) {
-            if (content.seasons
-                    ?.elementAt(seasonIndex - 1)
-                    .episodesSeenArray
+            if (season.episodesSeenArray
                     ?.elementAt(episodeIndex - 1) ==
                 1) {
-              log('vS: ${(seasonIndex)} E: ${episodeIndex + 1}');
+              log('vS: ${season.seasonNumber} E: ${episodeIndex + 1}');
               return tmdb.getTVSeason2(
-                  item.id ?? 0, seasonIndex, episodeIndex + 1);
+                  item.id ?? 0, season.seasonNumber!, episodeIndex + 1);
             }
           }
         }
@@ -132,7 +135,8 @@ class DetailPageState extends State<DetailPage> {
       );
     }
 
-    final season = content.seasons?[findSeason(seasonNumber)];
+    final season = content.seasons
+        ?.firstWhere((element) => element.seasonNumber == seasonNumber);
 
     season?.episodesSeenArray = seenArray;
     season?.episodesSeen = seenCount;
@@ -281,7 +285,7 @@ class DetailPageState extends State<DetailPage> {
                           if (item.mediaType == MediaType.tvSeries.string)
                             SeasonList(
                               seasons: content.seasons,
-                              showId: item.id ?? 1,
+                              showId: item.id!,
                               onPressed: (int seenCount, int seasonNumber,
                                   List<int> seenArray) {
                                 seasonOnPressed(seenCount, seasonNumber,
@@ -305,63 +309,64 @@ class DetailPageState extends State<DetailPage> {
                   if (snapshot.hasData) {
                     return snapshot.data!.cast!.isNotEmpty
                         ? Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: 16,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8, bottom: 8),
-                            child: Text(
-                              'Credits',
-                              textScaleFactor: 1.5,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              bottom: 16,
                             ),
-                          ),
-                          SizedBox(
-                            height: 204,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data?.cast?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final name = snapshot.data?.cast?[index].name !=
-                                        null
-                                    ? 'credits_${snapshot.data?.cast?[index].name}'
-                                    : 'credits_${snapshot.data?.cast?[index].id}';
-                                return PosterCard(
-                                  item: TMDBResults.fromCredits(
-                                    snapshot.data?.cast?[index],
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8, bottom: 8),
+                                  child: Text(
+                                    'Credits',
+                                    textScaleFactor: 1.5,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                  index: index,
-                                  listName: name,
-                                  extraLine: true,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailPage(
-                                          item: TMDBResults.fromCredits(
-                                            snapshot.data?.cast?[index],
-                                          ),
-                                          heroKey: '$name$index',
+                                ),
+                                SizedBox(
+                                  height: 204,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data?.cast?.length ?? 0,
+                                    itemBuilder: (context, index) {
+                                      final name = snapshot
+                                                  .data?.cast?[index].name !=
+                                              null
+                                          ? 'credits_${snapshot.data?.cast?[index].name}'
+                                          : 'credits_${snapshot.data?.cast?[index].id}';
+                                      return PosterCard(
+                                        item: TMDBResults.fromCredits(
+                                          snapshot.data?.cast?[index],
                                         ),
-                                      ),
-                                    ).then((value) {
-                                      setState(() {});
-                                    });
-                                  },
-                                );
-                              },
+                                        index: index,
+                                        listName: name,
+                                        extraLine: true,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DetailPage(
+                                                item: TMDBResults.fromCredits(
+                                                  snapshot.data?.cast?[index],
+                                                ),
+                                                heroKey: '$name$index',
+                                              ),
+                                            ),
+                                          ).then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                           )
                         : const SizedBox.shrink();
                   }
@@ -417,22 +422,5 @@ class DetailPageState extends State<DetailPage> {
       return '  •  ${DateTime.parse(date!).year.toString()}';
     }
     return '';
-  }
-
-  /// Some Series have a Season 0, aka Specials
-  int findSeason(int number) {
-    //log(content.toString());
-    if (content.seasons == null) {
-      return number - 1;
-    }
-
-    final length = content.seasons?.length ?? 0;
-    final lastSeason = content.seasons?.last.seasonNumber ?? 0;
-
-    if (length == lastSeason + 1) {
-      return number;
-    }
-
-    return number - 1;
   }
 }
