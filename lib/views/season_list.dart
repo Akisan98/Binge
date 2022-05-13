@@ -121,14 +121,6 @@ class _SeasonCardState extends State<SeasonCard> {
                     '${widget.season.episodesSeen} / ${widget.season.episodes}',
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 8, bottom: 32),
-                //   child: LinearProgressIndicator(
-                //     value: calculateProgress(
-                //         widget.season.episodes, widget.season.episodesSeen),
-                //     minHeight: 8,
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 32),
                   child: BarProgress(
@@ -180,10 +172,9 @@ class _SeasonCardState extends State<SeasonCard> {
 }
 
 double calculateProgress(int? episodes, int? seen) {
-  if (episodes != null && seen != null) {
-    return seen / episodes;
+  if (seen != null && seen > 0) {
+    return seen / (episodes ?? 1);
   }
-
   return 0;
 }
 

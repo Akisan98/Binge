@@ -219,15 +219,6 @@ class DetailPageState extends State<DetailPage> {
                                         if (readEntry() != null) {
                                           setState(() {
                                             deleteEntry();
-
-                                            // log('gg:' + content.toString());
-                                            // content.seasons?.forEach((element) {
-                                            //   element.episodesSeen = 0;
-                                            //   element.episodesSeenArray =
-                                            //       List.filled(
-                                            //           element?.episodes ?? 0,
-                                            //           0);
-                                            // });
                                           });
                                         } else {
                                           setState(() {
@@ -259,7 +250,8 @@ class DetailPageState extends State<DetailPage> {
                                 ? Text(formatString(snapshot.data))
                                 : Text(safeString(snapshot.data?.birthday)),
                           ),
-                          if (item.mediaType != MediaType.person.string)
+                          if (item.mediaType != MediaType.person.string &&
+                              (snapshot.data?.genres?.length ?? 0) > 0)
                             Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: SizedBox(
@@ -311,7 +303,8 @@ class DetailPageState extends State<DetailPage> {
                 future: tmdb.getCredits(item.id, item.mediaType),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Padding(
+                    return snapshot.data!.cast!.isNotEmpty
+                        ? Padding(
                       padding: const EdgeInsets.only(
                         left: 16,
                         right: 16,
@@ -369,7 +362,8 @@ class DetailPageState extends State<DetailPage> {
                           ),
                         ],
                       ),
-                    );
+                          )
+                        : const SizedBox.shrink();
                   }
                   return const CircularProgressIndicator();
                 },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/tmdb_service.dart';
+import '../views/my_app_bar.dart';
 import '../views/infinite_list.dart';
 import '../views/search_bar/search_bar.dart';
 
@@ -17,12 +18,11 @@ class HomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // NavBar
-                const Padding(
-                  padding: EdgeInsets.only(left: 8, top: 24, bottom: 8),
-                  child: Placeholder(
-                    fallbackHeight: 100,
-                  ),
+                const MyAppBar(
+                  title: 'Search',
+                  icon: Icons.person,
                 ),
+
                 // Search
                 const SearchBar(),
                 InfiniteList(

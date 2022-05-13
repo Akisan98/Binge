@@ -8,6 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../enums/media_type.dart';
 import '../models/db/media_content.dart';
 import '../views/db_content.dart';
+import '../views/my_app_bar.dart';
+import '../views/no_content.dart';
 
 class DBRes extends StatelessWidget {
   const DBRes({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class DBRes extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SafeArea(
         child: SizedBox.expand(
-        child: ValueListenableBuilder<Box<MediaContent>>(
-          valueListenable: Hive.box<MediaContent>('myBox').listenable(),
+          child: ValueListenableBuilder<Box<MediaContent>>(
+            valueListenable: Hive.box<MediaContent>('myBox').listenable(),
             builder: (context, box, widget) {
               var items = box.values.where((element) {
                 if (element.type == MediaType.movie) {
@@ -40,16 +42,41 @@ class DBRes extends StatelessWidget {
               // ignore: cascade_invocations
               items.sort((a, b) => (a.title ?? '').compareTo(b.title ?? ''));
 
-              return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) => SizedBox(
-                  height: 170,
-                  child: DBContent(
-                    item: items.elementAt(index), //box.getAt(index),
-                    index: index,
-                  ),
-                ),
-              );
+              items.add(MediaContent());
+
+              return items.length > 1
+                  ? ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) => index == 0
+                          ? const Padding(
+                              padding: EdgeInsets.only(left: 16, right: 16),
+                              child: MyAppBar(title: 'Home'),
+                            )
+                          : SizedBox(
+                              height: 170,
+                              child: DBContent(
+                                item:
+                                    items.elementAt(index), //box.getAt(index),
+                                index: index,
+                              ),
+                            ))
+                  : Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                          ),
+                          child: const MyAppBar(
+                            title: 'Home',
+                            icon: Icons.settings,
+                          ),
+                        ),
+                        NoContent(
+                            message:
+                                'You are all up to date, how about starting a new show or movie?')
+                      ],
+                    );
             },
           ),
         ),
