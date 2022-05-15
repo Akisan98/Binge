@@ -119,8 +119,8 @@ class Binge extends StatelessWidget {
             ),
           ),
         ),
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        home: NavigationTest(),
+        home: const NavigationTest(),
       );
 }

@@ -18,12 +18,9 @@ class MyLibrary extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
         child: ValueListenableBuilder<Box<MediaContent>>(
           valueListenable: Hive.box<MediaContent>('myBox').listenable(),
-          builder: (context, box, widget) => SingleChildScrollView(
-            physics: box.values.isNotEmpty
-                ? const ScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            child: box.values.isNotEmpty
-                ? Column(
+          builder: (context, box, widget) => box.values.isNotEmpty
+              ? SingleChildScrollView(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
@@ -44,7 +41,9 @@ class MyLibrary extends StatelessWidget {
                       Released(db: box), NotReleased(db: box)
                     ],
                   )
-                : Column(
+                
+          )
+              : Column(
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(
@@ -56,13 +55,20 @@ class MyLibrary extends StatelessWidget {
                           icon: Icons.settings,
                         ),
                       ),
-                      const NoContent(
+                      
+
+                    Spacer(
+                      flex: 3,
+                    ),
+                    NoContent(
                         message:
                             'You have no content. How about starting by adding a new show or movie?',
                       ),
+                    Spacer(
+                      flex: 4,
+                    )
                     ],
-                  ),
-          ),
+                ),
         ),
       );
 }
@@ -384,13 +390,13 @@ class NotReleased extends StatelessWidget {
 
   final Box<MediaContent> db;
 
-  // Returning Series, Ended, Canceled, Released, Post Production, In Production
-  @override
+  // Returning Series, Ended, Canceled, Released, Post Production, In Production, Planned
   Widget build(BuildContext context) {
     final items = db.values.where((element) {
       if ((element.type == MediaType.movie &&
                   (element.status == 'In Production' ||
-                      element.status == 'Post Production') ||
+                      element.status == 'Post Production' ||
+                      element.status == 'Planned') ||
               (element.type == MediaType.tvSeries &&
                   (element.status == 'In Production' ||
                       element.status == 'Post Production' ||

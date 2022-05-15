@@ -160,8 +160,10 @@ class _SeasonCardState extends State<SeasonCard> {
 
               setState(() {});
             },
-            icon: const Icon(
-              Icons.add,
+            icon: Icon(
+              widget.season.episodesSeen != widget.season.episodes
+                  ? Icons.add
+                  : Icons.check,
               // color: Colors.purple,
             ),
           ),

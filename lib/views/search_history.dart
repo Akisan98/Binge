@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '../models/tmdb/tmdb_result.dart';
@@ -50,7 +51,7 @@ class HistoryList extends StatelessWidget {
                   ),
                 ),
               ),
-              for (int i = 0; i < history.length - 1; i++)
+              for (int i = 0; i < history.length; i++)
                 SizedBox(
                   height: 170,
                   child: ListCard(

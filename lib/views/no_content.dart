@@ -8,7 +8,9 @@ class NoContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.only(
-            top: (MediaQuery.of(context).size.height) / 4, left: 32, right: 32),
+          left: 32,
+          right: 32,
+        ),
         child: Container(
           decoration: const BoxDecoration(
               color: Color.fromARGB(255, 65, 53, 67),

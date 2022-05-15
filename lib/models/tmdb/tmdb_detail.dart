@@ -98,13 +98,13 @@ class TMDBDetail {
     popularity = json['popularity'];
     posterPath = json['poster_path'];
     if (json['networks'] != null) {
-      companies = <Companies>[];
+      companies ??= <Companies>[];
       json['networks'].forEach((v) {
         companies!.add(Companies.fromJson(v));
       });
     }
     if (json['production_companies'] != null) {
-      companies = <Companies>[];
+      companies ??= <Companies>[];
       json['production_companies'].forEach((v) {
         companies!.add(Companies.fromJson(v));
       });
@@ -168,8 +168,9 @@ class TMDBDetail {
     data['overview'] = overview;
     data['popularity'] = popularity;
     data['poster_path'] = posterPath;
+    // NetWorks - TODO Not Production Compamies
     if (companies != null) {
-      data['production_companies'] = companies!.map((v) => v.toJson()).toList();
+      data['networks'] = companies!.map((v) => v.toJson()).toList();
     }
     data['release_date'] = releaseDate;
     data['revenue'] = revenue;

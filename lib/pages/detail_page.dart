@@ -101,6 +101,7 @@ class DetailPageState extends State<DetailPage> {
           }
 
           log('No New Episodes');
+          
           return null;
         } else {
           final episodes = season.episodes ?? 0;

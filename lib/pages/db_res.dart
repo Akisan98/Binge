@@ -80,9 +80,15 @@ class DBRes extends StatelessWidget {
                             title: 'Home',
                           ),
                         ),
+                        Spacer(
+                          flex: 3,
+                        ),
                         NoContent(
                             message:
-                                'You are all up to date, how about starting a new show or movie?')
+                                'You are all up to date, how about starting a new show or movie?'),
+                        Spacer(
+                          flex: 4,
+                        )
                       ],
                     );
             },
