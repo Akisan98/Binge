@@ -65,9 +65,9 @@ class DetailPageState extends State<DetailPage> {
     if (content.type == MediaType.movie && isNonReleasedMovie()) {
       content.notificationOnly = true;
     }
-    log(item.toString());
-    log(item.toString());
-    log('${item.mediaType}_${item.id}');
+    //log(item.toString());
+    //log(item.toString());
+    //log('${item.mediaType}_${item.id}');
     box.put('${item.mediaType}_${item.id}', content);
   }
 
@@ -179,7 +179,7 @@ class DetailPageState extends State<DetailPage> {
                       // }
 
                       if (content2 != null) {
-                        log('fg2');
+                        //log('fg2');
                         var newContent = MediaContent.fromDetails(
                             snapshot.data, item.mediaType);
 
@@ -188,7 +188,7 @@ class DetailPageState extends State<DetailPage> {
                       }
                       // tmp == null &&
                       if (content2 == null) {
-                        log('fg');
+                        //log('fg');
                         content = MediaContent.fromDetails(
                             snapshot.data, item.mediaType);
                       }

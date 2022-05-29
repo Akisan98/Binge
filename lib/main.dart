@@ -1,29 +1,32 @@
-import 'dart:developer';
-
-import 'package:binge/models/genres.dart';
-import 'package:binge/pages/navigation_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'enums/media_type.dart';
 import 'models/db/db_season.dart';
 import 'models/db/media_content.dart';
+import 'models/genres.dart';
 import 'models/tv/episode_to_air.dart';
-import 'pages/home_page.dart';
+import 'pages/navigation_test.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(MediaContentAdapter());
-  Hive.registerAdapter(DBSeasonsAdapter());
-  Hive.registerAdapter(GenresAdapter());
-  Hive.registerAdapter(EpisodeToAirAdapter());
-  Hive.registerAdapter(MediaTypeAdapter());
+  Hive
+    ..registerAdapter(MediaContentAdapter())
+    ..registerAdapter(DBSeasonsAdapter())
+    ..registerAdapter(GenresAdapter())
+    ..registerAdapter(EpisodeToAirAdapter())
+    ..registerAdapter(MediaTypeAdapter());
   var box = await Hive.openBox<MediaContent>('myBox');
   //log(box.length.toString());
   await dotenv.load();
-  runApp(const Binge());
+  // WidgetsFlutterBinding.ensureInitialized();
+  // TMP Fix
+  // https://github.com/flutter/flutter/issues/101007
+  // https://github.com/flutter/flutter/pull/104405
+  Future.delayed(const Duration(milliseconds: 500), () {
+    runApp(const Binge());
+  });
 }
 
 class Binge extends StatelessWidget {
@@ -34,7 +37,7 @@ class Binge extends StatelessWidget {
   final Color black = const Color.fromARGB(255, 0, 0, 0);
 
   final Color dark = const Color.fromARGB(255, 27, 28, 33);
-  final Color light = const Color.fromARGB(255, 238, 204, 215);
+  final Color light = const Color.fromARGB(255, 241, 234, 242);
 
   final TextStyle button = const TextStyle(
     color: Colors.white,
@@ -50,7 +53,8 @@ class Binge extends StatelessWidget {
           brightness: Brightness.light,
           backgroundColor: light,
           primaryColor: purple,
-          splashColor: Colors.black,
+          bottomAppBarColor: light,
+          //splashColor: Colors.black,
           colorScheme: ColorScheme.fromSeed(
             seedColor: purple,
             secondary: white,
@@ -66,10 +70,21 @@ class Binge extends StatelessWidget {
               ),
             ),
           ),
+          navigationBarTheme: NavigationBarThemeData(
+            backgroundColor: light,
+            indicatorColor: Colors.purple[800]?.withOpacity(0.5),
+            iconTheme: MaterialStateProperty.all(
+              IconThemeData(
+                  color: Theme.of(context).textTheme.overline?.color ??
+                      Colors.white),
+            ),
+            labelTextStyle:
+                MaterialStateProperty.all(Theme.of(context).textTheme.overline),
+          ),
           textTheme: TextTheme(
             button: button,
             overline: TextStyle(
-              color: white,
+              color: black,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5,
@@ -86,7 +101,16 @@ class Binge extends StatelessWidget {
           // Dark Theme
           backgroundColor: dark,
           brightness: Brightness.dark,
-
+          bottomAppBarColor: dark,
+          navigationBarTheme: NavigationBarThemeData(
+            backgroundColor: Colors.grey[800],
+            indicatorColor: Colors.purple[800]?.withOpacity(0.5),
+            iconTheme: MaterialStateProperty.all(
+              const IconThemeData(color: Colors.white),
+            ),
+            labelTextStyle:
+                MaterialStateProperty.all(const TextStyle(color: Colors.white)),
+          ),
           primaryColor: purple,
           colorScheme: ColorScheme.fromSeed(
             seedColor: purple,
@@ -107,7 +131,7 @@ class Binge extends StatelessWidget {
           textTheme: TextTheme(
             button: button,
             overline: TextStyle(
-              color: purple,
+              color: white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5,

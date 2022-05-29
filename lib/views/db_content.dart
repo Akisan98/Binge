@@ -34,7 +34,7 @@ class DBContent extends StatelessWidget {
   Widget build(BuildContext context) {
     log('DBContent - Build');
 
-    log(item.toString());
+    //log(item.toString());
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
@@ -133,10 +133,12 @@ class DBContent extends StatelessWidget {
                           Text(
                             resolveCounter(item)[0],
                             textScaleFactor: 1.25,
+                            style: TextStyle(color: Colors.white),
                           ),
                           Text(
                             resolveCounter(item)[1],
                             textScaleFactor: 0.75,
+                            style: TextStyle(color: Colors.white),
                           )
                         ],
                       ),
@@ -179,7 +181,7 @@ class DBContent extends StatelessWidget {
       String output = '';
 
       if (db?.title == 'The Falcon and the Winter Soldier') {
-        log(db.toString());
+        //log(db.toString());
       }
 
       var item = countDown ? db?.nextToAir : db?.nextToWatch;

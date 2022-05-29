@@ -49,7 +49,7 @@ class _AnimatedSearchState extends State<AnimatedSearch> {
   /// TextStyle of hint text and input text of search bar.
   TextStyle textStyle = const TextStyle(
     color: Colors.black,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w500,
   );
 

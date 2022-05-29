@@ -16,7 +16,7 @@ class SharedPreferencesService {
     prefs = await SharedPreferences.getInstance();
 
     var searchHistory = prefs.getStringList('search_history');
-    log('History $searchHistory - SharedPreferencesService');
+    //log('History $searchHistory - SharedPreferencesService');
 
     controller.sink.add(searchHistory ?? '');
   }

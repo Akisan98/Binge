@@ -17,7 +17,6 @@ class SearchBar extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, top: 24, bottom: 8, right: 8),
           child: Container(
             height: 50,
-            width: double.infinity,
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 244, 241, 249),
               borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -37,7 +36,7 @@ class SearchBar extends StatelessWidget {
                       'TV Series, Movies, or Actors',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                       overflow: TextOverflow.ellipsis,
