@@ -13,14 +13,18 @@ class NavigationTest extends StatefulWidget {
 }
 
 class _NavigationTestState extends State<NavigationTest> {
-  final PageController _pageController = PageController();
+  PageController _pageController = PageController();
 
   int _currentIndex = 0;
-  List<Widget> pages = [
-    const DBRes(),
-    HomePage(),
-   const MyLibrary()
-  ];
+  List<Widget> pages = [const DBRes(), HomePage(), const MyLibrary()];
+
+  @override
+  void initState() {
+    _pageController = PageController();
+    _currentIndex = 0;
+    pages = [const DBRes(), HomePage(), const MyLibrary()];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -35,22 +39,10 @@ class _NavigationTestState extends State<NavigationTest> {
           },
         ),
         bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-            indicatorColor: Colors.purple[800]?.withOpacity(0.5),
-            iconTheme: MaterialStateProperty.all(
-              const IconThemeData(color: Colors.black),
-            ),
-            labelTextStyle: MaterialStateProperty.all(
-              const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          data: Theme.of(context).navigationBarTheme,
           child: NavigationBar(
             height: 60,
-            backgroundColor: Colors.white,
+            //backgroundColor: Theme.of(context).bottomAppBarColor,
             animationDuration: const Duration(seconds: 1),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
             selectedIndex: _currentIndex,

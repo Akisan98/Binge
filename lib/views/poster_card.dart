@@ -42,7 +42,8 @@ class PosterCard extends StatelessWidget {
         },
         child: Card(
           color: Colors.transparent,
-          shadowColor: Colors.transparent,
+          //shadowColor: Colors.transparent,
+          elevation: 0,
           margin: const EdgeInsets.fromLTRB(6, 8, 6, 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -70,6 +71,8 @@ class PosterCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: extraLine ? 3 : 2,
                       overflow: TextOverflow.ellipsis,
+                    minFontSize: 10,
+                    stepGranularity: 0.5,
                     ),
                   ),
                 ),

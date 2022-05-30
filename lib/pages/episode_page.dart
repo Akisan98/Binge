@@ -35,7 +35,7 @@ class EpisodesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(season.toString());
+    //log(season.toString());
     if (season.episodesSeen == null || season.episodesSeenArray == null) {
       season.episodesSeen = 0;
       season.episodesSeenArray = List.filled(season.episodes ?? 0, 0);

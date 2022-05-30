@@ -34,7 +34,7 @@ class DBContent extends StatelessWidget {
   Widget build(BuildContext context) {
     log('DBContent - Build');
 
-    log(item.toString());
+    //log(item.toString());
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
@@ -51,7 +51,12 @@ class DBContent extends StatelessWidget {
         ),
       },
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 16,
+          bottom: 16,
+        ),
         child: Row(
           children: [
             Hero(
@@ -71,6 +76,7 @@ class DBContent extends StatelessWidget {
                           16 -
                           16 -
                           16 -
+                          16 - 
                           (countDown ? 64 : 0),
                       child: AutoSizeText(
                         item?.title ?? '',
@@ -91,6 +97,7 @@ class DBContent extends StatelessWidget {
                         16 -
                         16 -
                         16 -
+                        16 - 
                         (countDown ? 64 : 0),
                     child: AutoSizeText(
                       countDown
@@ -110,6 +117,7 @@ class DBContent extends StatelessWidget {
                           16 -
                           16 -
                           16 -
+                          16 - 
                           (countDown ? 64 : 0),
                       child: AutoSizeText(
                         resolveSubtext(item),
@@ -133,10 +141,12 @@ class DBContent extends StatelessWidget {
                           Text(
                             resolveCounter(item)[0],
                             textScaleFactor: 1.25,
+                            style: TextStyle(color: Colors.white),
                           ),
                           Text(
                             resolveCounter(item)[1],
                             textScaleFactor: 0.75,
+                            style: TextStyle(color: Colors.white),
                           )
                         ],
                       ),
@@ -179,7 +189,7 @@ class DBContent extends StatelessWidget {
       String output = '';
 
       if (db?.title == 'The Falcon and the Winter Soldier') {
-        log(db.toString());
+        //log(db.toString());
       }
 
       var item = countDown ? db?.nextToAir : db?.nextToWatch;

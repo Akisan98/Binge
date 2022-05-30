@@ -49,13 +49,15 @@ class DBRes extends StatelessWidget {
               List<Widget> cards = [];
 
               for (var i = 0; i < items.length; i++) {
-                cards.add(SizedBox(
-                  height: 170,
-                  child: DBContent(
-                    item: items.elementAt(i), //box.getAt(index),
-                    index: i,
+                cards.add(
+                  SizedBox(
+                    height: 170,
+                    child: DBContent(
+                      item: items.elementAt(i), //box.getAt(index),
+                      index: i,
+                    ),
                   ),
-                ));
+                );
               }
 
               cards.insert(
@@ -68,7 +70,8 @@ class DBRes extends StatelessWidget {
               return cards.length > 1
                   ? ListView.builder(
                       itemCount: cards.length,
-                      itemBuilder: (context, index) => cards[index])
+                      itemBuilder: (context, index) => cards[index],
+                    )
                   : Column(
                       children: [
                         const Padding(

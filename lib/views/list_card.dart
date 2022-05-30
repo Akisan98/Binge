@@ -36,7 +36,8 @@ class ListCard extends StatelessWidget {
         ),
       },
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:
+            const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
         child: Row(
           children: [
             Hero(
@@ -50,7 +51,7 @@ class ListCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: SizedBox(
-                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      width: screenWidth - 92 - 16 - 16 - 16 - 16 - 16,
                       child: AutoSizeText(
                         item.name ?? '',
                         textAlign: TextAlign.start,
@@ -64,7 +65,7 @@ class ListCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                    width: screenWidth - 92 - 16 - 16 - 16 - 16 - 16,
                     child: AutoSizeText(
                       Utils.resolveMediaType(item.mediaType, item.gender) +
                           resolveYear(item.firstAirDate),
@@ -76,11 +77,11 @@ class ListCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: SizedBox(
-                      width: screenWidth - 92 - 16 - 16 - 16 - 16,
+                      width: screenWidth - 92 - 16 - 16 - 16 - 16 - 16,
                       child: AutoSizeText(
                         resolveGenre(item.genreIds),
                         textAlign: TextAlign.start,
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

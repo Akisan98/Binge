@@ -40,6 +40,7 @@ class Rating extends StatelessWidget {
               style: TextStyle(
                 fontSize: mini ? 16 : 22,
                 fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.overline?.color,
               ),
               children: [
                 TextSpan(
@@ -47,6 +48,7 @@ class Rating extends StatelessWidget {
                   style: TextStyle(
                     fontSize: mini ? 12 : 14,
                     fontWeight: FontWeight.normal,
+                    //color: Theme.of(context).textTheme.overline?.color,
                   ),
                 ),
                 TextSpan(

@@ -238,7 +238,7 @@ class Returning extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.5,
+                        childAspectRatio: 0.58,
                         crossAxisCount: 4,
                       ),
                       itemCount: items.length,
@@ -302,7 +302,7 @@ class Canceled extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.5,
+                        childAspectRatio: 0.58,
                         crossAxisCount: 4,
                       ),
                       itemCount: items.length,
@@ -365,7 +365,7 @@ class Released extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.5,
+                        childAspectRatio: 0.58,
                         crossAxisCount: 4,
                       ),
                       itemCount: items.length,
@@ -433,7 +433,7 @@ class NotReleased extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.5,
+                        childAspectRatio: 0.58,
                         crossAxisCount: 4,
                       ),
                       itemCount: items.length,

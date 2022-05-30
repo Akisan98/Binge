@@ -43,7 +43,7 @@ class HistoryList extends StatelessWidget {
               const Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 16, left: 16),
+                  padding: EdgeInsets.only(top: 16, left: 24),
                   child: Text(
                     'Recent Searches',
                     textScaleFactor: 1.25,
