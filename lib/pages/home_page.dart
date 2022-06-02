@@ -5,9 +5,13 @@ import '../views/my_app_bar.dart';
 import '../views/infinite_list.dart';
 import '../views/search_bar/search_bar.dart';
 
+typedef SearchBoxTapped = void Function();
+
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key, required this.onTapped}) : super(key: key);
+
   final TMDBService tmdb = TMDBService();
+  final SearchBoxTapped onTapped;
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -24,7 +28,10 @@ class HomePage extends StatelessWidget {
                 ),
 
                 // Search
-                const SearchBar(),
+                GestureDetector(
+                  onTap: onTapped.call,
+                  child: const SearchBar(),
+                ),
                 InfiniteList(
                   apiCall: tmdb.getTodaysTVShows,
                   header: 'Airing Today',

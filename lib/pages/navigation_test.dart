@@ -1,9 +1,9 @@
-import 'package:binge/pages/db_res.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'db_res.dart';
 import 'home_page.dart';
 import 'my_library.dart';
+import 'search_pages/active_search_page.dart';
 
 class NavigationTest extends StatefulWidget {
   const NavigationTest({Key? key}) : super(key: key);
@@ -15,14 +15,30 @@ class NavigationTest extends StatefulWidget {
 class _NavigationTestState extends State<NavigationTest> {
   PageController _pageController = PageController();
 
+  void onSearchBoxTapped() {
+    setState(() {
+      _currentIndex = 3;
+    });
+    _pageController.animateToPage(
+      3,
+      duration: const Duration(milliseconds: 1),
+      curve: Curves.decelerate,
+    );
+  }
+
   int _currentIndex = 0;
-  List<Widget> pages = [const DBRes(), HomePage(), const MyLibrary()];
+  late List<Widget> pages;
 
   @override
   void initState() {
-    _pageController = PageController();
-    _currentIndex = 0;
-    pages = [const DBRes(), HomePage(), const MyLibrary()];
+    //_pageController = PageController();
+    //_currentIndex = 0;
+    pages = [
+      const DBRes(),
+      HomePage(onTapped: onSearchBoxTapped),
+      const MyLibrary(),
+      const ActiveSearchPage()
+    ];
     super.initState();
   }
 
@@ -34,7 +50,7 @@ class _NavigationTestState extends State<NavigationTest> {
           children: pages,
           onPageChanged: (index) {
             setState(() {
-              _currentIndex = index;
+              _currentIndex = index == 3 ? 1 : index;
             });
           },
         ),
@@ -45,7 +61,7 @@ class _NavigationTestState extends State<NavigationTest> {
             //backgroundColor: Theme.of(context).bottomAppBarColor,
             animationDuration: const Duration(seconds: 1),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-            selectedIndex: _currentIndex,
+            selectedIndex: _currentIndex == 3 ? 1 : _currentIndex,
             onDestinationSelected: (newIndex) {
               _pageController.animateToPage(
                 newIndex,

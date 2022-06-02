@@ -73,10 +73,10 @@ class TMDBService {
     final endpoint = '/tv/$showId/season/$season/episode/$episode';
 
     final uri = createUri(endpoint, {'api_key': apiKey});
-    log(uri.toString());
+    //log(uri.toString());
     final request = await client.get(uri);
 
-    log(jsonDecode(request.body).toString());
+    //log(jsonDecode(request.body).toString());
 
     if (request.statusCode == 200) {
       return EpisodeToAir.fromJson(jsonDecode(request.body));

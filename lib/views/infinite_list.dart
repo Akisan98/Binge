@@ -60,7 +60,7 @@ class _InfiniteListState extends State<InfiniteList> {
   Widget build(BuildContext context) => Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8, top: 24, bottom: 8),
+            padding: const EdgeInsets.only(left: 8, top: 16, bottom: 8),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(

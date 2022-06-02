@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'navigation_test.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: (() {
+                  onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Privacy is a good thing!'),
@@ -43,9 +44,10 @@ class LoginPage extends StatelessWidget {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(
+                          builder: (context) => const NavigationTest()),
                     );
-                  }),
+                  },
                   child: Text(
                     "Let's Start!",
                     style: theme.textTheme.button,

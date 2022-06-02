@@ -1,4 +1,7 @@
+// ignore_for_file: use_colored_box
+
 import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,6 +15,7 @@ import '../models/tmdb/tmdb_result.dart';
 import '../models/tv/episode_to_air.dart';
 import '../services/tmdb_service.dart';
 import '../utils/utils.dart';
+import '../views/detail_page/header_skeleton.dart';
 import '../views/genre_card.dart';
 import '../views/poster_card.dart';
 import '../views/rating.dart';
@@ -88,31 +92,35 @@ class DetailPageState extends State<DetailPage> {
   }
 
   Future<EpisodeToAir?> resolveNextEpisode(MediaContent content) async {
-    final seasonLength = content.seasons?.last.seasonNumber ?? 0;
-
     for (var season
         in content.seasons?.reversed ?? List<DBSeasons>.empty().reversed) {
       if (season.episodesSeen != 0) {
         if (season.episodesSeen == season.episodes) {
-          if (content.seasons!.length > content.seasons!.indexOf(season) + 1) {
-            log('S: ${(content.seasons!.indexOf(season) + 1)} E: 1');
+          /* log(content.seasons!.length.toString()); // 2
+          log(((season.seasonNumber ?? 1) + 1).toString()); // 2
+          log((content.seasons!.indexOf(season) + 1).toString()); // 1 */
+          if (content.seasons!.length >= (season.seasonNumber ?? 1) + 1 &&
+              content.seasons!.length > content.seasons!.indexOf(season) + 1) {
+            log('S: ${(season.seasonNumber ?? 1) + 1} E: 1');
             return tmdb.getTVSeason2(
-                item.id ?? 0, content.seasons!.indexOf(season) + 1, 1);
+              item.id ?? 0,
+              (season.seasonNumber ?? 1) + 1,
+              1,
+            );
           }
-
           log('No New Episodes');
-          
           return null;
         } else {
           final episodes = season.episodes ?? 0;
 
           for (var episodeIndex = episodes; episodeIndex >= 1; episodeIndex--) {
-            if (season.episodesSeenArray
-                    ?.elementAt(episodeIndex - 1) ==
-                1) {
+            if (season.episodesSeenArray?.elementAt(episodeIndex - 1) == 1) {
               log('vS: ${season.seasonNumber} E: ${episodeIndex + 1}');
               return tmdb.getTVSeason2(
-                  item.id ?? 0, season.seasonNumber!, episodeIndex + 1);
+                item.id ?? 0,
+                season.seasonNumber!,
+                episodeIndex + 1,
+              );
             }
           }
         }
@@ -123,8 +131,13 @@ class DetailPageState extends State<DetailPage> {
     return tmdb.getTVSeason2(item.id ?? 0, 1, 1);
   }
 
-  seasonOnPressed(int seenCount, int seasonNumber, List<int> seenArray,
-      TMDBDetail? snapshot, dynamic context) {
+  seasonOnPressed(
+    int seenCount,
+    int seasonNumber,
+    List<int> seenArray,
+    TMDBDetail? snapshot,
+    dynamic context,
+  ) {
     // log("media: " + content.toString());
     // log("snap: " + (snapshot != null ? snapshot.toString() : ''));
 
@@ -181,7 +194,9 @@ class DetailPageState extends State<DetailPage> {
                       if (content2 != null) {
                         //log('fg2');
                         var newContent = MediaContent.fromDetails(
-                            snapshot.data, item.mediaType);
+                          snapshot.data,
+                          item.mediaType,
+                        );
 
                         content =
                             Utils.combineMediaContents(content2, newContent);
@@ -190,9 +205,12 @@ class DetailPageState extends State<DetailPage> {
                       if (content2 == null) {
                         //log('fg');
                         content = MediaContent.fromDetails(
-                            snapshot.data, item.mediaType);
+                          snapshot.data,
+                          item.mediaType,
+                        );
                       }
                     }
+
                     // log(snapshot.data!.toString());
                     return Padding(
                       padding: const EdgeInsets.all(16),
@@ -218,28 +236,26 @@ class DetailPageState extends State<DetailPage> {
                                   valueListenable:
                                       Hive.box<MediaContent>('myBox')
                                           .listenable(),
-                                  builder: (context, box, widget) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        if (readEntry() != null) {
-                                          setState(() {
-                                            deleteEntry();
-                                          });
-                                        } else {
-                                          setState(() {
-                                            createEntry(content);
-                                          });
-                                        }
-                                      },
-                                      icon: Icon(readEntry() != null
+                                  builder: (context, box, widget) => IconButton(
+                                    onPressed: () {
+                                      if (readEntry() != null) {
+                                        setState(deleteEntry);
+                                      } else {
+                                        setState(() {
+                                          createEntry(content);
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      readEntry() != null
                                           ? isNonReleasedMovie()
                                               ? Icons.notifications
                                               : Icons.check
                                           : isNonReleasedMovie()
                                               ? Icons.notification_add_outlined
-                                              : Icons.add),
-                                    );
-                                  },
+                                              : Icons.add,
+                                    ),
+                                  ),
                                 )
                               else
                                 SizedBox.shrink(),
@@ -287,10 +303,18 @@ class DetailPageState extends State<DetailPage> {
                             SeasonList(
                               seasons: content.seasons,
                               showId: item.id!,
-                              onPressed: (int seenCount, int seasonNumber,
-                                  List<int> seenArray) {
-                                seasonOnPressed(seenCount, seasonNumber,
-                                    seenArray, snapshot.data, context);
+                              onPressed: (
+                                int seenCount,
+                                int seasonNumber,
+                                List<int> seenArray,
+                              ) {
+                                seasonOnPressed(
+                                  seenCount,
+                                  seasonNumber,
+                                  seenArray,
+                                  snapshot.data,
+                                  context,
+                                );
                               },
                             )
                           else
@@ -301,7 +325,7 @@ class DetailPageState extends State<DetailPage> {
                     );
                   }
 
-                  return const CircularProgressIndicator();
+                  return const HeaderSkeleton();
                 },
               ),
               FutureBuilder<TMDBCredit>(
