@@ -230,7 +230,7 @@ class Returning extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 174.0 * ((items.length / 4).ceil()),
+                  height: 180.0 * ((items.length / 4).ceil()),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: GridView.builder(
@@ -238,18 +238,16 @@ class Returning extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.50,
-                        crossAxisCount: 4,
+                              //childAspectRatio: 0.50,
+                              crossAxisCount: 4,
+                              childAspectRatio: 92 / 164
                       ),
                       itemCount: items.length,
-                      itemBuilder: (context, index) => SizedBox(
-                        height: 160,
-                        child: PosterCard(
-                          scaleFactor: 0.8,
-                          item: toRes(items.elementAt(index)),
-                          index: index,
-                          listName: 'Returning',
-                        ),
+                      itemBuilder: (context, index) => PosterCard(
+                        scaleFactor: 0.8,
+                        item: toRes(items.elementAt(index)),
+                        index: index,
+                        listName: 'Returning',
                       ),
                     ),
                   ),
@@ -294,7 +292,7 @@ class Canceled extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 174.0 * ((items.length / 4).ceil()),
+                  height: 180.0 * ((items.length / 4).ceil()),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: GridView.builder(
@@ -302,8 +300,7 @@ class Canceled extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.50,
-                        crossAxisCount: 4,
+                              crossAxisCount: 4, childAspectRatio: 92 / 164
                       ),
                       itemCount: items.length,
                       itemBuilder: (context, index) => PosterCard(
@@ -357,7 +354,7 @@ class Released extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 174.0 * ((items.length / 4).ceil()),
+                  height: 180.0 * ((items.length / 4).ceil()),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: GridView.builder(
@@ -365,8 +362,7 @@ class Released extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.50,
-                        crossAxisCount: 4,
+                              crossAxisCount: 4, childAspectRatio: 92 / 164
                       ),
                       itemCount: items.length,
                       itemBuilder: (context, index) => PosterCard(
@@ -433,8 +429,7 @@ class NotReleased extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.50,
-                        crossAxisCount: 4,
+                              crossAxisCount: 4, childAspectRatio: 92 / 164
                       ),
                       itemCount: items.length,
                       itemBuilder: (context, index) => PosterCard(
