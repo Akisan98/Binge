@@ -8,6 +8,8 @@ import '../models/tmdb/tmdb_result.dart';
 import '../models/tmdb/tmdb_season.dart';
 import '../services/tmdb_service.dart';
 import '../views/circular_checkbox.dart';
+import '../views/episode_page/episode_skeleton.dart';
+import '../views/episode_page/season_skeleton.dart';
 import '../views/rating.dart';
 import '../views/text_card.dart';
 import '../views/tmdb_image.dart';
@@ -68,7 +70,7 @@ class EpisodesPage extends StatelessWidget {
                       ? Text(
                           list[index],
                           textScaleFactor: 1.75,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         )
                       : EpisodeCard(
                           episode: list[index],
@@ -82,8 +84,20 @@ class EpisodesPage extends StatelessWidget {
               );
             }
 
-            return const Center(
-              child: CircularProgressIndicator(),
+            return ListView.separated(
+              separatorBuilder: (context, index) {
+                if (index == 0) {
+                  return const SizedBox.shrink();
+                }
+
+                return Divider(
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.tertiary,
+                );
+              },
+              itemCount: 6,
+              itemBuilder: (context, index) =>
+                  index == 0 ? const SeasonSkeleton() : const EpisodeSkeleton(),
             );
           },
         ),
@@ -144,7 +158,7 @@ class EpisodeCard extends StatelessWidget {
             child: Text(episode.airDate ?? ''),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: 8),
             child: Rating(
               rating: episode.voteAverage,
               mini: true,
