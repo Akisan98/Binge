@@ -1,5 +1,5 @@
 import 'package:binge/services/tmdb_service.dart';
-import 'package:binge/views/infinite_list.dart';
+import 'package:binge/views/home_page/infinite_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../models/tmdb/tmdb_response.dart';
-import '../models/tmdb/tmdb_result.dart';
-import 'poster_card.dart';
+import '../../models/tmdb/tmdb_response.dart';
+import '../../models/tmdb/tmdb_result.dart';
+import '../poster_card.dart';
 
 class InfiniteList extends StatefulWidget {
   const InfiniteList({Key? key, required this.apiCall, required this.header})
@@ -57,37 +57,22 @@ class _InfiniteListState extends State<InfiniteList> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-      children: [
-        Padding(
-            padding: const EdgeInsets.only(left: 8, top: 16, bottom: 8),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.header,
-              textScaleFactor: 1.5,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-            height: _scaleFactor * 206,
+  Widget build(BuildContext context) => SliverToBoxAdapter(
+        child: SizedBox(
+          height: _scaleFactor * 206,
           child: PagedListView<int, TMDBResults>(
             scrollDirection: Axis.horizontal,
             pagingController: _controller,
             builderDelegate: PagedChildBuilderDelegate<TMDBResults>(
-                itemBuilder: (context, item, index) => PosterCard(
-                      index: index,
-                      listName: widget.header,
-                      item: item,
-                      scaleFactor: _scaleFactor,
-                    ),
-                animateTransitions: true,
+              itemBuilder: (context, item, index) => PosterCard(
+                index: index,
+                listName: widget.header,
+                item: item,
+                scaleFactor: _scaleFactor,
               ),
+              animateTransitions: true,
+            ),
           ),
         ),
-      ],
       );
 }

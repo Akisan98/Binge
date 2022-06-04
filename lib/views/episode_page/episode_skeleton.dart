@@ -54,7 +54,7 @@ class EpisodeSkeleton extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Container(
                   color: Colors.white,
-                  height: 50,
+                  height: 150,
                 ),
               ),
               Padding(

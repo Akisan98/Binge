@@ -84,20 +84,24 @@ class EpisodesPage extends StatelessWidget {
               );
             }
 
-            return ListView.separated(
-              separatorBuilder: (context, index) {
-                if (index == 0) {
-                  return const SizedBox.shrink();
-                }
+            return Padding(
+              padding: EdgeInsets.all(16),
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  if (index == 0) {
+                    return const SizedBox.shrink();
+                  }
 
-                return Divider(
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.tertiary,
-                );
-              },
-              itemCount: 6,
-              itemBuilder: (context, index) =>
-                  index == 0 ? const SeasonSkeleton() : const EpisodeSkeleton(),
+                  return Divider(
+                    thickness: 2,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  );
+                },
+                itemCount: 6,
+                itemBuilder: (context, index) => index == 0
+                    ? const SeasonSkeleton()
+                    : const EpisodeSkeleton(),
+              ),
             );
           },
         ),

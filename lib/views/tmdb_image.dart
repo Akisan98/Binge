@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TMDBImage extends StatelessWidget {
   const TMDBImage({
@@ -104,11 +105,23 @@ class TMDBImage extends StatelessWidget {
             : SizedBox(
                 height: getHeight(),
                 width: getWidth(),
-                child: Center(
-                  child: CircularProgressIndicator(
-                    value: downloadProgress.progress,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey,
+                  highlightColor: Colors.grey[700]!,
+                  child: Container(
+                    height: getHeight(),
+                    width: getWidth(),
+                    decoration: BoxDecoration(
+                      borderRadius: heroImage
+                          ? null
+                          : const BorderRadius.all(Radius.circular(8)),
+                      color: Colors.white,
+                    ),
                   ),
                 ),
+                
+                
+                
               ),
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
