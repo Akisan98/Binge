@@ -22,7 +22,8 @@ class MediaGrid extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
+  Widget build(BuildContext context) => content.isNotEmpty
+      ? SliverPadding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -41,5 +42,6 @@ class MediaGrid extends StatelessWidget {
             childCount: content.length,
           ),
         ),
-      );
+        )
+      : const SliverToBoxAdapter(child: SizedBox.shrink());
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 
 import '../models/db/db_season.dart';
+import '../models/tv/episode_to_air.dart';
 import '../pages/episode_page.dart';
 import '../utils/utils.dart';
 
@@ -13,13 +14,27 @@ class SeasonList extends StatelessWidget {
     required this.showId,
     required this.seasons,
     required this.onPressed,
+      required this.nextToAir
   }) : super(key: key);
 
   final List<DBSeasons>? seasons;
   final int showId;
+  final EpisodeToAir? nextToAir;
 
   /// What happens when + button is pressed.
   final SeasonCallback onPressed;
+
+  int? calculateEpisodesAired(DBSeasons season) {
+    if (season.seasonNumber == nextToAir?.seasonNumber) {
+      if ((nextToAir?.episodeNumber ?? 1) - 1 > 0) {
+        return (nextToAir?.episodeNumber ?? 1) - 1;
+      }
+
+      return 1;
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +52,7 @@ class SeasonList extends StatelessWidget {
                 season: item,
                 callback: onPressed,
                 showId: showId,
+                episodesAired: calculateEpisodesAired(item),
               ),
           ],
         ),
@@ -57,10 +73,12 @@ class SeasonCard extends StatefulWidget {
     required this.showId,
     required this.season,
     required this.callback,
+      this.episodesAired
   }) : super(key: key);
 
   final DBSeasons season;
   final int showId;
+  final int? episodesAired;
 
   /// What happens when + button is pressed.
   final SeasonCallback callback;
@@ -145,17 +163,35 @@ class _SeasonCardState extends State<SeasonCard> {
           child: IconButton(
             onPressed: () {
               var newValue = 0;
-              if (widget.season.episodesSeen != widget.season.episodes) {
-                newValue = widget.season.episodes ?? 0;
+              if (widget.episodesAired != null &&
+                      widget.season.episodesSeen != widget.episodesAired ||
+                  widget.episodesAired == null &&
+                      widget.season.episodesSeen != widget.season.episodes) {
+                if (widget.episodesAired != null) {
+                  newValue = widget.episodesAired ?? 0;
+                } else {
+                  newValue = widget.season.episodes ?? 0;
+                }
+              }
+
+              Iterable<int> seenArray = List.filled(
+                newValue,
+                newValue == 0 ? 0 : 1,
+              );
+
+              if ((widget.season.episodes ?? 0) > newValue) {
+                seenArray = seenArray.followedBy(
+                  List.filled(
+                    (widget.season.episodes ?? 0) - newValue,
+                    0,
+                  ),
+                );
               }
 
               widget.callback(
                 newValue,
                 widget.season.seasonNumber!,
-                List.filled(
-                  widget.season.episodes ?? 0,
-                  newValue == 0 ? 0 : 1,
-                ),
+                seenArray.toList(),
               );
 
               setState(() {});

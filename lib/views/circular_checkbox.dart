@@ -23,7 +23,7 @@ class _CircularCheckboxState extends State<CircularCheckbox> {
     return Transform.scale(
       scale: 1.5,
       child: Checkbox(
-        activeColor: Theme.of(context).colorScheme.primary,
+        activeColor: Theme.of(context).primaryColor,
         value: widget.seen == 1,
         shape: const CircleBorder(),
         onChanged: (nbool) {

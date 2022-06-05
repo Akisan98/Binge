@@ -10,11 +10,11 @@ class MediaTitle extends StatelessWidget {
   final double? leftPadding;
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
+  Widget build(BuildContext context) => display
+      ? SliverPadding(
         padding: EdgeInsets.only(
             left: leftPadding != null ? leftPadding! : 22, top: 32, bottom: 16),
-        sliver: display
-            ? SliverToBoxAdapter(
+          sliver: SliverToBoxAdapter(
                 child: Text(
                   title,
                   textScaleFactor: 1.5,
@@ -22,7 +22,7 @@ class MediaTitle extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
-            : const SliverToBoxAdapter(child: SizedBox.shrink()),
-      );
+          ),
+        )
+      : const SliverToBoxAdapter(child: SizedBox.shrink());
 }

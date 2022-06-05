@@ -301,6 +301,7 @@ class DetailPageState extends State<DetailPage> {
                           ),
                           if (item.mediaType == MediaType.tvSeries.string)
                             SeasonList(
+                              nextToAir: content.nextToAir,
                               seasons: content.seasons,
                               showId: item.id!,
                               onPressed: (
