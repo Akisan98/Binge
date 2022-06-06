@@ -59,7 +59,7 @@ class MediaContent {
     this.type,
     this.nextRelease,
     this.status,
-      this.notificationOnly
+    this.notificationOnly,
   });
 
   Map<String, dynamic> toJson() {

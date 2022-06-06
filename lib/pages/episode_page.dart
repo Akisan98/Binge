@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import '../models/db/db_season.dart';
-import '../models/db/media_content.dart';
 import '../models/tmdb/tmdb_result.dart';
 import '../models/tmdb/tmdb_season.dart';
 import '../services/tmdb_service.dart';
@@ -67,10 +65,21 @@ class EpisodesPage extends StatelessWidget {
                   },
                   itemCount: list.length,
                   itemBuilder: (context, index) => index == 0
-                      ? Text(
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: IconButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                icon: const Icon(Icons.chevron_left),
+                              ),
+                            ),
+                            Text(
                           list[index],
                           textScaleFactor: 1.75,
                           style: const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
                         )
                       : EpisodeCard(
                           episode: list[index],
@@ -85,7 +94,7 @@ class EpisodesPage extends StatelessWidget {
             }
 
             return Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: ListView.separated(
                 separatorBuilder: (context, index) {
                   if (index == 0) {

@@ -23,4 +23,7 @@ class Genres {
     data['name'] = name;
     return data;
   }
+
+  @override
+  String toString() => name ?? '';
 }

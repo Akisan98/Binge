@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'db_res.dart';
@@ -44,7 +45,12 @@ class _NavigationTestState extends State<NavigationTest> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: PageView(
+        body: kIsWeb && MediaQuery.of(context).size.width > 750
+            ? const Center(
+                child: Text(
+                    'Only Mobile Devices, try reducing width of browser window'),
+              )
+            : PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: pages,
@@ -54,7 +60,9 @@ class _NavigationTestState extends State<NavigationTest> {
             });
           },
         ),
-        bottomNavigationBar: NavigationBarTheme(
+        bottomNavigationBar: kIsWeb && MediaQuery.of(context).size.width > 750
+            ? null
+            : NavigationBarTheme(
           data: Theme.of(context).navigationBarTheme,
           child: NavigationBar(
             height: 60,

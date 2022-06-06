@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'enums/media_type.dart';
@@ -9,6 +11,15 @@ import 'models/genres.dart';
 import 'models/tv/episode_to_air.dart';
 import 'pages/navigation_test.dart';
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+}
+
 Future<void> main() async {
   await Hive.initFlutter();
   Hive
@@ -17,15 +28,15 @@ Future<void> main() async {
     ..registerAdapter(GenresAdapter())
     ..registerAdapter(EpisodeToAirAdapter())
     ..registerAdapter(MediaTypeAdapter());
-  var box = await Hive.openBox<MediaContent>('myBox');
-  //log(box.length.toString());
-  await dotenv.load();
-  // WidgetsFlutterBinding.ensureInitialized();
+  await Hive.openBox<MediaContent>('myBox');
+  WidgetsFlutterBinding.ensureInitialized();
+
   // TMP Fix
   // https://github.com/flutter/flutter/issues/101007
   // https://github.com/flutter/flutter/pull/104405
   Future.delayed(const Duration(milliseconds: 500), () {
-    runApp(const Binge());
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+        .then((value) => runApp(const Binge()));
   });
 }
 
@@ -76,7 +87,8 @@ class Binge extends StatelessWidget {
             iconTheme: MaterialStateProperty.all(
               IconThemeData(
                   color: Theme.of(context).textTheme.overline?.color ??
-                      Colors.white),
+                      Colors.white,
+              ),
             ),
             labelTextStyle:
                 MaterialStateProperty.all(Theme.of(context).textTheme.overline),
@@ -143,7 +155,7 @@ class Binge extends StatelessWidget {
             ),
           ),
         ),
-        themeMode: ThemeMode.system,
+        scrollBehavior: MyCustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
         home: const NavigationTest(),
       );

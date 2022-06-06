@@ -76,7 +76,7 @@ class DBContent extends StatelessWidget {
                           16 -
                           16 -
                           16 -
-                          16 - 
+                          16 -
                           (countDown ? 64 : 0),
                       child: AutoSizeText(
                         item?.title ?? '',
@@ -97,12 +97,14 @@ class DBContent extends StatelessWidget {
                         16 -
                         16 -
                         16 -
-                        16 - 
+                        16 -
                         (countDown ? 64 : 0),
                     child: AutoSizeText(
                       countDown
                           ? item?.nextRelease ?? ''
-                          : item?.nextToWatch?.airDate ?? '',
+                          : item?.type == MediaType.movie
+                              ? item?.nextRelease ?? ''
+                              : item?.nextToWatch?.airDate ?? '',
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -117,7 +119,7 @@ class DBContent extends StatelessWidget {
                           16 -
                           16 -
                           16 -
-                          16 - 
+                          16 -
                           (countDown ? 64 : 0),
                       child: AutoSizeText(
                         resolveSubtext(item),
@@ -177,10 +179,19 @@ class DBContent extends StatelessWidget {
   }
 
   String resolveSubtext(MediaContent? db) {
-    //log(db.toString());
     if (db?.type == MediaType.movie) {
       if (db?.genres != null) {
-        return db!.genres.toString();
+        final buffer = StringBuffer();
+
+        for (var i = 0; i < db!.genres!.length; i++) {
+          buffer.write(db.genres!.elementAt(i).name);
+
+          if (i < db.genres!.length - 1) {
+            buffer.write(', ');
+          }
+        }
+
+        return buffer.toString();
       }
     } else {
       int season;
@@ -188,9 +199,6 @@ class DBContent extends StatelessWidget {
       String episodeName;
       String output = '';
 
-      if (db?.title == 'The Falcon and the Winter Soldier') {
-        //log(db.toString());
-      }
 
       var item = countDown ? db?.nextToAir : db?.nextToWatch;
 

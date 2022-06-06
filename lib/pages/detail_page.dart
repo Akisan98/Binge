@@ -170,13 +170,25 @@ class DetailPageState extends State<DetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Hero(
-                tag: heroKey ?? '',
-                child: TMDBImage(
-                  width: MediaQuery.of(context).size.width,
-                  imagePath: item.posterPath,
-                  heroImage: true,
-                ),
+              Stack(
+                children: [
+                  Hero(
+                    tag: heroKey ?? '',
+                    child: TMDBImage(
+                      width: MediaQuery.of(context).size.width,
+                      imagePath: item.posterPath,
+                      heroImage: true,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 16),
+                    child: FloatingActionButton(
+                      mini: true,
+                      child: const Icon(Icons.chevron_left),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                ],
               ),
               FutureBuilder<TMDBDetail>(
                 future: tmdb.getDetails(item.mediaType, item.id),

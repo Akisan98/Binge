@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 import '../enums/media_type.dart';
@@ -14,12 +13,11 @@ import '../models/tv/episode_to_air.dart';
 
 class TMDBService {
   // Base Url for the API
-  static const _baseUrl = 'api.themoviedb.org';
-  Uri createUri(String unencoded, Map<String, dynamic> queryParameters) =>
-      Uri.https(_baseUrl, '/3$unencoded', queryParameters);
+  static const _baseUrl = 'api.akisan.ml';
+  Uri createUri(String unencoded) => Uri.https(_baseUrl, '/tmdb/3$unencoded');
 
-  // API Key
-  static String apiKey = dotenv.get('TMDB_KEY');
+  Uri createQueryUri(String unencoded, Map<String, dynamic> queryParameters) =>
+      Uri.https(_baseUrl, '/tmdb_query/3$unencoded', queryParameters);
 
   // One client instance for all the requests
   Client client = Client();
@@ -41,7 +39,7 @@ class TMDBService {
         break;
     }
 
-    final uri = createUri(endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint);
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -57,7 +55,7 @@ class TMDBService {
   Future<TMDBSeason> getTVSeason(int showId, int season) async {
     final endpoint = '/tv/$showId/season/$season';
 
-    final uri = createUri(endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint);
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -72,7 +70,7 @@ class TMDBService {
   Future<EpisodeToAir> getTVSeason2(int showId, int season, int episode) async {
     final endpoint = '/tv/$showId/season/$season/episode/$episode';
 
-    final uri = createUri(endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint);
     //log(uri.toString());
     final request = await client.get(uri);
 
@@ -89,7 +87,7 @@ class TMDBService {
   Future<TMDBResponse> search(String query) async {
     const endpoint = '/search/multi';
 
-    final uri = createUri(endpoint, {'api_key': apiKey, 'query': query});
+    final uri = createQueryUri(endpoint, {'query': query});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -113,7 +111,7 @@ class TMDBService {
       endpoint = '/person/$id/combined_credits';
     }
 
-    final uri = createUri(endpoint, {'api_key': apiKey});
+    final uri = createUri(endpoint);
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -134,7 +132,7 @@ class TMDBService {
     }
 
     final uri =
-        createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+        createQueryUri(endpoint, {'page': pageKey.toString()});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -157,7 +155,7 @@ class TMDBService {
     }
 
     final uri =
-        createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()});
+        createQueryUri(endpoint, {'page': pageKey.toString()});
     log(uri.toString());
     final request = await client.get(uri);
 
@@ -180,7 +178,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createQueryUri(endpoint, {'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -202,7 +200,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createQueryUri(endpoint, {'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -221,7 +219,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createQueryUri(endpoint, {'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
@@ -240,7 +238,7 @@ class TMDBService {
     }
 
     final request = await client.get(
-      createUri(endpoint, {'api_key': apiKey, 'page': pageKey.toString()}),
+      createQueryUri(endpoint, {'page': pageKey.toString()}),
     );
 
     if (request.statusCode == 200) {
