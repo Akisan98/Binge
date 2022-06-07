@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../services/tmdb_service.dart';
-import '../views/my_app_bar.dart';
 import '../views/home_page/infinite_list.dart';
+import '../views/my_app_bar.dart';
 import '../views/my_library/media_title.dart';
 import '../views/search_bar/search_bar.dart';
 
@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
               const SliverToBoxAdapter(
                 child: MyAppBar(
                   title: 'Search',
-                  icon: Icons.person,
+                  icon: Icons.settings,
                 ),
               ),
               

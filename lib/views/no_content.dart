@@ -7,16 +7,17 @@ class NoContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 32,
           right: 32,
         ),
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 65, 53, 67),
-              borderRadius: BorderRadius.all(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor.withOpacity(0.5),
+            borderRadius: const BorderRadius.all(
                 Radius.circular(16),
-              )),
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.only(top: 32, bottom: 32),
             child: Column(
@@ -28,7 +29,11 @@ class NoContent extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 24, left: 32, right: 32, bottom: 16),
+                    top: 24,
+                    left: 32,
+                    right: 32,
+                    bottom: 16,
+                  ),
                   child: Text(
                     message,
                     textScaleFactor: 1.25,
