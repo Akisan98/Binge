@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'db_res.dart';
 import 'home_page.dart';
@@ -14,7 +15,10 @@ class NavigationTest extends StatefulWidget {
 }
 
 class _NavigationTestState extends State<NavigationTest> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
+  late final AlertDialog alert;
+  int _currentIndex = 0;
+  late List<Widget> pages;
 
   void onSearchBoxTapped() {
     setState(() {
@@ -27,8 +31,32 @@ class _NavigationTestState extends State<NavigationTest> {
     );
   }
 
-  int _currentIndex = 0;
-  late List<Widget> pages;
+  void createDialog() {
+    // Dialog Action Button
+    final Widget okButton = TextButton(
+      child: const Text('Ok'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    final alert = AlertDialog(
+      title: const Text('Try our mobile application!'),
+      content: const Text(
+          'This web application is only meant for testing our application.\nNote that performance will be slower compared to the mobile application.'),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // Wait & Show Dialog
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) => showDialog(
+        context: context,
+        builder: (context) => alert,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -40,17 +68,16 @@ class _NavigationTestState extends State<NavigationTest> {
       const MyLibrary(),
       const ActiveSearchPage()
     ];
+
+    if (kIsWeb) {
+      createDialog();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: kIsWeb && MediaQuery.of(context).size.width > 750
-            ? const Center(
-                child: Text(
-                    'Only Mobile Devices, try reducing width of browser window'),
-              )
-            : PageView(
+        body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: pages,
@@ -60,9 +87,7 @@ class _NavigationTestState extends State<NavigationTest> {
             });
           },
         ),
-        bottomNavigationBar: kIsWeb && MediaQuery.of(context).size.width > 750
-            ? null
-            : NavigationBarTheme(
+        bottomNavigationBar: NavigationBarTheme(
           data: Theme.of(context).navigationBarTheme,
           child: NavigationBar(
             height: 60,
