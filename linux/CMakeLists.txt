@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "binge")
-set(APPLICATION_ID "ml.akisan.binge2")
+set(APPLICATION_ID "ml.akisan.binge")
 
 cmake_policy(SET CMP0063 NEW)
 

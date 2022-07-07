@@ -5,6 +5,8 @@ import '../genres.dart';
 import '../tmdb/tmdb_detail.dart';
 import '../tv/episode_to_air.dart';
 import '../tv/season.dart';
+import '../v1/season.dart';
+import '../v1/tv_show.dart';
 import 'db_season.dart';
 
 part 'media_content.g.dart';
@@ -127,5 +129,32 @@ class MediaContent {
     }
 
     return newSeasons;
+  }
+
+  MediaContent.fromv1(TVShow details) {
+    tmdbId = details.id ?? 0;
+    title = details.title;
+    runtime = details.runtime;
+    seasons = toDBSeason2(details.seasons);
+    posterPath = details.poster;
+    type = MediaType.tvSeries;
+    status = details.status;
+  }
+
+  List<DBSeasons>? toDBSeason2(List<Season>? seasons) {
+    List<DBSeasons>? dbSeasons = [];
+
+    seasons?.forEach((season) {
+      DBSeasons s = DBSeasons();
+      s
+        ..episodesSeen = season.episodeSeen
+        ..episodes = season.episodeCount
+        ..seasonNumber = season.seasonNo
+        ..name = season.title;
+
+      dbSeasons.add(s);
+    });
+
+    return dbSeasons;
   }
 }

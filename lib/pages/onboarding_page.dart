@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import '../enums/media_type.dart';
+import '../models/db/db_season.dart';
+import '../models/db/media_content.dart';
+import '../models/tv/episode_to_air.dart';
+import '../services/v1_import_service.dart';
 import 'navigation_test.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class OnboardingPage extends StatelessWidget {
+  const OnboardingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +40,6 @@ class LoginPage extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Privacy is a good thing!'),
-                      ),
-                    );
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -49,31 +47,37 @@ class LoginPage extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Let's Start!",
+                    'Start Fresh',
                     style: theme.textTheme.button,
                   ),
                 ),
-                // const SizedBox(
-                //   height: 18,
-                // ),
-                // ElevatedButton(
-                //   onPressed: (() {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(
-                //         content: Text("No Support for web"),
-                //       ),
-                //     );
-                //   }),
-                //   child: Text(
-                //     "Sign in with Trakt",
-                //     style: theme.textTheme.overline,
-                //   ),
-                //   style: ElevatedButton.styleFrom(
-                //     primary: theme.brightness == Brightness.light
-                //         ? theme.colorScheme.secondary
-                //         : theme.colorScheme.tertiary,
-                //   ),
-                // ),
+                const SizedBox(
+                  height: 18,
+                ),
+                ElevatedButton(
+                  onPressed: (() async {
+                    await V1ImportService.convertData();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NavigationTest()),
+                    );
+                  }),
+                  style: ElevatedButton.styleFrom(
+                    primary: theme.colorScheme.tertiary,
+                  ),
+                  child: Text(
+                    'Keep my data',
+                    style: TextStyle(
+                      color: theme.brightness == Brightness.light
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

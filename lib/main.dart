@@ -9,7 +9,7 @@ import 'models/db/db_season.dart';
 import 'models/db/media_content.dart';
 import 'models/genres.dart';
 import 'models/tv/episode_to_air.dart';
-import 'pages/navigation_test.dart';
+import 'pages/onboarding_page.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
@@ -157,6 +157,6 @@ class Binge extends StatelessWidget {
         ),
         scrollBehavior: MyCustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
-        home: const NavigationTest(),
+        home: const OnboardingPage(),
       );
 }
